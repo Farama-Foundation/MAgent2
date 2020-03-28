@@ -372,13 +372,6 @@ class GridWorld(Environment):
                           buf.ctypes.data_as(ctypes.POINTER(ctypes.c_int32)))
         return buf
 
-    def get_mean_info(self, handle):
-        """ deprecated """
-        buf = np.empty(2 + self.action_space[handle.value][0], dtype=np.float32)
-        _LIB.env_get_info(self.game, handle, b"mean_info",
-                          buf.ctypes.data_as(ctypes.POINTER(ctypes.c_float)))
-        return buf
-
     def get_view2attack(self, handle):
         """ get a matrix with the same size of view_range,
             if element >= 0, then it means it is a attackable point, and the corresponding
@@ -480,14 +473,6 @@ class GridWorld(Environment):
 
     def __del__(self):
         _LIB.env_delete_game(self.game)
-
-    # ====== SPECIAL RULE ======
-    def set_goal(self, handle, method, *args, **kwargs):
-        """ deprecated """
-        if method == "random":
-            _LIB.gridworld_set_goal(self.game, handle, b"random", 0, 0)
-        else:
-            raise NotImplementedError
 
     # ====== PRIVATE ======
     def _serialize_event_exp(self, config):
