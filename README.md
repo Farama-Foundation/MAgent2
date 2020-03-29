@@ -1,7 +1,7 @@
 <h1><img src="data/figure/logo.png" width="200"></h1>
 
 MAgent is a research platform for many-agent reinforcement learning.
-Unlike previous research platforms that focus on reinforcement learning research with a single agent or only few agents, 
+Unlike previous research platforms that focus on reinforcement learning research with a single agent or only few agents,
 MAgent aims at supporting reinforcement learning research that scales up from hundreds to millions of agents.
 
 - AAAI 2018 demo paper: [MAgent: A Many-Agent Reinforcement Learning Platform for Artificial Collective Intelligence](https://arxiv.org/abs/1712.00600)
@@ -28,15 +28,14 @@ export PYTHONPATH=$(pwd)/python:$PYTHONPATH
 ```
 
 ## Install on OSX
-**Note: There is an issue with homebrew for installing websocketpp, please refer to [#17](https://github.com/geek-ai/MAgent/issues/17)**
 ```bash
 git clone git@github.com:geek-ai/MAgent.git
 cd MAgent
 
 brew install cmake llvm boost@1.55
 brew install jsoncpp argp-standalone
-brew tap david-icracked/homebrew-websocketpp
-brew install --HEAD david-icracked/websocketpp/websocketpp
+brew tap davidzhen0/homebrew-websocketpp
+brew install --HEAD davidzhen0/websocketpp/websocketpp
 brew link --force boost@1.55
 
 bash build.sh
