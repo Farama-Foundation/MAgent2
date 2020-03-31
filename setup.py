@@ -20,7 +20,6 @@ setuptools.setup(
         'numpy>=1.18.0',
         'pygame>=2.0.0.dev6'
     ],
-    extras_require=extras,
     requires_python='>=3.6',
     classifiers=[
         "Programming Language :: Python :: 3.6",
