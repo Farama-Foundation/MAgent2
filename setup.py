@@ -19,8 +19,8 @@ setuptools.setup(
     keywords=["Reinforcement Learning", "game", "RL", "AI"],
     packages=setuptools.find_packages(),
     install_requires=[
-        'numpy>=1.16.3',
-        pygame>=2.0.0.dev6
+        'numpy>=1.18.0',
+        'pygame>=2.0.0.dev6'
     ],
     extras_require=extras,
     requires_python='>=3.6',
