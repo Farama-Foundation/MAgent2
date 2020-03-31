@@ -12,34 +12,24 @@ setuptools.setup(
     version="0.1.0",
     author="PettingZoo Team",
     author_email="justinkterry@gmail.com",
-    
-    description="A Toolkit for Reinforcement Learning in Card Games",
+    description="A toolkit for multi-agent reinforcement learning with a very large number of agents",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/datamllab/rlcard",
+    url="https://github.com/PettingZoo-Team/MAgent",
     keywords=["Reinforcement Learning", "game", "RL", "AI"],
-    packages=setuptools.find_packages(exclude=('tests',)),
-    package_data={
-        'rlcard': ['models/pretrained/leduc_holdem_nfsp/*',
-                   'models/pretrained/leduc_holdem_cfr/*',
-                   'models/pretrained/leduc_holdem_nfsp_pytorch/*',
-                   'games/uno/jsondata/action_space.json',
-                   'games/limitholdem/card2index.json',
-                   'games/leducholdem/card2index.json',
-                   'games/doudizhu/jsondata/*',
-                   'games/uno/jsondata/*',
-                   'games/simpledoudizhu/jsondata/*'
-                   ]},
+    packages=setuptools.find_packages(),
     install_requires=[
         'numpy>=1.16.3',
-        'matplotlib>=3.0',
-        'termcolor',
+        pygame>=2.0.0.dev6
     ],
     extras_require=extras,
-    requires_python='>=3.5',
+    requires_python='>=3.6',
     classifiers=[
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
 )
+
