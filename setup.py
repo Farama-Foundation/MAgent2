@@ -1,11 +1,9 @@
 import setuptools
 
-"""MAgent is a library for creating Multi-Agent Reinforcement Learning environments with very large numbers of agents
+# MAgent is a library for creating Multi-Agent Reinforcement Learning environments with very large numbers of agents.
 
-For details and documentation, please see:
-
-https://github.com/PettingZoo-Team/MAgent/
-"""
+with open("README.md", "r") as fh:
+    long_description = fh.read()
 
 setuptools.setup(
     name="rlcard",
