@@ -9,7 +9,17 @@ This is a maintained fork from the original repo- https://github.com/geek-ai/MAg
 ## Requirements
 MAgent supports Linux and OS X and Python 3.5+
 
-## Install on Linux
+## Installation:
+
+```
+git clone https://github.com/datamllab/rlcard.git
+cd rlcard
+pip install -e .
+```
+
+## Old install instructions
+
+Linux:
 
 ```bash
 git clone git@github.com:geek-ai/MAgent.git
@@ -21,7 +31,8 @@ bash build.sh
 export PYTHONPATH=$(pwd)/python:$PYTHONPATH
 ```
 
-## Install on OSX
+macOS:
+
 ```bash
 git clone git@github.com:geek-ai/MAgent.git
 cd MAgent
