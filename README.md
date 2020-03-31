@@ -12,8 +12,8 @@ MAgent supports Linux and OS X and Python 3.5+
 ## Installation:
 
 ```
-git clone https://github.com/datamllab/rlcard.git
-cd rlcard
+git clone https://github.com/PettingZoo-Team/MAgent
+cd MAgent
 pip install -e .
 ```
 
