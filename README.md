@@ -49,10 +49,11 @@ export PYTHONPATH=$(pwd)/python:$PYTHONPATH
 
 If you use this in your research, please cite the original paper:
 
+```
 @inproceedings{zheng2018magent,
   title={MAgent: A many-agent reinforcement learning platform for artificial collective intelligence},
   author={Zheng, Lianmin and Yang, Jiacheng and Cai, Han and Zhou, Ming and Zhang, Weinan and Wang, Jun and Yu, Yong},
   booktitle={Thirty-Second AAAI Conference on Artificial Intelligence},
   year={2018}
 }
-
+```
