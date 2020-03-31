@@ -21,6 +21,7 @@ setuptools.setup(
         'pygame>=2.0.0.dev6'
     ],
     requires_python='>=3.6',
+    data_files = [("", ["LICENSE.txt"])]
     classifiers=[
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
