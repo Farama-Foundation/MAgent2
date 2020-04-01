@@ -18,9 +18,10 @@ setuptools.setup(
         'numpy>=1.18.0',
         'pygame>=2.0.0.dev6'
     ],
-    requires_python='>=3.6',
+    requires_python='>=3.5',
     data_files = [("", ["LICENSE.txt"])],
     classifiers=[
+        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
