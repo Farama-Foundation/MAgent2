@@ -1,0 +1,2 @@
+include build.sh
+recursive-include magent *
