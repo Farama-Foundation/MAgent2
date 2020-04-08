@@ -25,6 +25,7 @@ def post_install_script(s):
     print(site_p)
     for sub in site_p.iterdir():
         f = str(sub)
+        print("sub builds ",f)
         if "bdist" in f:
             raw_build_dir = f+"/wheel/magent"
             break
