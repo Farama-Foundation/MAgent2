@@ -2,7 +2,7 @@ import setuptools
 from setuptools import Extension
 from setuptools.command.install import install
 from setuptools.command.develop import develop
-from setuptools.command.install_scripts import install_scripts
+from setuptools.command.install_lib import install_lib
 from setuptools.command.build_ext import build_ext as build_ext_orig
 from subprocess import check_call
 from distutils.sysconfig import get_python_lib
@@ -10,34 +10,32 @@ import os
 import platform
 import pathlib
 import atexit
+import shutil
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-class PostInstallCommand(install_scripts):
+class PostInstallCommand(install_lib):
     def run(self):
-        post_install_script(self.build_dir)
-        install_scripts.run(self)
+        build_dir = self.build_dir
+        post_install_script(build_dir)
+        install_lib.run(self)
         
 def post_install_script(s):
     current_dir = os.getcwd()
     site_p = pathlib.Path(s).parent
-    print(site_p)
-    raw_build_dir = ""
-    build_dir_sub_lib = ""
-    if platform.system() == "Darwin":
-        build_dir_sub_lib = "/wheel/magent"
-    else:
-        build_dir_sub_lib = "/magent"
-    for sub in site_p.iterdir():
-        f = str(sub)
-        print("sub builds ",f)
-        raw_build_dir = f+build_dir_sub_lib
-        break
-    
+    print("b dir", site_p)
+    raw_build_dir = site_p / "lib" / "magent"
+    raw_build_dir = str(raw_build_dir.absolute())
+    print("r dir ", raw_build_dir)
     if raw_build_dir != "":
         os.chdir(str(raw_build_dir))
         check_call("bash build.sh".split())
+        magent_site = get_python_lib() + "/magent/build"
+        built_path = raw_build_dir + "/build"
+        print("b path ", built_path)
+        print("m site ", magent_site)
+        shutil.move(built_path, magent_site)
         os.chdir(str(current_dir))
     else:
         print("pre-built src not available, cannot build.")
@@ -70,7 +68,7 @@ setuptools.setup(
     ],
     include_package_data=True,
     cmdclass = {
-        'install_scripts': PostInstallCommand,
+        'install_lib': PostInstallCommand,
     },
 )
 
