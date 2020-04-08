@@ -23,22 +23,23 @@ def post_install_script(s):
     current_dir = os.getcwd()
     site_p = pathlib.Path(s).parent
     print(site_p)
-    for f in os.listdir(site_p):
-        if f.startswith("bdist"):
-            raw_build_dir = pathlib.Path.joinpath(site_p, f+"/wheel/magent")
+    for sub in site_p.iterdir():
+        f = str(sub)
+        if "bdist" in f:
+            raw_build_dir = f+"/wheel/magent"
             break
     
     if raw_build_dir != "":
-        os.chdir(raw_build_dir)
+        os.chdir(str(raw_build_dir))
         check_call("bash build.sh".split())
-        os.chdir(current_dir)
+        os.chdir(str(current_dir))
     else:
         print("BDIST unavailable for MAgent setup, cannot build.")
 
 
 setuptools.setup(
     name="magent",
-    version="0.1.2",
+    version="0.1.3",
     author="PettingZoo Team",
     author_email="justinkterry@gmail.com",
     description="Multi-Agent Reinforcement Learning environments with very large numbers of agents",
