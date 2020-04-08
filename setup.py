@@ -35,7 +35,7 @@ def post_install_script(s):
         built_path = raw_build_dir + "/build"
         print("b path ", built_path)
         print("m site ", magent_site)
-        if platform.system() != "Darwin":
+        if platform.system() == "Darwin":
             shutil.move(built_path, magent_site)
         os.chdir(str(current_dir))
     else:
