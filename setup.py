@@ -23,6 +23,7 @@ def post_install_script(s):
     current_dir = os.getcwd()
     site_p = pathlib.Path(s).parent
     print(site_p)
+    raw_build_dir = ""
     for sub in site_p.iterdir():
         f = str(sub)
         print("sub builds ",f)
