@@ -9,33 +9,20 @@ This is a maintained fork from the original repo- https://github.com/geek-ai/MAg
 ## Requirements
 MAgent supports Linux and OS X and Python 3.5+
 
-## Installation:
 
-```
-git clone https://github.com/PettingZoo-Team/MAgent
-cd MAgent
-pip install -e .
-```
-
-## Old install instructions
+## Install instructions
 
 Linux:
 
 ```bash
-git clone git@github.com:geek-ai/MAgent.git
-cd MAgent
-
 sudo apt-get install cmake libboost-system-dev libjsoncpp-dev libwebsocketpp-dev
 
-bash build.sh
-export PYTHONPATH=$(pwd)/python:$PYTHONPATH
+pip3 install magent
 ```
 
 macOS:
 
 ```bash
-git clone git@github.com:geek-ai/MAgent.git
-cd MAgent
 
 brew install cmake llvm boost@1.55
 brew install jsoncpp argp-standalone
@@ -43,8 +30,7 @@ brew tap davidzhen0/homebrew-websocketpp
 brew install --HEAD davidzhen0/websocketpp/websocketpp
 brew link --force boost@1.55
 
-bash build.sh
-export PYTHONPATH=$(pwd)/python:$PYTHONPATH
+pip3 install magent
 ```
 
 If you use this in your research, please cite the original paper:
