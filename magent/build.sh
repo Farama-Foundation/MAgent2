@@ -4,9 +4,8 @@ then
     rm -rf *.log save_model build
 fi
 
-cd $1
-mkdir -p magent/build
-cd magent/build
+mkdir -p build
+cd build
 touch __init__.py
 cmake ..
 
