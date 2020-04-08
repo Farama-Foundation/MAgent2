@@ -24,19 +24,23 @@ def post_install_script(s):
     site_p = pathlib.Path(s).parent
     print(site_p)
     raw_build_dir = ""
+    build_dir_sub_lib = ""
+    if platform.system() == "Darwin":
+        build_dir_sub_lib = "/wheel/magent"
+    else:
+        build_dir_sub_lib = "/magent"
     for sub in site_p.iterdir():
         f = str(sub)
         print("sub builds ",f)
-        if "bdist" in f:
-            raw_build_dir = f+"/wheel/magent"
-            break
+        raw_build_dir = f+build_dir_sub_lib
+        break
     
     if raw_build_dir != "":
         os.chdir(str(raw_build_dir))
         check_call("bash build.sh".split())
         os.chdir(str(current_dir))
     else:
-        print("BDIST unavailable for MAgent setup, cannot build.")
+        print("pre-built src not available, cannot build.")
 
 
 setuptools.setup(
