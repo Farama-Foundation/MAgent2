@@ -11,6 +11,7 @@ MAgent supports Linux and OS X and Python 3.5+
 
 
 ## Install instructions
+Note that the library is built during pip installation (it doesn't take to long).
 
 Linux:
 
