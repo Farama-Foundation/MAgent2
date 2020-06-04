@@ -7,7 +7,7 @@ MAgent is a library for creating 2D environments with very large numbers of agen
 This is a maintained fork from the original repo- https://github.com/geek-ai/MAgent. 
 
 ## Requirements
-MAgent supports Linux and OS X and Python 3.5+
+MAgent supports Linux and macOS and Python 3.5+
 
 
 ## Install instructions
