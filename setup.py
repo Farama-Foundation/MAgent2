@@ -44,7 +44,7 @@ def post_install_script(s):
 
 setuptools.setup(
     name="magent",
-    version="0.1.4",
+    version="0.1.6",
     author="PettingZoo Team",
     author_email="justinkterry@gmail.com",
     description="Multi-Agent Reinforcement Learning environments with very large numbers of agents",
@@ -55,10 +55,9 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         'numpy>=1.18.0',
-        'pygame>=2.0.0.dev6'
+        'pygame>=2.0.0.dev10'
     ],
     python_requires='>=3.5',
-    data_files = [("", ["LICENSE"])],
     classifiers=[
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
