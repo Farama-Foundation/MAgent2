@@ -12,7 +12,8 @@ import random
 import numpy as np
 
 import magent
-from magent.builtin.tf_model import DeepQNetwork, DeepRecurrentQNetwork
+from models import buffer
+from models.tf_model import DeepQNetwork, DeepRecurrentQNetwork
 
 
 def get_config(map_size):
@@ -120,7 +121,7 @@ def play_a_round(env, map_size, handles, models, print_every, train=True, render
     ids  = [[] for _ in range(n)]
     acts = [[] for _ in range(n)]
     nums = [env.get_num(handle) for handle in handles]
-    sample_buffer = magent.utility.EpisodesBuffer(capacity=1000)
+    sample_buffer = buffer.EpisodesBuffer(capacity=1000)
     total_reward = [0 for _ in range(n)]
 
     print("===== sample =====")
@@ -215,7 +216,7 @@ if __name__ == "__main__":
         print("sample eval set...")
         env.reset()
         generate_map(env, args.map_size, handles)
-        eval_obs = magent.utility.sample_observation(env, handles, 2048, 500)[0]
+        eval_obs = buffer.sample_observation(env, handles, 2048, 500)[0]
 
     # init models
     batch_size = 256
@@ -258,7 +259,7 @@ if __name__ == "__main__":
     start = time.time()
     for k in range(start_from, start_from + args.n_round):
         tic = time.time()
-        eps = magent.utility.piecewise_decay(k, [0, 700, 1400], [1, 0.2, 0.05]) if not args.greedy else 0
+        eps = buffer.piecewise_decay(k, [0, 700, 1400], [1, 0.2, 0.05]) if not args.greedy else 0
         loss, num, reward, value = play_a_round(env, args.map_size, handles, models,
                                                 train=args.train, print_every=50,
                                                 render=args.render or (k+1) % args.render_every == 0,

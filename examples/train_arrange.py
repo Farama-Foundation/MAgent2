@@ -9,8 +9,10 @@ import random
 import numpy as np
 
 import magent
-from magent.builtin.tf_model import DeepQNetwork as RLModel
+from models.tf_model import DeepQNetwork as RLModel
+from magent import utility
 from magent.utility import FontProvider
+from models import buffer
 
 
 def remove_wall(d, cur_pos, wall_set, unit):
@@ -258,8 +260,8 @@ def generate_map(env, map_size, goal_handle, handles):
         for i in range(w):
             for j in range(h):
                 if data[i][j] == 1:
-                    start_x = i * scale + base_y
-                    start_y = j * scale + base_x
+                    start_x = int(i * scale + base_y)
+                    start_y = int(j * scale + base_x)
                     for x in range(start_x, start_x + scale):
                         for y in range(start_y, start_y + scale):
                             pos.append([y, x])
@@ -308,7 +310,7 @@ def play_a_round(env, map_size, food_handle, handles, models, train_id=-1,
     ids  = [None for _ in range(n)]
     acts = [None for _ in range(n)]
     nums = [env.get_num(handle) for handle in handles]
-    sample_buffer = magent.utility.EpisodesBuffer(capacity=5000)
+    sample_buffer = buffer.EpisodesBuffer(capacity=5000)
 
     center_x, center_y = map_size // 2, map_size // 2
 
@@ -436,7 +438,7 @@ if __name__ == "__main__":
         print("sample eval set...")
         env.reset()
         generate_map(env, args.map_size, food_handle, player_handles)
-        eval_obs = magent.utility.sample_observation(env, player_handles, 0, 2048, 500)
+        eval_obs = buffer.sample_observation(env, player_handles, 0, 2048, 500)
 
     # load models
     models = [
@@ -475,7 +477,7 @@ if __name__ == "__main__":
         train_id = 0 if args.train else -1
         for k in range(start_from, start_from + args.n_round):
             tic = time.time()
-            eps = magent.utility.piecewise_decay(k, [0, 400, 1200], [1.0, 0.2, 0.10]) if not args.greedy else 0
+            eps = buffer.piecewise_decay(k, [0, 400, 1200], [1.0, 0.2, 0.10]) if not args.greedy else 0
             loss, reward, value, pos_reward_ct, fill_rate = \
                 play_a_round(env, args.map_size, food_handle, player_handles, models,
                              train_id, record=False,

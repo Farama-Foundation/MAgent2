@@ -54,11 +54,6 @@ int gridworld_define_event_node(EnvHandle game, int no, int op, int *inputs, int
 int gridworld_add_reward_rule(EnvHandle game, int on, int *receiver, float *value, int n_receiver,
                               bool is_terminal, bool auto_value);
 
-/**
- *  DiscreteSnake special
- */
-int discrete_snake_clear_dead(EnvHandle game);
-int discrete_snake_add_object(EnvHandle game, int obj_id, int n, const char *method, const int *linear_buffer);
 
 
 /**

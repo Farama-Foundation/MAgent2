@@ -4,9 +4,9 @@ First demo, show the usage of API
 
 import magent
 # try:
-#     from magent.builtin.mx_model import DeepQNetwork
+#     from models.mx_model import DeepQNetwork
 # except ImportError as e:
-from magent.builtin.tf_model import DeepQNetwork
+from models.tf_model import DeepQNetwork
 
 if __name__ == "__main__":
     map_size = 100
@@ -68,4 +68,3 @@ if __name__ == "__main__":
         step_ct += 1
         if step_ct > 250:
             break
-

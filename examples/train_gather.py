@@ -7,8 +7,10 @@ import logging as log
 import time
 
 import magent
-from magent.builtin.mx_model import DeepQNetwork as RLModel
-# change this line to magent.builtin.tf_model to use tensorflow
+from magent import utility
+from models import buffer
+from models.mx_model import DeepQNetwork as RLModel
+# change this line to models.tf_model to use tensorflow
 
 
 def load_config(size):
@@ -39,7 +41,7 @@ def load_config(size):
     b = gw.AgentSymbol(g_f, index='any')
 
     cfg.add_reward_rule(gw.Event(a, 'attack', b), receiver=a, value=0.5)
-    
+
     return cfg
 
 
@@ -138,7 +140,7 @@ def play_a_round(env, map_size, food_handle, handles, models, train_id=-1,
     ids  = [None for _ in range(n)]
     acts = [None for _ in range(n)]
     nums = [env.get_num(handle) for handle in handles]
-    sample_buffer = magent.utility.EpisodesBuffer(capacity=5000)
+    sample_buffer = buffer.EpisodesBuffer(capacity=5000)
 
     print("===== sample =====")
     print("eps %s number %s" % (eps, nums))
@@ -242,7 +244,7 @@ if __name__ == "__main__":
         print("sample eval set...")
         env.reset()
         generate_map(env, args.map_size, food_handle, player_handles)
-        eval_obs = magent.utility.sample_observation(env, player_handles, 0, 2048, 500)
+        eval_obs = buffer.sample_observation(env, player_handles, 0, 2048, 500)
 
     # load models
     models = [
@@ -281,7 +283,7 @@ if __name__ == "__main__":
         train_id = 0 if args.train else -1
         for k in range(start_from, start_from + args.n_round):
             tic = time.time()
-            eps = magent.utility.piecewise_decay(k, [0, 400, 1000], [1.0, 0.2, 0.05]) if not args.greedy else 0
+            eps = buffer.piecewise_decay(k, [0, 400, 1000], [1.0, 0.2, 0.05]) if not args.greedy else 0
             loss, reward, value, pos_reward_ct = \
                     play_a_round(env, args.map_size, food_handle, player_handles, models,
                                  train_id, record=False,

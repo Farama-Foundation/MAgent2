@@ -11,6 +11,8 @@ import math
 import numpy as np
 
 import magent
+from models import buffer
+from model import ProcessingModel
 
 
 def load_config(map_size):
@@ -210,7 +212,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # set logger
-    magent.utility.init_logger(args.name)
+    buffer.init_logger(args.name)
 
     # init the game
     env = magent.GridWorld(load_config(args.map_size))
@@ -225,7 +227,7 @@ if __name__ == "__main__":
         print("sample eval set...")
         env.reset()
         generate_map(env, args.map_size, handles)
-        eval_obs = magent.utility.sample_observation(env, handles, 2048, 500)
+        eval_obs = buffer.sample_observation(env, handles, 2048, 500)
 
     # load models
     batch_size = 256
@@ -234,13 +236,13 @@ if __name__ == "__main__":
     train_freq = 5
 
     if args.alg == 'dqn':
-        from magent.builtin.tf_model import DeepQNetwork
+        from models.tf_model import DeepQNetwork
         RLModel = DeepQNetwork
         base_args = {'batch_size': batch_size,
                      'memory_size': 2 ** 20,
                      'target_update': target_update, 'train_freq': train_freq}
     elif args.alg == 'drqn':
-        from magent.builtin.tf_model import DeepRecurrentQNetwork
+        from models.tf_model import DeepRecurrentQNetwork
         RLModel = DeepRecurrentQNetwork
         base_args = {'batch_size': batch_size / unroll_step, 'unroll_step': unroll_step,
                      'memory_size': 8 * 300,
@@ -257,7 +259,7 @@ if __name__ == "__main__":
     for i in range(len(names)):
         model_args = {'eval_obs': eval_obs[i]}
         model_args.update(base_args)
-        models.append(magent.ProcessingModel(env, handles[i], names[i], 20000+i, 1000, RLModel, **model_args))
+        models.append(ProcessingModel(env, handles[i], names[i], 20000+i, 1000, RLModel, **model_args))
 
     # load if
     savedir = 'save_model'
@@ -278,7 +280,7 @@ if __name__ == "__main__":
     start = time.time()
     for k in range(start_from, start_from + args.n_round):
         tic = time.time()
-        eps = magent.utility.piecewise_decay(k, [0, 700, 1400], [1, 0.2, 0.05]) if not args.greedy else 0
+        eps = buffer.piecewise_decay(k, [0, 700, 1400], [1, 0.2, 0.05]) if not args.greedy else 0
 
         loss, num, reward, value = play_a_round(env, args.map_size, handles, models,
                                                 train=args.train, print_every=50,
