@@ -9,7 +9,8 @@ import logging as log
 import numpy as np
 
 import magent
-from magent.builtin.rule_model import RandomActor
+from models import buffer
+from models.rule_model import RandomActor
 
 
 def generate_map(env, map_size, handles):
@@ -32,7 +33,7 @@ def play_a_round(env, map_size, handles, models, print_every, train_id=1, step_b
     ids  = [[] for _ in range(n)]
     acts = [[] for _ in range(n)]
     nums = [0 for _ in range(n)]
-    sample_buffer = magent.utility.EpisodesBuffer(10000)
+    sample_buffer = buffer.EpisodesBuffer(10000)
     n_transition = 0
 
     print("===== sample =====")
@@ -130,19 +131,19 @@ if __name__ == "__main__":
     unroll     = 8
 
     if args.alg == 'dqn':
-        from magent.builtin.tf_model import DeepQNetwork
+        from models.tf_model import DeepQNetwork
         models.append(DeepQNetwork(env, tiger_handle, "tiger",
                                    batch_size=batch_size,
                                    memory_size=2 ** 20, learning_rate=4e-4))
         step_batch_size = None
     elif args.alg == 'drqn':
-        from magent.builtin.tf_model import DeepRecurrentQNetwork
+        from models.tf_model import DeepRecurrentQNetwork
         models.append(DeepRecurrentQNetwork(env, tiger_handle, "tiger",
                                    batch_size=batch_size/unroll, unroll_step=unroll,
                                    memory_size=20000, learning_rate=4e-4))
         step_batch_size = None
     elif args.alg == 'a2c':
-        from magent.builtin.mx_model import AdvantageActorCritic
+        from models.mx_model import AdvantageActorCritic
         step_batch_size = int(10 * args.map_size * args.map_size*0.01)
         models.append(AdvantageActorCritic(env, tiger_handle, "tiger",
                                    batch_size=step_batch_size,
@@ -161,7 +162,7 @@ if __name__ == "__main__":
         start_from = 0
 
     # init logger
-    magent.utility.init_logger(args.name)
+    buffer.init_logger(args.name)
 
     # print debug info
     print(args)
@@ -172,7 +173,7 @@ if __name__ == "__main__":
     start = time.time()
     for k in range(start_from, start_from + args.n_round):
         tic = time.time()
-        eps = magent.utility.linear_decay(k, 10, 0.1) if not args.greedy else 0
+        eps = buffer.linear_decay(k, 10, 0.1) if not args.greedy else 0
         loss, reward, value = play_a_round(env, args.map_size, [deer_handle, tiger_handle], models,
                                            step_batch_size=step_batch_size, train_id=train_id,
                                            print_every=40, render=args.render,

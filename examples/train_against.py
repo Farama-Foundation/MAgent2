@@ -10,8 +10,10 @@ import math
 
 import numpy as np
 
+from magent import utility
 import magent
-from magent.builtin.rule_model import RandomActor
+from models.rule_model import RandomActor
+from models import buffer
 
 
 def generate_map(env, map_size, handles):
@@ -149,10 +151,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # download opponent model
-    magent.utility.check_model('against')
+    utility.check_model('against')
 
     # set logger
-    magent.utility.init_logger(args.name)
+    buffer.init_logger(args.name)
 
     # init the game
     env = magent.GridWorld("battle", map_size=args.map_size)
@@ -166,7 +168,7 @@ if __name__ == "__main__":
         print("sample eval set...")
         env.reset()
         generate_map(env, args.map_size, handles)
-        eval_obs = magent.utility.sample_observation(env, handles, n_obs=2048, step=500)
+        eval_obs = buffer.sample_observation(env, handles, n_obs=2048, step=500)
     else:
         eval_obs = [None, None]
 
@@ -180,7 +182,7 @@ if __name__ == "__main__":
 
     # load opponent
     if args.opponent >= 0:
-        from magent.builtin.tf_model import DeepQNetwork
+        from models.tf_model import DeepQNetwork
         models.append(magent.ProcessingModel(env, handles[1], names[1], 20000, 0, DeepQNetwork))
         models[0].load("data/battle_model", args.opponent)
     else:
@@ -188,22 +190,22 @@ if __name__ == "__main__":
 
     # load our model
     if args.alg == 'dqn':
-        from magent.builtin.tf_model import DeepQNetwork
+        from models.tf_model import DeepQNetwork
         models.append(magent.ProcessingModel(env, handles[0], names[0], 20001, 1000, DeepQNetwork,
                                    batch_size=batch_size,
                                    learning_rate=3e-4,
                                    memory_size=2 ** 20, train_freq=train_freq, eval_obs=eval_obs[0]))
-                                   
+
         step_batch_size = None
     elif args.alg == 'drqn':
-        from magent.builtin.tf_model import DeepRecurrentQNetwork
+        from models.tf_model import DeepRecurrentQNetwork
         models.append(magent.ProcessingModel(env, handles[0], names[0], 20001, 1000, DeepRecurrentQNetwork,
                                    batch_size=batch_size/unroll_step, unroll_step=unroll_step,
                                    learning_rate=3e-4,
                                    memory_size=4 * 625, train_freq=train_freq, eval_obs=eval_obs[0]))
         step_batch_size = None
     elif args.alg == 'a2c':
-        from magent.builtin.mx_model import AdvantageActorCritic
+        from models.mx_model import AdvantageActorCritic
         step_batch_size = 10 * args.map_size * args.map_size * 0.04
         models.append(magent.ProcessingModel(env, handles[0], names[0], 20001, 1000, AdvantageActorCritic,
                                              learning_rate=1e-3))
@@ -227,7 +229,7 @@ if __name__ == "__main__":
     for k in range(start_from, start_from + args.n_round):
         tic = time.time()
         start = 1 if args.opponent != -1 else 0.1
-        train_eps = magent.utility.piecewise_decay(k, [0, 100, 250], [start, 0.1, 0.05]) if not args.greedy else 0
+        train_eps = buffer.piecewise_decay(k, [0, 100, 250], [start, 0.1, 0.05]) if not args.greedy else 0
         opponent_eps = train_eps if k < 100 else 0.05  # can use curriculum learning in first 100 steps
 
         loss, num, reward, value = play_a_round(env, args.map_size, handles, models,

@@ -5,7 +5,6 @@
 
 #include "Environment.h"
 #include "gridworld/GridWorld.h"
-#include "discrete_snake/DiscreteSnake.h"
 #include "utility/utility.h"
 #include "runtime_api.h"
 
@@ -17,8 +16,6 @@ int env_new_game(EnvHandle *game, const char *name) {
 
     if (strequ(name, "GridWorld")) {
         *game = new ::magent::gridworld::GridWorld();
-    } else if (strequ(name, "DiscreteSnake")) {
-        *game = new ::magent::discrete_snake::DiscreteSnake();
     } else {
         throw std::invalid_argument("invalid name of game");
     }
@@ -85,7 +82,7 @@ int env_render(EnvHandle game) {
 int env_render_next_file(EnvHandle game) {
     LOG(TRACE) << "env render next file.  ";
     // temporally only needed in DiscreteSnake
-    ((::magent::discrete_snake::DiscreteSnake *)game)->render_next_file();
+    //((::magent::discrete_snake::DiscreteSnake *)game)->render_next_file();
     return 0;
 }
 
@@ -143,21 +140,5 @@ int gridworld_add_reward_rule(EnvHandle game, int on, int *receiver, float *valu
                               bool is_terminal, bool auto_value) {
     LOG(TRACE) << "gridworld add reward rule";
     ((::magent::gridworld::GridWorld *)game)->add_reward_rule(on, receiver, value, n_receiver, is_terminal, auto_value);
-    return 0;
-}
-
-/**
- * DiscreteSnake special
- */
-int discrete_snake_add_object(EnvHandle game, int obj_id, int n, const char *method, const int *linear_buffer) {
-    LOG(TRACE) << "discrete snake add object.  ";
-    ((::magent::discrete_snake::DiscreteSnake *)game)->add_object(obj_id, n, method, linear_buffer);
-    return 0;
-}
-
-// run step
-int discrete_snake_clear_dead(EnvHandle game) {
-    LOG(TRACE) << "gridworld clear dead.  ";
-    ((::magent::discrete_snake::DiscreteSnake *)game)->clear_dead();
     return 0;
 }

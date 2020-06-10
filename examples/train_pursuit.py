@@ -9,7 +9,9 @@ import logging as log
 import numpy as np
 
 import magent
-from magent.builtin.tf_model import DeepQNetwork
+from models import buffer
+from models.tf_model import DeepQNetwork
+from model import ProcessingModel
 
 
 def play_a_round(env, map_size, handles, models, print_every, train=True, render=False, eps=None):
@@ -113,7 +115,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # set logger
-    magent.utility.init_logger(args.name)
+    buffer.init_logger(args.name)
 
     # init the game
     env = magent.GridWorld("pursuit", map_size=args.map_size)
@@ -127,9 +129,9 @@ if __name__ == "__main__":
     models = []
 
     for i in range(len(names)):
-        models.append(magent.ProcessingModel(
+        models.append(ProcessingModel(
             env, handles[i], names[i], 20000+i, 4000, DeepQNetwork,
-            batch_size=512, memory_size=2 ** 22,
+            batch_size=128, memory_size=2 ** 22,
             target_update=1000, train_freq=4
         ))
 
@@ -152,7 +154,7 @@ if __name__ == "__main__":
     start = time.time()
     for k in range(start_from, start_from + args.n_round):
         tic = time.time()
-        eps = magent.utility.piecewise_decay(k, [0, 200, 400], [1, 0.2, 0.05]) if not args.greedy else 0
+        eps = buffer.piecewise_decay(k, [0, 200, 400], [1, 0.2, 0.05]) if not args.greedy else 0
 
         loss, reward, value = play_a_round(env, args.map_size, handles, models,
                                            print_every=50, train=args.train,
