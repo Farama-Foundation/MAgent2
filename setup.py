@@ -44,7 +44,7 @@ def post_install_script(s):
 
 setuptools.setup(
     name="magent",
-    version="0.1.6",
+    version="0.1.7",
     author="PettingZoo Team",
     author_email="justinkterry@gmail.com",
     description="Multi-Agent Reinforcement Learning environments with very large numbers of agents",
