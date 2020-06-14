@@ -4,7 +4,7 @@ MAgent is a library for creating 2D environments with very large numbers of agen
 
 <img src="https://kipsora.github.io/resources/magent-graph-1.gif" width="200"><img src="https://kipsora.github.io/resources/magent-graph-2.gif" width="200">
 
-This is a maintained fork from the original repo- https://github.com/geek-ai/MAgent. 
+This is a maintained fork from the original repo- https://github.com/geek-ai/MAgent.
 
 ## Requirements
 MAgent supports Linux and macOS and Python 3.5+
@@ -13,26 +13,14 @@ MAgent supports Linux and macOS and Python 3.5+
 ## Install instructions
 Note that the library is built during pip installation (it doesn't take to long).
 
-Linux:
+Linux or macOS:
 
 ```bash
-sudo apt-get install cmake libboost-system-dev libjsoncpp-dev libwebsocketpp-dev
+sudo apt-get install cmake
 
 pip3 install magent
 ```
 
-macOS:
-
-```bash
-
-brew install cmake llvm boost@1.55
-brew install jsoncpp argp-standalone
-brew tap davidzhen0/homebrew-websocketpp
-brew install --HEAD davidzhen0/websocketpp/websocketpp
-brew link --force boost@1.55
-
-pip3 install magent
-```
 
 If you use this in your research, please cite the original paper:
 
