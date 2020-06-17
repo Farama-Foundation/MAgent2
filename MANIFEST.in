@@ -1,1 +1,2 @@
-recursive-include magent *
+include CMakeLists.txt
+recursive-include src *
