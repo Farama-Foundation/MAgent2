@@ -3,7 +3,7 @@ from setuptools import Extension
 from setuptools.command.install import install
 from setuptools.command.develop import develop
 from setuptools.command.install_lib import install_lib
-from setuptools.command.build_ext import build_ext as build_ext_orig
+from setuptools.command.build_ext import build_ext
 from subprocess import check_call
 from distutils.sysconfig import get_python_lib
 import os
@@ -11,9 +11,74 @@ import platform
 import pathlib
 import atexit
 import shutil
+import subprocess
+
+###
+# Build process:
+# cmake .
+# make -j threads
+# move libmagent -> build/
+###
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
+
+class CMakeExtension(Extension):
+    def __init__(self, name, sourcedir, config=[]):
+        Extension.__init__(self, name, sources=[])
+        self.sourcedir = os.path.abspath(sourcedir)
+        self.config = config
+
+class CMakeBuild(build_ext):
+    def build_extensions(self):
+        try:
+            subprocess.check_output(["cmake", "--version"])
+        except OSError:
+            raise RuntimeError(
+                "CMake must be installed to build the extensions: %s"
+                % ", ".join(ext.name for ext in self.extensions)
+            )
+        cfg = "Debug" if self.debug else "Release"
+        for ext in self.extensions:
+            
+            if not os.path.exists(self.build_temp):
+                os.makedirs(self.build_temp)
+
+            cmake_config_args = [
+                "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}".format(cfg.upper(), self.build_temp),
+                "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY_{}={}".format(cfg.upper(), self.build_temp),
+                "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_{}={}".format(
+                    cfg.upper(), self.build_temp
+                ),
+            ]
+
+            subprocess.check_call(
+                ["cmake", ext.sourcedir] + cmake_config_args, cwd=self.build_temp
+            )
+
+            subprocess.check_call(["pwd"])
+            print(self.build_temp)
+            subprocess.check_call(["ls"])
+            lib_ext = ""
+
+            if platform.system() == "Darwin":
+                lib_ext = ".dylib"
+                subprocess.check_call(
+                    ["make", "-C", ext.sourcedir], cwd=self.build_temp
+                )
+            elif platform.system() == "Linux":
+                lib_ext = ".so"
+                subprocess.check_call(
+                    ["make", "-C", ext.sourcedir, "-j", "`nproc`"], cwd=self.build_temp, shell=True
+                )
+
+            build_res_dir = ext.sourcedir + "/magent/build/"
+            if not os.path.exists(build_res_dir):
+                os.makedirs(build_res_dir)
+            lib_name = ext.sourcedir + "/libmagent" + lib_ext
+            subprocess.check_call(
+                ["mv", lib_name, build_res_dir]
+            )
 
 class PostInstallCommand(install_lib):
     def run(self):
@@ -44,7 +109,7 @@ def post_install_script(s):
 
 setuptools.setup(
     name="magent",
-    version="0.1.7",
+    version="0.1.8",
     author="PettingZoo Team",
     author_email="justinkterry@gmail.com",
     description="Multi-Agent Reinforcement Learning environments with very large numbers of agents",
@@ -53,6 +118,9 @@ setuptools.setup(
     url="https://github.com/PettingZoo-Team/MAgent",
     keywords=["Reinforcement Learning", "game", "RL", "AI"],
     packages=setuptools.find_packages(),
+    ext_modules=[
+        CMakeExtension("libmagent", ".", [])
+    ],
     install_requires=[
         'numpy>=1.18.0',
         'pygame>=2.0.0.dev10'
@@ -68,7 +136,7 @@ setuptools.setup(
     ],
     include_package_data=True,
     cmdclass = {
-        'install_lib': PostInstallCommand,
+        "build_ext": CMakeBuild
     },
 )
 
