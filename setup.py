@@ -4,7 +4,7 @@ from setuptools.command.install import install
 from setuptools.command.develop import develop
 from setuptools.command.install_lib import install_lib
 from setuptools.command.build_ext import build_ext
-from subprocess import check_call
+from subprocess import check_call, check_output, Popen, PIPE
 from distutils.sysconfig import get_python_lib
 import os
 import platform
@@ -40,42 +40,45 @@ class CMakeBuild(build_ext):
             )
         cfg = "Debug" if self.debug else "Release"
         for ext in self.extensions:
-            
             if not os.path.exists(self.build_temp):
                 os.makedirs(self.build_temp)
 
+            extdir = os.path.abspath(os.path.dirname(self.build_temp))
+
             cmake_config_args = [
-                "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}".format(cfg.upper(), self.build_temp),
-                "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY_{}={}".format(cfg.upper(), self.build_temp),
+                "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}".format(cfg.upper(), extdir),
+                "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY_{}={}".format(cfg.upper(), extdir),
                 "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_{}={}".format(
-                    cfg.upper(), self.build_temp
+                    cfg.upper(), extdir
                 ),
             ]
 
             subprocess.check_call(
-                ["cmake", ext.sourcedir] + cmake_config_args, cwd=self.build_temp
+                ["cmake", ext.sourcedir] + cmake_config_args, cwd=extdir
             )
 
             subprocess.check_call(["pwd"])
-            print(self.build_temp)
+            print(extdir)
             subprocess.check_call(["ls"])
             lib_ext = ""
 
             if platform.system() == "Darwin":
                 lib_ext = ".dylib"
+                thread_num = check_output(["sysctl", "-n", "hw.ncpu"], encoding="utf-8")
                 subprocess.check_call(
-                    ["make", "-C", ext.sourcedir], cwd=self.build_temp
+                    ["make", "-C", extdir, "-j", str(thread_num).rstrip()], cwd=extdir
                 )
             elif platform.system() == "Linux":
                 lib_ext = ".so"
+                thread_num = check_output(["nproc"], encoding="utf-8")
                 subprocess.check_call(
-                    ["make", "-C", ext.sourcedir, "-j", "`nproc`"], cwd=self.build_temp, shell=True
+                    ["make", "-C", extdir, "-j", str(thread_num).rstrip()], cwd=extdir
                 )
 
-            build_res_dir = ext.sourcedir + "/magent/build/"
+            build_res_dir = extdir + "/magent/build/"
             if not os.path.exists(build_res_dir):
                 os.makedirs(build_res_dir)
-            lib_name = ext.sourcedir + "/libmagent" + lib_ext
+            lib_name = extdir + "/libmagent" + lib_ext
             subprocess.check_call(
                 ["mv", lib_name, build_res_dir]
             )
