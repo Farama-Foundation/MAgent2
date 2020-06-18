@@ -40,15 +40,18 @@ class CMakeBuild(build_ext):
             extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
 
             cmake_config_args = [
+                "-DCMAKE_BUILD_TYPE={}".format(cfg),
                 "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}".format(cfg.upper(), extdir),
                 "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY_{}={}".format(cfg.upper(), extdir),
                 "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_{}={}".format(
-                    cfg.upper(), extdir
+                    cfg.upper(), self.build_temp
                 ),
             ]
 
+            make_location = os.path.abspath(self.build_temp)
+
             subprocess.check_call(
-                ["cmake", ext.sourcedir] + cmake_config_args, cwd=extdir
+                ["cmake", ext.sourcedir] + cmake_config_args, cwd=make_location
             )
             print(ext.name)
             subprocess.check_call(["pwd"])
@@ -60,13 +63,13 @@ class CMakeBuild(build_ext):
                 lib_ext = ".dylib"
                 thread_num = check_output(["sysctl", "-n", "hw.ncpu"], encoding="utf-8")
                 subprocess.check_call(
-                    ["make", "-C", extdir, "-j", str(thread_num).rstrip()], cwd=extdir
+                    ["make", "-C", make_location, "-j", str(thread_num).rstrip()], cwd=extdir
                 )
             elif platform.system() == "Linux":
                 lib_ext = ".so"
                 thread_num = check_output(["nproc"], encoding="utf-8")
                 subprocess.check_call(
-                    ["make", "-C", extdir, "-j", str(thread_num).rstrip()], cwd=extdir
+                    ["make", "-C", make_location, "-j", str(thread_num).rstrip()], cwd=extdir
                 )
 
             # build_res_dir = extdir + "/magent/build/"
@@ -90,7 +93,7 @@ setuptools.setup(
     keywords=["Reinforcement Learning", "game", "RL", "AI"],
     packages=setuptools.find_packages(),
     ext_modules=[
-        CMakeExtension("libmagent", ".", [])
+        CMakeExtension("magent.libmagent", ".", [])
     ],
     install_requires=[
         'numpy>=1.18.0',
