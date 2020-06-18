@@ -1,2 +1,4 @@
 include CMakeLists.txt
 recursive-include src *
+include *.dylib
+include *.so

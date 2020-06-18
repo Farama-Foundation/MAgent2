@@ -1,16 +1,10 @@
 import setuptools
 from setuptools import Extension
-from setuptools.command.install import install
-from setuptools.command.develop import develop
-from setuptools.command.install_lib import install_lib
 from setuptools.command.build_ext import build_ext
 from subprocess import check_call, check_output, Popen, PIPE
-from distutils.sysconfig import get_python_lib
 import os
 import platform
 import pathlib
-import atexit
-import shutil
 import subprocess
 
 ###
@@ -43,7 +37,7 @@ class CMakeBuild(build_ext):
             if not os.path.exists(self.build_temp):
                 os.makedirs(self.build_temp)
 
-            extdir = os.path.abspath(os.path.dirname(self.build_temp))
+            extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
 
             cmake_config_args = [
                 "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}".format(cfg.upper(), extdir),
@@ -56,7 +50,7 @@ class CMakeBuild(build_ext):
             subprocess.check_call(
                 ["cmake", ext.sourcedir] + cmake_config_args, cwd=extdir
             )
-
+            print(ext.name)
             subprocess.check_call(["pwd"])
             print(extdir)
             subprocess.check_call(["ls"])
@@ -75,44 +69,18 @@ class CMakeBuild(build_ext):
                     ["make", "-C", extdir, "-j", str(thread_num).rstrip()], cwd=extdir
                 )
 
-            build_res_dir = extdir + "/magent/build/"
-            if not os.path.exists(build_res_dir):
-                os.makedirs(build_res_dir)
-            lib_name = extdir + "/libmagent" + lib_ext
-            subprocess.check_call(
-                ["mv", lib_name, build_res_dir]
-            )
-
-class PostInstallCommand(install_lib):
-    def run(self):
-        build_dir = self.build_dir
-        post_install_script(build_dir)
-        install_lib.run(self)
-        
-def post_install_script(s):
-    current_dir = os.getcwd()
-    site_p = pathlib.Path(s).parent
-    print("b dir", site_p)
-    raw_build_dir = site_p / "lib" / "magent"
-    raw_build_dir = str(raw_build_dir.absolute())
-    print("r dir ", raw_build_dir)
-    if raw_build_dir != "":
-        os.chdir(str(raw_build_dir))
-        check_call("bash build.sh".split())
-        magent_site = get_python_lib() + "/magent/build"
-        built_path = raw_build_dir + "/build"
-        print("b path ", built_path)
-        print("m site ", magent_site)
-        if platform.system() == "Darwin":
-            shutil.move(built_path, magent_site)
-        os.chdir(str(current_dir))
-    else:
-        print("pre-built src not available, cannot build.")
+            # build_res_dir = extdir + "/magent/build/"
+            # if not os.path.exists(build_res_dir):
+            #     os.makedirs(build_res_dir)
+            # lib_name = extdir + "/libmagent" + lib_ext
+            # subprocess.check_call(
+            #     ["mv", lib_name, build_res_dir]
+            # )
 
 
 setuptools.setup(
     name="magent",
-    version="0.1.8",
+    version="0.1.9",
     author="PettingZoo Team",
     author_email="justinkterry@gmail.com",
     description="Multi-Agent Reinforcement Learning environments with very large numbers of agents",
