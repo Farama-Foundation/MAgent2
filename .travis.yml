@@ -1,50 +1,51 @@
 language: python
-
 jobs:
   include:
-    - name: "Python 3.6 on Linux"
-      python: 3.6
-      before_install:
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-
-    - name: "Python 3.7 on Linux"
-      python: 3.7
-      before_install:
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-
-    - name: "Python 3.8 on Linux"
-      python: 3.8
-      before_install:
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-
+  - name: Python 3.6 on Linux
+    python: 3.6
+    before_install:
+    - export AUDIODEV=null
+    - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
+    - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
+    - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
+    - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
+    - mv cmake-3.17.3-Linux-x86_64 cmake-install
+    - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
+    - cd ${TRAVIS_BUILD_DIR}
+    - sudo apt-get install swig
+  - name: Python 3.7 on Linux
+    python: 3.7
+    before_install:
+    - export AUDIODEV=null
+    - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
+    - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
+    - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
+    - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
+    - mv cmake-3.17.3-Linux-x86_64 cmake-install
+    - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
+    - cd ${TRAVIS_BUILD_DIR}
+    - sudo apt-get install swig
+  - name: Python 3.8 on Linux
+    python: 3.8
+    before_install:
+    - export AUDIODEV=null
+    - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
+    - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
+    - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
+    - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
+    - mv cmake-3.17.3-Linux-x86_64 cmake-install
+    - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
+    - cd ${TRAVIS_BUILD_DIR}
+    - sudo apt-get install swig
 install:
-  - pip3 install wheel
-  - pip3 install -r requirements.txt
-
+- pip3 install wheel
+- pip3 install -r requirements.txt
 script:
-  - python3 setup.py bdist_wheel
-
+- python3 setup.py bdist_wheel
+deploy:
+  provider: pypi
+  user: MarioJ
+  password:
+    secure: CkDxXOHxJdJIXdnkEqDSTR0EG1+aqvNToLtn4d6kWFjUWvzm/vxqkSZWCIemJNPafnocRyKC1qDWiBvdsuDGp2TZOms73ZGvXYuUwF35ZlLxyG339u4ulzn7j8C3fP/q5930hj2vxhzry6eKktInbtba+1OHhNIIyeZ1UE8ZDxfcNkta+5tsKbDQ4QObTrXk0f9fiGZ1tbjWgmCAawaRbBEdO+5xMYnwTZZzSlby3AxHaqdCqqle4pvSRiQFD6Dh1OqFgMHU5+A+mpHqzMXOE3b9Yg+TYI8dMGa/JOOccDfcsXDZf9DA65JvsnFsleqFznteEs1KJESyh6oKpEtZMru5ccMzFjpzY5PB8CQT7oDU6c/dUgjcU12dFxnTI8Ch8kIhsmRRTFWyYfPnTI7W2695GczftuJC5J5oD0/r2dSWO/CysJ6ZY/T/TScuVCJearlmR+wLBEdqTJk+SZW57v7VPNyXbbvJ+ZpodWzFVJSp4zzRP/bsOZ72rncWNvAcbbeVCYB06TYIJx9cVyz6zIhTt5UtT1zX92tcgOsbdXvhdnt1M1jRRFhvLXZcQ/2MbLj89eOkUjaG4vwPasK8DDrc2feqoQF+Vlx23VDhfA/fF9oByjjnKyvawbZNHXWRgS+p+E5zBSzPvhk2bkU3wvNnOo7REq/SC1Z/uMu3ZZo=
+  on:
+    branch: production
