@@ -43,6 +43,7 @@ install:
 script:
 - python3 setup.py bdist_wheel
 deploy:
+  skip_cleanup: true
   provider: pypi
   user: MarioJ
   password:
