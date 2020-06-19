@@ -2,14 +2,14 @@
 
 MAgent is a library for creating 2D environments with very large numbers of agents for conducting research in Multi-Agent Reinforcement Learning. These can look like this:
 
-<img src="https://kipsora.github.io/resources/magent-graph-1.gif" width="200"><img src="https://kipsora.github.io/resources/magent-graph-2.gif" width="200">
+<img src="magent-graph-1.gif" width="200"><img src="magent-graph-2.gif" width="200">
 
 This is a maintained fork from the original repo- https://github.com/geek-ai/MAgent. The code is signifigantly cleaned up in many aspects and some unfortunate names have been fixed, but there are no major differences.
 
 This maintainenace was primarily done in the service of the [PettingZoo library](https://github.com/PettingZoo-Team/PettingZoo). PettingZoo is the easiest way to use environments in this library, and has comprehensive documentation of them.
 
 ## Requirements
-MAgent supports Linux and macOS and Python 3.5+
+MAgent supports Linux and macOS and Python 3.6+
 
 
 ## Install instructions
