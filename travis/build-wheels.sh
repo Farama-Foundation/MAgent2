@@ -3,10 +3,10 @@ set -e -u -x
 
 yum install -y wget
 
-wget https://cmake.org/files/v3.12/cmake-3.12.3.tar.gz
-tar zxvf cmake-3.*
-cd cmake-3.*
-./bootstrap --prefix=/usr/local
+wget https://github.com/Kitware/CMake/releases/download/v3.15.2/cmake-3.15.2.tar.gz
+tar -zxvf cmake-3.15.2.tar.gz > /dev/null
+cd cmake-3.15.2
+./bootstrap
 make -j$(nproc)
 make install
 cd ..
