@@ -1,7 +1,13 @@
 #!/bin/bash
 set -e -u -x
 
-yum install -y cmake
+wget https://cmake.org/files/v3.12/cmake-3.12.3.tar.gz
+tar zxvf cmake-3.*
+cd cmake-3.*
+./bootstrap --prefix=/usr/local
+make -j$(nproc)
+make install
+cd ..
 
 for PYBIN in /opt/python/*/bin; do
     if [[ ( "$PYBIN" != *"27"* ) && ( "$PYBIN" != *"35"* ) ]]; then
