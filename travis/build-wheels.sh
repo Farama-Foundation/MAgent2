@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e -u -x
 
+yum install -y cmake
+
 for PYBIN in /opt/python/*/bin; do
     if [[ ( "$PYBIN" != *"27"* ) && ( "$PYBIN" != *"35"* ) ]]; then
         "${PYBIN}/pip" install -r /io/requirements.txt
