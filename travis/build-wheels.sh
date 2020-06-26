@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e -u -x
 
+yum install wget
+
 wget https://cmake.org/files/v3.12/cmake-3.12.3.tar.gz
 tar zxvf cmake-3.*
 cd cmake-3.*
