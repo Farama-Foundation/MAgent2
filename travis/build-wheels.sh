@@ -1,4 +1,5 @@
 #!/bin/bash
 set -e -u -x
 
-python3 setup.py sdist bdist_wheel
+pip install -r /io/dev-requirements.txt
+pip wheel /io/ --no-deps 
