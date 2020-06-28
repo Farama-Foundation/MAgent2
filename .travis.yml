@@ -34,9 +34,9 @@ install:
   - pip3 install -r requirements.txt
 
 deploy:
+  provider: script
+  script: 
+    - pip3 install twine
+    - twine upload wheelhouse/* --skip-existing -u $PYPI_USER -p $PYPI_PASSWORD
   on:
     branch: production
-
-after_deploy:
-  - pip3 install twine
-  - twine upload wheelhouse/* --skip-existing -u $PYPI_USER -p $PYPI_PASSWORD
