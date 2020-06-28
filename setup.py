@@ -83,7 +83,7 @@ class CMakeBuild(build_ext):
 
 setuptools.setup(
     name="magent",
-    version="0.1.11",
+    version="0.1.12",
     author="PettingZoo Team",
     author_email="justinkterry@gmail.com",
     description="Multi-Agent Reinforcement Learning environments with very large numbers of agents",
