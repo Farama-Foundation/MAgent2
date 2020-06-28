@@ -39,4 +39,4 @@ deploy:
 
 after_deploy:
   - pip3 install twine
-  - twine upload wheelhouse/* --skip-existing
+  - twine upload wheelhouse/* --skip-existing -u $PYPI_USER -p $PYPI_PASSWORD
