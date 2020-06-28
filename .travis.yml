@@ -32,12 +32,12 @@ jobs:
 install:
   - pip3 install wheel
   - pip3 install -r requirements.txt
+  - pip3 install twine
 
 deploy:
   provider: script
   skip_cleanup: true
   script: 
-    - pip3 install twine
     - twine upload wheelhouse/* --skip-existing -u $PYPI_USER -p $PYPI_PASSWORD
   on:
     branch: production
