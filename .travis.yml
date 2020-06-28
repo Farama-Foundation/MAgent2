@@ -22,7 +22,8 @@ jobs:
           - llvm
     language: shell
     script: 
-      - alias pip=pip3
+      - pip3 install pathlib
+      - pip3 install twine
       - python3 setup.py bdist_wheel
       - cp -a dist/. .
 
