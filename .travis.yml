@@ -33,7 +33,10 @@ install:
   - pip3 install wheel
   - pip3 install -r requirements.txt
 
-after_success:
-  if: branch = production
+deploy:
+  on:
+    branch: production
+
+after_deploy:
   - pip3 install twine
   - twine upload wheelhouse/* --skip-existing
