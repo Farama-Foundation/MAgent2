@@ -13,9 +13,7 @@ MAgent supports Linux and macOS and Python 3.6+
 
 
 ## Install instructions
-The library is built during pip installation (it doesn't take to long), requiring cmake (i.e. `sudo apt install cmake`)
-
-Then you can simply use `pip install magent`
+You can simply use `pip install magent`
 
 
 If you use this in your research, please cite the original paper:
