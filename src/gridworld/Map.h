@@ -22,7 +22,7 @@ typedef float Food;
 
 class MapSlot {
 public:
-    MapSlot() : slot_type(BLANK), occupier(nullptr) {}
+    MapSlot() : slot_type(BLANK), occ_type(OCC_AGENT), occupier(nullptr) {}
     SlotType slot_type;
     OccupyType occ_type;
     void *occupier;
