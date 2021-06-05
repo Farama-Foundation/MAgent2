@@ -902,7 +902,7 @@ std::vector<int> GridWorld::make_channel_trans(
         trans[i] = i;
     for (int i = 0; i < groups.size(); i++) {
         int cycle_group = (i - group + groups.size()) % n_group;
-        trans[group2channel(cycle_group)] = base;
+        trans[group2channel(i)] = group2channel(cycle_group);
         if (minimap_mode) {
             base += 3;
         } else {
