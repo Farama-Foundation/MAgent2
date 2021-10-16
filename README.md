@@ -6,7 +6,7 @@ MAgent is a library for creating 2D environments with very large numbers of agen
 
 This is a maintained fork from the original repo- https://github.com/geek-ai/MAgent. The code is signifigantly cleaned up in many aspects and some unfortunate names have been fixed, but there are no major differences.
 
-This maintainenace was primarily done in the service of the [PettingZoo library](https://github.com/PettingZoo-Team/PettingZoo). PettingZoo is the easiest way to use environments in this library, and has comprehensive documentation of them.
+This maintainenace was primarily done in the service of the [PettingZoo library](https://github.com/Farama-Foundation/PettingZoo). PettingZoo is the easiest way to use environments in this library, and has comprehensive documentation of them.
 
 ## Requirements
 MAgent supports Linux and macOS and Python 3.6+
@@ -36,6 +36,6 @@ If you wish to cite this repo with it's modifications specifically, please cite:
   year = {2020},
   publisher = {GitHub},
   note = {GitHub repository},
-  howpublished = {\url{https://github.com/PettingZoo-Team/MAgent}}
+  howpublished = {\url{https://github.com/Farama-Foundation/MAgent}}
 }
 ```
