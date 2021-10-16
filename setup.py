@@ -89,7 +89,7 @@ setuptools.setup(
     description="Multi-Agent Reinforcement Learning environments with very large numbers of agents",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/PettingZoo-Team/MAgent",
+    url="https://github.com/Farama-Foundation/MAgent",
     keywords=["Reinforcement Learning", "game", "RL", "AI"],
     packages=setuptools.find_packages(),
     ext_modules=[
