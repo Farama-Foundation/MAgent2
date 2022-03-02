@@ -31,7 +31,7 @@ If you wish to cite this repo with it's modifications specifically, please cite:
 
 ```
 @misc{magent2020,
-  author = {Terry, Justin K and Black, Benjamin and Jayakumar, Mario},
+  author = {Terry, Jordan K and Black, Benjamin and Jayakumar, Mario},
   title = {MAgent},
   year = {2020},
   publisher = {GitHub},
