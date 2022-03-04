@@ -83,7 +83,7 @@ class CMakeBuild(build_ext):
 
 setuptools.setup(
     name="magent",
-    version="0.1.14",
+    version="0.1.15",
     author="PettingZoo Team",
     author_email="justinkterry@gmail.com",
     description="Multi-Agent Reinforcement Learning environments with very large numbers of agents",
@@ -99,11 +99,12 @@ setuptools.setup(
         'numpy>=1.18.0',
         'pygame>=2.0.0.dev10'
     ],
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     classifiers=[
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
