@@ -84,8 +84,8 @@ class CMakeBuild(build_ext):
 setuptools.setup(
     name="magent",
     version="0.1.15",
-    author="PettingZoo Team",
-    author_email="justinkterry@gmail.com",
+    author="Farama Foundation",
+    author_email="jkterry@farama.org",
     description="Multi-Agent Reinforcement Learning environments with very large numbers of agents",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -97,10 +97,12 @@ setuptools.setup(
     ],
     install_requires=[
         'numpy>=1.18.0',
-        'pygame>=2.0.0.dev10'
+        'pygame==2.1.0'
     ],
     python_requires='>=3.7',
     classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Programming Language :: Python :: 3',
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
