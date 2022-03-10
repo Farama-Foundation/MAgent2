@@ -16,6 +16,8 @@ def _load_lib():
         path_to_so_file = os.path.join(lib_path, "libmagent.dylib")
     elif platform.system() == 'Linux':
         path_to_so_file = os.path.join(lib_path, "libmagent.so")
+    elif platform.system() == 'Windows':
+        path_to_so_file = os.path.join(lib_path, "magent.dll")
     else:
         raise BaseException("unsupported system: " + platform.system())
     lib = ctypes.CDLL(path_to_so_file, ctypes.RTLD_GLOBAL)

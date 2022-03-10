@@ -251,7 +251,11 @@ void GridWorld::add_agents(GroupHandle group, int n, const char *method,
                 }
 
                 agent->set_dir(turn_mode ? (Direction) pos_dir[i] : NORTH);
+#if defined(_WIN32)                
+                agent->set_pos({pos_x[i], pos_y[i]});
+#else                
                 agent->set_pos((Position) {pos_x[i], pos_y[i]});
+#endif              
 
                 ret = map.add_agent(agent, base_channel_id);
                 add_or_error(ret, pos_x[i], pos_y[i], id_counter, g, agent);

@@ -8,10 +8,19 @@
 #include <cmath>
 #include <vector>
 #include "utility/utility.h"
+#if defined(_WIN32)
+#define random rand
+#endif 
+
+#ifdef _MSC_VER
+#define DLL_EXPORT  __declspec( dllexport )
+#else
+#define DLL_EXPORT
+#endif
 
 using magent::utility::NDPointer;
 
-void runaway_infer_action(float *obs_buf, float *feature_buf, int n, int height, int width, int n_channel,
+DLL_EXPORT void runaway_infer_action(float *obs_buf, float *feature_buf, int n, int height, int width, int n_channel,
                           int attack_base, int *act_buf, int away_channel, int move_back) {
     int wall  = 0;
     int food  = 1;
@@ -36,7 +45,7 @@ void runaway_infer_action(float *obs_buf, float *feature_buf, int n, int height,
     }
 }
 
-void rush_prey_infer_action(float *obs_buf, float *feature_buf, int n, int height, int width, int n_channel,
+DLL_EXPORT  void rush_prey_infer_action(float *obs_buf, float *feature_buf, int n, int height, int width, int n_channel,
                             int *act_buf, int attack_channel, int attack_base,
                             int *view2attack_buf, float threshold) {
     NDPointer<int, 2> view2attack(view2attack_buf, {{height, width}});
@@ -82,7 +91,7 @@ void rush_prey_infer_action(float *obs_buf, float *feature_buf, int n, int heigh
     }
 }
 
-int get_action(const std::pair<int, int> &disp, bool stride) {
+DLL_EXPORT  int get_action(const std::pair<int, int> &disp, bool stride) {
     int action = -1;
     if (disp.first < 0) {
         if (disp.second < 0) {
@@ -112,7 +121,7 @@ int get_action(const std::pair<int, int> &disp, bool stride) {
     return action;
 }
 
-void gather_infer_action(float *obs_buf, float *hp_buf, int n, int height, int width, int n_channel,
+DLL_EXPORT  void gather_infer_action(float *obs_buf, float *hp_buf, int n, int height, int width, int n_channel,
                          int *act_buf, int attack_base, int *view2attack_buf) {
     NDPointer<int, 2> view2attack(view2attack_buf, {{height, width}});
 
