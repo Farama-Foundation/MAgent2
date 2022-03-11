@@ -467,7 +467,7 @@ void GridWorld::step(int *done) {
 
     // shuffle attacks
     for (int i = 0; i < attack_size; i++) {
-        int j = (int)random_engine() % (i+1);
+        int j = (int)random_engine() % (unsigned long)(i+1);
         std::swap(attack_buffer[i], attack_buffer[j]);
     }
 

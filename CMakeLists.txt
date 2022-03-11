@@ -17,7 +17,7 @@ set(LIB_SRC_FILES ${autopilot_sources})
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -std=c++11 -O3")
 IF (WIN32)
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0 /wd4711 /wd4710")
 ELSE()
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-variable -Wno-reorder -Wno-sign-compare -Wno-missing-braces")
 ENDIF()
