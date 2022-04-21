@@ -73,10 +73,41 @@ jobs:
       with:
         path: dist/*.tar.gz
 
+  build-wheels-ms:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python-version: [ '3.7', '3.8', '3.9', '3.10' ]
+        include:
+        - os: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+        architecture: x64
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Build wheel
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run:  |
+        pip install wheel cmake-build-extension
+        pip wheel .  --no-deps -w wheelhouse/ 
+        
+    - uses: actions/upload-artifact@v3
+      with:
+        path: ./wheelhouse/*.whl        
+        
   publish:
     runs-on: ubuntu-latest
     needs:
     - build-wheels
+    - build-wheels-ms
     - build-src
     if: github.event_name == 'release' && github.event.action == 'published'
     steps:

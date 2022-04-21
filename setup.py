@@ -54,24 +54,40 @@ class CMakeBuild(build_ext):
                 ["cmake", ext.sourcedir] + cmake_config_args, cwd=make_location
             )
             print(ext.name)
-            subprocess.check_call(["pwd"])
-            print(extdir)
-            subprocess.check_call(["ls"])
+            if platform.system() == "Windows":
+              cdir = str(subprocess.check_output(["cd"], shell=True).decode()).strip()
+              #subprocess.check_call(["dir"], shell=True)
+            else:
+              subprocess.check_call(["pwd"])
+              print(extdir)
+              subprocess.check_call(["ls"])
+
             lib_ext = ""
+            lib_name = ""
 
             if platform.system() == "Darwin":
                 lib_ext = ".dylib"
+                lib_name = "libmagent"
                 thread_num = check_output(["sysctl", "-n", "hw.ncpu"], encoding="utf-8")
                 subprocess.check_call(
                     ["make", "-C", make_location, "-j", str(thread_num).rstrip()], cwd=extdir
                 )
             elif platform.system() == "Linux":
                 lib_ext = ".so"
+                lib_name = "libmagent"
                 thread_num = check_output(["nproc"], encoding="utf-8")
                 subprocess.check_call(
                     ["make", "-C", make_location, "-j", str(thread_num).rstrip()], cwd=extdir
                 )
-
+            elif platform.system() == "Windows":
+                lib_ext = ".dll"
+                lib_name = "magent"
+                thread_num = 1
+                # cmake --build . --target ALL_BUILD --config Release
+                subprocess.check_call(
+                    ["cmake",
+                    "--build",".","--target","ALL_BUILD","--config",cfg], cwd=make_location
+                , shell=True)
             # build_res_dir = extdir + "/magent/build/"
             # if not os.path.exists(build_res_dir):
             #     os.makedirs(build_res_dir)
