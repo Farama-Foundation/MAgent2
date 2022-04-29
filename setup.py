@@ -99,7 +99,7 @@ class CMakeBuild(build_ext):
 
 setuptools.setup(
     name="magent",
-    version="0.2.0",
+    version="0.2.2",
     author="Farama Foundation",
     author_email="jkterry@farama.org",
     description="Multi-Agent Reinforcement Learning environments with very large numbers of agents",
