@@ -1,4 +1,6 @@
-# MAgent
+<p align="center">
+    <img src="readme.png" width="500px"/>
+</p>
 
 MAgent is a library for creating 2D environments with very large numbers of agents for conducting research in Multi-Agent Reinforcement Learning. These can look like this:
 
