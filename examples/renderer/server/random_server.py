@@ -1,6 +1,6 @@
 import random
 
-from .base_server import BaseServer
+from examples.renderer.server.base_server import BaseServer
 
 
 class RandomServer(BaseServer):
