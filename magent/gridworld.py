@@ -416,7 +416,7 @@ class GridWorld(Environment):
             whether the agents are alive
         """
         n = self.get_num(handle)
-        buf = np.empty((n,), dtype=np.bool)
+        buf = np.empty((n,), dtype=bool)
         _LIB.env_get_info(
             self.game,
             handle,
