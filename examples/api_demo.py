@@ -2,11 +2,12 @@
 First demo, show the usage of API
 """
 
-import magent
 # try:
 #     from models.mx_model import DeepQNetwork
 # except ImportError as e:
 from models.tf_model import DeepQNetwork
+
+import magent
 
 if __name__ == "__main__":
     map_size = 100
@@ -22,11 +23,11 @@ if __name__ == "__main__":
     env.reset()
     env.add_walls(method="random", n=map_size * map_size * 0.01)
     env.add_agents(predator, method="random", n=map_size * map_size * 0.02)
-    env.add_agents(prey,     method="random", n=map_size * map_size * 0.02)
+    env.add_agents(prey, method="random", n=map_size * map_size * 0.02)
 
     # init two models
     model1 = DeepQNetwork(env, predator, "predator")
-    model2 = DeepQNetwork(env, prey,     "prey")
+    model2 = DeepQNetwork(env, prey, "prey")
 
     # load trained model
     model1.load("data/pursuit_model")
@@ -43,8 +44,8 @@ if __name__ == "__main__":
         env.set_action(predator, acts_1)
 
         # take actions for tigers
-        obs_2  = env.get_observation(prey)
-        ids_2  = env.get_agent_id(prey)
+        obs_2 = env.get_observation(prey)
+        ids_2 = env.get_agent_id(prey)
         acts_2 = model2.infer_action(obs_2, ids_1)
         env.set_action(prey, acts_2)
 
@@ -62,8 +63,10 @@ if __name__ == "__main__":
 
         # print info
         if step_ct % 10 == 0:
-            print("step: %d\t predators' reward: %d\t preys' reward: %d" %
-                    (step_ct, reward[0], reward[1]))
+            print(
+                "step: %d\t predators' reward: %d\t preys' reward: %d"
+                % (step_ct, reward[0], reward[1])
+            )
 
         step_ct += 1
         if step_ct > 250:

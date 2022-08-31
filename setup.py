@@ -1,11 +1,11 @@
+import os
+import platform
+import subprocess
+from subprocess import check_output
+
 import setuptools
 from setuptools import Extension
 from setuptools.command.build_ext import build_ext
-from subprocess import check_call, check_output, Popen, PIPE
-import os
-import platform
-import pathlib
-import subprocess
 
 ###
 # Build process:
@@ -14,14 +14,16 @@ import subprocess
 # move libmagent -> build/
 ###
 
-with open("README.md", "r") as fh:
+with open("README.md") as fh:
     long_description = fh.read()
+
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir, config=[]):
         Extension.__init__(self, name, sources=[])
         self.sourcedir = os.path.abspath(sourcedir)
         self.config = config
+
 
 class CMakeBuild(build_ext):
     def build_extensions(self):
@@ -40,9 +42,9 @@ class CMakeBuild(build_ext):
             extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
 
             cmake_config_args = [
-                "-DCMAKE_BUILD_TYPE={}".format(cfg),
-                "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}".format(cfg.upper(), extdir),
-                "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY_{}={}".format(cfg.upper(), extdir),
+                f"-DCMAKE_BUILD_TYPE={cfg}",
+                f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{cfg.upper()}={extdir}",
+                f"-DCMAKE_RUNTIME_OUTPUT_DIRECTORY_{cfg.upper()}={extdir}",
                 "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_{}={}".format(
                     cfg.upper(), self.build_temp
                 ),
@@ -55,39 +57,42 @@ class CMakeBuild(build_ext):
             )
             print(ext.name)
             if platform.system() == "Windows":
-              cdir = str(subprocess.check_output(["cd"], shell=True).decode()).strip()
-              #subprocess.check_call(["dir"], shell=True)
+                str(subprocess.check_output(["cd"], shell=True).decode()).strip()
+                # subprocess.check_call(["dir"], shell=True)
             else:
-              subprocess.check_call(["pwd"])
-              print(extdir)
-              subprocess.check_call(["ls"])
+                subprocess.check_call(["pwd"])
+                print(extdir)
+                subprocess.check_call(["ls"])
 
-            lib_ext = ""
-            lib_name = ""
+            # lib_ext = ""
+            # lib_name = ""
 
             if platform.system() == "Darwin":
-                lib_ext = ".dylib"
-                lib_name = "libmagent"
+                # lib_ext = ".dylib"
+                # lib_name = "libmagent"
                 thread_num = check_output(["sysctl", "-n", "hw.ncpu"], encoding="utf-8")
                 subprocess.check_call(
-                    ["make", "-C", make_location, "-j", str(thread_num).rstrip()], cwd=extdir
+                    ["make", "-C", make_location, "-j", str(thread_num).rstrip()],
+                    cwd=extdir,
                 )
             elif platform.system() == "Linux":
-                lib_ext = ".so"
-                lib_name = "libmagent"
+                # lib_ext = ".so"
+                # lib_name = "libmagent"
                 thread_num = check_output(["nproc"], encoding="utf-8")
                 subprocess.check_call(
-                    ["make", "-C", make_location, "-j", str(thread_num).rstrip()], cwd=extdir
+                    ["make", "-C", make_location, "-j", str(thread_num).rstrip()],
+                    cwd=extdir,
                 )
             elif platform.system() == "Windows":
-                lib_ext = ".dll"
-                lib_name = "magent"
+                # lib_ext = ".dll"
+                # lib_name = "magent"
                 thread_num = 1
                 # cmake --build . --target ALL_BUILD --config Release
                 subprocess.check_call(
-                    ["cmake",
-                    "--build",".","--target","ALL_BUILD","--config",cfg], cwd=make_location
-                , shell=True)
+                    ["cmake", "--build", ".", "--target", "ALL_BUILD", "--config", cfg],
+                    cwd=make_location,
+                    shell=True,
+                )
             # build_res_dir = extdir + "/magent/build/"
             # if not os.path.exists(build_res_dir):
             #     os.makedirs(build_res_dir)
@@ -108,17 +113,12 @@ setuptools.setup(
     url="https://github.com/Farama-Foundation/MAgent",
     keywords=["Reinforcement Learning", "game", "RL", "AI"],
     packages=setuptools.find_packages(),
-    ext_modules=[
-        CMakeExtension("magent.libmagent", ".", [])
-    ],
-    install_requires=[
-        'numpy>=1.18.0',
-        'pygame==2.1.0'
-    ],
-    python_requires='>=3.7',
+    ext_modules=[CMakeExtension("magent.libmagent", ".", [])],
+    install_requires=["numpy>=1.18.0", "pygame==2.1.0"],
+    python_requires=">=3.7",
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Programming Language :: Python :: 3',
+        "Development Status :: 5 - Production/Stable",
+        "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
@@ -127,7 +127,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     include_package_data=True,
-    cmdclass = {
-        "build_ext": CMakeBuild
-    },
+    cmdclass={"build_ext": CMakeBuild},
 )

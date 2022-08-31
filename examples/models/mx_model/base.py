@@ -1,8 +1,9 @@
 import os
+
 import mxnet as mx
+from model import BaseModel
 
 from magent.utility import has_gpu
-from model import BaseModel
 
 
 class MXBaseModel(BaseModel):
@@ -44,7 +45,10 @@ class MXBaseModel(BaseModel):
         """
         if not os.path.exists(dir_name):
             os.mkdir(dir_name)
-        dir_name = os.path.join(dir_name, self.name, )
+        dir_name = os.path.join(
+            dir_name,
+            self.name,
+        )
         if not os.path.exists(dir_name):
             os.mkdir(dir_name)
         pre = os.path.join(dir_name, self.subclass_name)

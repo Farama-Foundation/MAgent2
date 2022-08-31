@@ -3,18 +3,20 @@ Pursuit: predators get reward when they attack prey.
 """
 
 import argparse
-import time
 import logging as log
+import time
 
 import numpy as np
-
-import magent
+from model import ProcessingModel
 from models import buffer
 from models.tf_model import DeepQNetwork
-from model import ProcessingModel
+
+import magent
 
 
-def play_a_round(env, map_size, handles, models, print_every, train=True, render=False, eps=None):
+def play_a_round(
+    env, map_size, handles, models, print_every, train=True, render=False, eps=None
+):
     env.reset()
 
     env.add_walls(method="random", n=map_size * map_size * 0.03)
@@ -25,14 +27,14 @@ def play_a_round(env, map_size, handles, models, print_every, train=True, render
     done = False
 
     n = len(handles)
-    obs  = [[] for _ in range(n)]
-    ids  = [[] for _ in range(n)]
+    obs = [[] for _ in range(n)]
+    ids = [[] for _ in range(n)]
     acts = [[] for _ in range(n)]
     nums = [env.get_num(handle) for handle in handles]
     total_reward = [0 for _ in range(n)]
 
     print("===== sample =====")
-    print("eps %s number %s" % (eps, nums))
+    print(f"eps {eps} number {nums}")
     start_time = time.time()
     while not done:
         # take actions for every model
@@ -40,7 +42,7 @@ def play_a_round(env, map_size, handles, models, print_every, train=True, render
             obs[i] = env.get_observation(handles[i])
             ids[i] = env.get_agent_id(handles[i])
             # let models infer action in parallel (non-blocking)
-            models[i].infer_action(obs[i], ids[i], 'e_greedy', eps, block=False)
+            models[i].infer_action(obs[i], ids[i], "e_greedy", eps, block=False)
         for i in range(n):
             acts[i] = models[i].fetch_action()  # fetch actions (blocking)
             env.set_action(handles[i], acts[i])
@@ -53,7 +55,7 @@ def play_a_round(env, map_size, handles, models, print_every, train=True, render
         for i in range(n):
             rewards = env.get_reward(handles[i])
             if train:
-                alives  = env.get_alive(handles[i])
+                alives = env.get_alive(handles[i])
                 # store samples in replay buffer (non-blocking)
                 models[i].sample_step(rewards, alives, block=False)
             s = sum(rewards)
@@ -73,14 +75,19 @@ def play_a_round(env, map_size, handles, models, print_every, train=True, render
                 model.check_done()
 
         if step_ct % print_every == 0:
-            print("step %3d,  reward: %s,  total_reward: %s " %
-                  (step_ct, np.around(step_reward, 2), np.around(total_reward, 2)))
+            print(
+                "step %3d,  reward: %s,  total_reward: %s "
+                % (step_ct, np.around(step_reward, 2), np.around(total_reward, 2))
+            )
         step_ct += 1
         if step_ct > 250:
             break
 
     sample_time = time.time() - start_time
-    print("steps: %d,  total time: %.2f,  step average %.2f" % (step_ct, sample_time, sample_time / step_ct))
+    print(
+        "steps: %d,  total time: %.2f,  step average %.2f"
+        % (step_ct, sample_time, sample_time / step_ct)
+    )
 
     # train
     total_loss, value = [0 for _ in range(n)], [0 for _ in range(n)]
@@ -129,14 +136,23 @@ if __name__ == "__main__":
     models = []
 
     for i in range(len(names)):
-        models.append(ProcessingModel(
-            env, handles[i], names[i], 20000+i, 4000, DeepQNetwork,
-            batch_size=128, memory_size=2 ** 22,
-            target_update=1000, train_freq=4
-        ))
+        models.append(
+            ProcessingModel(
+                env,
+                handles[i],
+                names[i],
+                20000 + i,
+                4000,
+                DeepQNetwork,
+                batch_size=128,
+                memory_size=2**22,
+                target_update=1000,
+                train_freq=4,
+            )
+        )
 
     # load if
-    savedir = 'save_model'
+    savedir = "save_model"
     if args.load_from is not None:
         start_from = args.load_from
         print("load ... %d" % start_from)
@@ -154,14 +170,29 @@ if __name__ == "__main__":
     start = time.time()
     for k in range(start_from, start_from + args.n_round):
         tic = time.time()
-        eps = buffer.piecewise_decay(k, [0, 200, 400], [1, 0.2, 0.05]) if not args.greedy else 0
+        eps = (
+            buffer.piecewise_decay(k, [0, 200, 400], [1, 0.2, 0.05])
+            if not args.greedy
+            else 0
+        )
 
-        loss, reward, value = play_a_round(env, args.map_size, handles, models,
-                                           print_every=50, train=args.train,
-                                           render=args.render or (k+1) % args.render_every == 0,
-                                           eps=eps)  # for e-greedy
-        log.info("round %d\t loss: %s\t reward: %s\t value: %s" % (k, loss, reward, value))
-        print("round time %.2f  total time %.2f\n" % (time.time() - tic, time.time() - start))
+        loss, reward, value = play_a_round(
+            env,
+            args.map_size,
+            handles,
+            models,
+            print_every=50,
+            train=args.train,
+            render=args.render or (k + 1) % args.render_every == 0,
+            eps=eps,
+        )  # for e-greedy
+        log.info(
+            "round %d\t loss: %s\t reward: %s\t value: %s" % (k, loss, reward, value)
+        )
+        print(
+            "round time %.2f  total time %.2f\n"
+            % (time.time() - tic, time.time() - start)
+        )
 
         if (k + 1) % args.save_every == 0 and args.train:
             print("save model... ")

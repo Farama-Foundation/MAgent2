@@ -1,9 +1,10 @@
+import random
 import time
 
 import numpy as np
-import random
-import magent
 from models.tf_model import DeepQNetwork
+
+import magent
 from magent.renderer.server import BaseServer
 from magent.utility import FontProvider
 
@@ -45,7 +46,7 @@ def dfs(x, y, width, height, unit, wall_set):
     max_y = y + height
 
     d = random.choice(range(4))
-    pos_list = []
+    # pos_list = []
     flag = 0
     while len(trace) > 0:
         if flag == 4:
@@ -93,8 +94,14 @@ def draw_line(x, y, width, height):
 def open_the_door(x_s, y_s, w, h, unit):
     pos_list = []
     n_door = 15
-    random_horizon_list_x = [x_s + (2 * np.random.choice(w // 2 // unit, n_door) + 1) * unit, x_s + (2 * np.random.choice(w // 2 // unit, n_door) - 1) * unit]
-    random_vertical_list_y = [y_s + (2 * np.random.choice(h // 2 // unit, n_door) + 1) * unit, y_s + (2 * np.random.choice(h // 2 // unit, n_door) + 1) * unit]
+    random_horizon_list_x = [
+        x_s + (2 * np.random.choice(w // 2 // unit, n_door) + 1) * unit,
+        x_s + (2 * np.random.choice(w // 2 // unit, n_door) - 1) * unit,
+    ]
+    random_vertical_list_y = [
+        y_s + (2 * np.random.choice(h // 2 // unit, n_door) + 1) * unit,
+        y_s + (2 * np.random.choice(h // 2 // unit, n_door) + 1) * unit,
+    ]
 
     y_e = y_s + h - unit
     for v in random_horizon_list_x[0]:
@@ -117,26 +124,72 @@ def create_maze(pos, width, height, unit, font_area):
     for i in range(height):
         if i % 2 == 0:
             pos_set.extend(draw_line(pos[0], pos[1] + i * unit, width * unit, unit))
-            pos_set.extend(draw_line(pos[0], pos[1] + font_area[1] + i * unit, width * unit, unit))
-            pos_set.extend(draw_line(pos[0] + i * unit, pos[1] + height * unit, unit, font_area[1]))
-            pos_set.extend(draw_line(pos[0] + font_area[0] + i * unit, pos[1] + height * unit, unit, font_area[1]))
+            pos_set.extend(
+                draw_line(pos[0], pos[1] + font_area[1] + i * unit, width * unit, unit)
+            )
+            pos_set.extend(
+                draw_line(pos[0] + i * unit, pos[1] + height * unit, unit, font_area[1])
+            )
+            pos_set.extend(
+                draw_line(
+                    pos[0] + font_area[0] + i * unit,
+                    pos[1] + height * unit,
+                    unit,
+                    font_area[1],
+                )
+            )
 
     for i in range(width):
         if i % 2 == 0:
             pos_set.extend(draw_line(pos[0] + i * unit, pos[1], unit, height * unit))
-            pos_set.extend(draw_line(pos[0] + i * unit, pos[1] + font_area[1], unit, height * unit))
+            pos_set.extend(
+                draw_line(pos[0] + i * unit, pos[1] + font_area[1], unit, height * unit)
+            )
             pos_set.extend(draw_line(pos[0], pos[1] + i * unit, height * unit, unit))
-            pos_set.extend(draw_line(pos[0] + font_area[0], pos[1] + i * unit, height * unit, unit))
+            pos_set.extend(
+                draw_line(pos[0] + font_area[0], pos[1] + i * unit, height * unit, unit)
+            )
 
     pos_set = set(pos_set)
 
-    dfs(pos[0] + 2, pos[1] + 2, (width - 1) * unit, (height - 1) * unit, unit, pos_set)  # north
-    dfs(pos[0] + 2, pos[1] + (height - 2) * unit, (height - 1) * unit, (width + 3) * unit, unit, pos_set)  # west
-    dfs(pos[0] + height * unit, pos[1] + font_area[1] - unit, (width - height) * unit, (height - 1) * unit, unit, pos_set)  # south
-    dfs(pos[0] + font_area[0] - unit, pos[1] + (height - 2) * unit, (height - 1) * unit, font_area[1] - (height + 1) * unit, unit, pos_set)  # east
+    dfs(
+        pos[0] + 2, pos[1] + 2, (width - 1) * unit, (height - 1) * unit, unit, pos_set
+    )  # north
+    dfs(
+        pos[0] + 2,
+        pos[1] + (height - 2) * unit,
+        (height - 1) * unit,
+        (width + 3) * unit,
+        unit,
+        pos_set,
+    )  # west
+    dfs(
+        pos[0] + height * unit,
+        pos[1] + font_area[1] - unit,
+        (width - height) * unit,
+        (height - 1) * unit,
+        unit,
+        pos_set,
+    )  # south
+    dfs(
+        pos[0] + font_area[0] - unit,
+        pos[1] + (height - 2) * unit,
+        (height - 1) * unit,
+        font_area[1] - (height + 1) * unit,
+        unit,
+        pos_set,
+    )  # east
 
     temp = []
-    temp.extend(open_the_door(pos[0], pos[1], font_area[0] + height * unit, font_area[1] + height * unit, unit))
+    temp.extend(
+        open_the_door(
+            pos[0],
+            pos[1],
+            font_area[0] + height * unit,
+            font_area[1] + height * unit,
+            unit,
+        )
+    )
     res = clean_pos_set_convert_to_list(pos_set, temp)
     return res
 
@@ -150,29 +203,30 @@ def load_config(map_size):
     cfg.set({"embedding_size": 12})
 
     goal = cfg.register_agent_type(
-        "goal",
-        {'width': 1, 'length': 1,
-
-         'can_absorb': True
-         }
+        "goal", {"width": 1, "length": 1, "can_absorb": True}
     )
 
     agent = cfg.register_agent_type(
         "agent",
-        {'width': 1, 'length': 1, 'hp': 10, 'speed': 2,
-         'view_range': gw.CircleRange(6),
-         'damage': 2, 'step_recover': -10.0/400,
-
-         'step_reward': 0,
-         })
+        {
+            "width": 1,
+            "length": 1,
+            "hp": 10,
+            "speed": 2,
+            "view_range": gw.CircleRange(6),
+            "damage": 2,
+            "step_recover": -10.0 / 400,
+            "step_reward": 0,
+        },
+    )
 
     g_goal = cfg.add_group(goal)
     g_agent = cfg.add_group(agent)
 
-    g = gw.AgentSymbol(g_goal, 'any')
-    a = gw.AgentSymbol(g_agent, 'any')
+    g = gw.AgentSymbol(g_goal, "any")
+    a = gw.AgentSymbol(g_agent, "any")
 
-    cfg.add_reward_rule(gw.Event(a, 'collide', g), receiver=a, value=10)
+    cfg.add_reward_rule(gw.Event(a, "collide", g), receiver=a, value=10)
 
     return cfg
 
@@ -184,7 +238,7 @@ def generate_map(mode, env, map_size, goal_handle, handles, messages, font):
     for msg in messages:
         if len(msg) > max_len:
             for i in range(0, len(msg), max_len):
-                new.append(msg[i:i+max_len])
+                new.append(msg[i : i + max_len])
         else:
             new.append(msg)
     messages = new
@@ -194,17 +248,23 @@ def generate_map(mode, env, map_size, goal_handle, handles, messages, font):
     # create maze
     if mode == 1:
         radius = 90
-        pos_list = create_maze([center_x - radius, center_y - radius], radius + 1, 15, 2, font_area=[radius * 2 - 28, radius * 2 - 28])
+        pos_list = create_maze(
+            [center_x - radius, center_y - radius],
+            radius + 1,
+            15,
+            2,
+            font_area=[radius * 2 - 28, radius * 2 - 28],
+        )
         env.add_walls(method="custom", pos=pos_list)
 
     def add_square(pos, side, gap):
         side = int(side)
-        for x in range(center_x - side//2, center_x + side//2 + 1, gap):
-            pos.append([x, center_y - side//2])
-            pos.append([x, center_y + side//2])
-        for y in range(center_y - side//2, center_y + side//2 + 1, gap):
-            pos.append([center_x - side//2, y])
-            pos.append([center_x + side//2, y])
+        for x in range(center_x - side // 2, center_x + side // 2 + 1, gap):
+            pos.append([x, center_y - side // 2])
+            pos.append([x, center_y + side // 2])
+        for y in range(center_y - side // 2, center_y + side // 2 + 1, gap):
+            pos.append([center_x - side // 2, y])
+            pos.append([center_x + side // 2, y])
 
     def draw(base_x, base_y, scale, data):
         w, h = len(data), len(data[0])
@@ -241,7 +301,9 @@ def generate_map(mode, env, map_size, goal_handle, handles, messages, font):
     add_square(pos, map_size * 0.80, 1)
 
     pos = np.array(pos)
-    pos = pos[np.random.choice(np.arange(len(pos)), int(alpha_goal_num * 1.6), replace=False)]
+    pos = pos[
+        np.random.choice(np.arange(len(pos)), int(alpha_goal_num * 1.6), replace=False)
+    ]
 
     env.add_agents(handles[0], method="custom", pos=pos)
 
@@ -268,7 +330,7 @@ class ArrangeServer(BaseServer):
     def get_info(self):
         ret = self.env._get_groups_info()
         ret[1] = ret[0]
-        return (self.map_size, self.map_size), ret, {'wall': self.env._get_walls_info()}
+        return (self.map_size, self.map_size), ret, {"wall": self.env._get_walls_info()}
 
     def __init__(self, path="data/arrange_model", messages=None, mode=1):
         # some parameter
@@ -277,12 +339,12 @@ class ArrangeServer(BaseServer):
 
         # init the game
         env = magent.GridWorld(load_config(map_size))
-        font = FontProvider('data/font_8x8/basic.txt')
+        font = FontProvider("data/font_8x8/basic.txt")
 
         handles = env.get_handles()
         food_handle, handles = handles[0], handles[1:]
         models = []
-        models.append(DeepQNetwork(env, handles[0], 'arrange', use_conv=True))
+        models.append(DeepQNetwork(env, handles[0], "arrange", use_conv=True))
 
         # load model
         models[0].load(path, 10)
@@ -310,8 +372,8 @@ class ArrangeServer(BaseServer):
         models = self.models
         env = self.env
 
-        center_x = self.map_size // 2
-        center_y = self.map_size
+        # center_x = self.map_size // 2
+        # center_y = self.map_size
 
         for j in range(2):
             obs = [env.get_observation(handle) for handle in handles]
@@ -322,7 +384,7 @@ class ArrangeServer(BaseServer):
                     obs[i][1][:, 10:12] = 0
                 else:
                     obs[i][1][:, 10:12] = 1
-                acts = models[i].infer_action(obs[i], ids[i], 'e_greedy', eps=self.eps)
+                acts = models[i].infer_action(obs[i], ids[i], "e_greedy", eps=self.eps)
                 env.set_action(handles[i], acts)
 
             done = env.step()
