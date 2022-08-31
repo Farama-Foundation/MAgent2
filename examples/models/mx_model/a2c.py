@@ -97,7 +97,7 @@ class AdvantageActorCritic(MXBaseModel):
         self.feature_buf = np.empty((1,) + self.feature_space)
         self.action_buf = np.empty(1, dtype=np.int32)
         self.advantage_buf, self.value_buf = np.empty(1), np.empty(1)
-        self.terminal_buf = np.empty(1, dtype=np.bool)
+        self.terminal_buf = np.empty(1, dtype=bool)
 
         # print("parameters", self.model.get_params())
         # mx.viz.plot_network(self.output).view()
