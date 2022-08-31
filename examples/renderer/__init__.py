@@ -1,2 +1,2 @@
-from .base_renderer import BaseRenderer
-from .pygame_renderer import PyGameRenderer
+from examples.renderer.base_renderer import BaseRenderer
+from examples.renderer.pygame_renderer import PyGameRenderer

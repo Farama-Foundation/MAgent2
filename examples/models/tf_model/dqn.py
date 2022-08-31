@@ -5,8 +5,8 @@ import time
 import numpy as np
 import tensorflow as tf
 
-from ..common import ReplayBuffer
-from .base import TFBaseModel
+from examples.models.common import ReplayBuffer
+from examples.models.tf_model.base import TFBaseModel
 
 
 class DeepQNetwork(TFBaseModel):
