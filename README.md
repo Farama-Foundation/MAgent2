@@ -6,7 +6,7 @@ MAgent is a library for creating 2D environments with very large numbers of agen
 
 <img src="magent-graph-1.gif" width="200"><img src="magent-graph-2.gif" width="200">
 
-This is a maintained fork from the original repo- https://github.com/geek-ai/MAgent. The code is signifigantly cleaned up in many aspects and some unfortunate names have been fixed, but there are no major differences.
+This is a maintained fork from the original repo- https://github.com/geek-ai/MAgent. The code is significantly cleaned up in many aspects and some unfortunate names have been fixed, but there are no major differences.
 
 This maintainenace was primarily done in the service of the [PettingZoo library](https://github.com/Farama-Foundation/PettingZoo). PettingZoo is the easiest way to use environments in this library, and has comprehensive documentation of them.
 

@@ -1,18 +1,14 @@
-from models.rule_model import RandomActor
 import logging
-
 import math
-import collections
-import platform
+import os
 
 import numpy as np
-import logging
-import collections
-import os
+
+from examples.models.rule_model import RandomActor
 
 
 def init_logger(filename):
-    """ initialize logger config
+    """initialize logger config
 
     Parameters
     ----------
@@ -22,11 +18,12 @@ def init_logger(filename):
     logging.basicConfig(level=logging.INFO, filename=filename + ".log")
     console = logging.StreamHandler()
     console.setLevel(logging.INFO)
-    logging.getLogger('').addHandler(console)
+    logging.getLogger("").addHandler(console)
 
 
 class EpisodesBufferEntry:
     """Entry for episode buffer"""
+
     def __init__(self):
         self.views = []
         self.features = []
@@ -45,8 +42,9 @@ class EpisodesBufferEntry:
 
 class EpisodesBuffer:
     """Replay buffer to store a whole episode for all agents
-       one entry for one agent
+    one entry for one agent
     """
+
     def __init__(self, capacity):
         self.buffer = {}
         self.capacity = capacity
@@ -79,20 +77,20 @@ class EpisodesBuffer:
                 entry.append(obs[0][i], obs[1][i], acts[i], rewards[i], alives[i])
 
     def reset(self):
-        """ clear replay buffer """
+        """clear replay buffer"""
         self.buffer = {}
         self.is_full = False
 
     def episodes(self):
-        """ get episodes """
+        """get episodes"""
         return self.buffer.values()
 
 
 # decay schedulers
 def exponential_decay(now_step, total_step, final_value, rate):
     """exponential decay scheduler"""
-    decay = math.exp(math.log(final_value)/total_step ** rate)
-    return max(final_value, 1 * decay ** (now_step ** rate))
+    decay = math.exp(math.log(final_value) / total_step**rate)
+    return max(final_value, 1 * decay ** (now_step**rate))
 
 
 def linear_decay(now_step, total_step, final_value):
@@ -120,8 +118,9 @@ def piecewise_decay(now_step, anchor, anchor_value):
     if i == len(anchor):
         return anchor_value[-1]
     else:
-        return anchor_value[i-1] + (now_step - anchor[i-1]) * \
-                                   ((anchor_value[i] - anchor_value[i-1]) / (anchor[i] - anchor[i-1]))
+        return anchor_value[i - 1] + (now_step - anchor[i - 1]) * (
+            (anchor_value[i] - anchor_value[i - 1]) / (anchor[i] - anchor[i - 1])
+        )
 
 
 # eval observation set generator
@@ -177,21 +176,25 @@ def sample_observation(env, handles, n_obs=-1, step=-1):
         step_ct += 1
 
     for i in range(n):
-        views[i] = np.array(views[i], dtype=np.float32).reshape((-1,) +
-                            env.get_view_space(handles[i]))
-        features[i] = np.array(features[i], dtype=np.float32).reshape((-1,) +
-                               env.get_feature_space(handles[i]))
+        views[i] = np.array(views[i], dtype=np.float32).reshape(
+            (-1,) + env.get_view_space(handles[i])
+        )
+        features[i] = np.array(features[i], dtype=np.float32).reshape(
+            (-1,) + env.get_feature_space(handles[i])
+        )
 
     if n_obs != -1:
         for i in range(n):
             views[i] = views[i][np.random.choice(np.arange(views[i].shape[0]), n_obs)]
-            features[i] = features[i][np.random.choice(np.arange(features[i].shape[0]), n_obs)]
+            features[i] = features[i][
+                np.random.choice(np.arange(features[i].shape[0]), n_obs)
+            ]
 
     ret = [(v, f) for v, f in zip(views, features)]
     return ret
 
 
 def has_gpu():
-    """ check where has a nvidia gpu """
+    """check where has a nvidia gpu"""
     ret = os.popen("nvidia-smi -L 2>/dev/null").read()
     return ret.find("GPU") != -1

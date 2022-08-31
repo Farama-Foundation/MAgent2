@@ -45,7 +45,7 @@ So if agent is configured as follow, it has 13 + 8 + 2 = 23 valid actions.
 
 ## Reward
 Reward can be defined by constant attributes of agent type or by event trigger.
-Here is an example of the event tigger fashion. Boolean expression is supported. Two tigers can get reward when attack a deer simultaneously.
+Here is an example of the event trigger fashion. Boolean expression is supported. Two tigers can get reward when attack a deer simultaneously.
 ```python
 a = AgentSymbol(tiger_group, index='any')
 b = AgentSymbol(tiger_group, index='any')
@@ -60,7 +60,7 @@ See [python/magent/builtin/config](../python/magent/builtin/config/) for more ex
 Of course, you can also write your own reward rules in the control logic in python code.
 
 ## Game loop & Model parallelism
-In Magent, agents are controled by groups. You should use group handle to manipulate agents.
+In Magent, agents are controlled by groups. You should use group handle to manipulate agents.
 A typical main loop of a game is listed as follows. It is worth noting that groups can infer action in parallel.
 ```python
 handles = env.get_handles()
@@ -86,7 +86,7 @@ for i in range(n):
 for i in range(n):
     total_loss[i], value[i] = models[i].fetch_train()
 ```
-Futhermore, with several lines of modification in python (use socket instead of pipe), models can be deployed to different machines.
+Furthermore, with several lines of modification in python (use socket instead of pipe), models can be deployed to different machines.
 
 ## Run the first demo
 Run the following command in the root directory, do not cd to `examples/`
@@ -116,10 +116,10 @@ In this section, Pygame are required.
 pip install pygame
 python examples/show_battle_game.py
 ```
-In this game, you will act as a general and dispatch your soilders.
-You have 10 chances to place your soilders in the map.
-Then the soilders will act according to their deep q-networks.
-You goal is to find best places to place your soilders and let them to eliminate the enemies.
+In this game, you will act as a general and dispatch your soldiers.
+You have 10 chances to place your soldiers in the map.
+Then the soldiers will act according to their deep q-networks.
+You goal is to find best places to place your soldiers and let them to eliminate the enemies.
 
 ## Next step
 Try other examples and have fun!

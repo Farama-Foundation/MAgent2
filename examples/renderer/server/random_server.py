@@ -1,28 +1,41 @@
 import random
 
-from .base_server import BaseServer
+from examples.renderer.server.base_server import BaseServer
 
 
 class RandomServer(BaseServer):
-    def __init__(self, agent_number=1000, group_number=20, map_size=100, shape_range=3, speed=5, event_range=100):
+    def __init__(
+        self,
+        agent_number=1000,
+        group_number=20,
+        map_size=100,
+        shape_range=3,
+        speed=5,
+        event_range=100,
+    ):
         self._data = {}
         self._map_size = map_size
         self._number = agent_number
         for i in range(agent_number):
-            self._data.setdefault(i, [
-                random.randint(0, map_size - 1),
-                random.randint(0, map_size - 1),
-                random.randint(0, group_number - 1)
-            ])
+            self._data.setdefault(
+                i,
+                [
+                    random.randint(0, map_size - 1),
+                    random.randint(0, map_size - 1),
+                    random.randint(0, group_number - 1),
+                ],
+            )
         self._group = []
         for i in range(group_number):
-            self._group.append([
-                random.randint(1, shape_range),
-                random.randint(1, shape_range),
-                random.randint(0, 255),
-                random.randint(0, 255),
-                random.randint(0, 255)
-            ])
+            self._group.append(
+                [
+                    random.randint(1, shape_range),
+                    random.randint(1, shape_range),
+                    random.randint(0, 255),
+                    random.randint(0, 255),
+                    random.randint(0, 255),
+                ]
+            )
         self._speed = speed
         self._event_range = event_range
         self._map_size = map_size
@@ -45,8 +58,13 @@ class RandomServer(BaseServer):
             data[1] = min(max(data[1], 0), self._map_size - 1)
             data[2] = olddata[2]
             self._data[i] = data
-            if (x_range[0] <= data[0] <= x_range[1] and y_range[0] <= data[1] <= y_range[1]) or \
-                    (x_range[0] <= olddata[0] <= x_range[1] and y_range[0] <= olddata[1] <= y_range[1]):
+            if (
+                x_range[0] <= data[0] <= x_range[1]
+                and y_range[0] <= data[1] <= y_range[1]
+            ) or (
+                x_range[0] <= olddata[0] <= x_range[1]
+                and y_range[0] <= olddata[1] <= y_range[1]
+            ):
                 result.setdefault(i, olddata)
         event_number = random.randint(0, self._event_range)
         for i in range(event_number):
@@ -55,7 +73,7 @@ class RandomServer(BaseServer):
                 (
                     agent_id,
                     random.randint(0, self._map_size - 1),
-                    random.randint(0, self._map_size - 1)
+                    random.randint(0, self._map_size - 1),
                 )
             )
         return result, event
@@ -63,7 +81,6 @@ class RandomServer(BaseServer):
     def add_agents(self, x, y, g):
         self._data.setdefault(self._number, (x, y, g))
         self._number += 1
-        
+
     def get_map_size(self):
         return self._map_size, self._map_size
-

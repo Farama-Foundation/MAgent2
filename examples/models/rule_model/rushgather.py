@@ -1,9 +1,9 @@
 """gather agent, rush to food according to minimap"""
 
 import numpy as np
-
 from model import BaseModel
-from magent.c_lib import _LIB, as_int32_c_array, as_float_c_array
+
+from magent.c_lib import _LIB, as_float_c_array, as_int32_c_array
 
 
 class RushGatherer(BaseModel):
@@ -18,14 +18,23 @@ class RushGatherer(BaseModel):
 
     def infer_action(self, states, *args, **kwargs):
         obs_buf = as_float_c_array(states[0])
-        hp_buf  = as_float_c_array(states[1])
+        hp_buf = as_float_c_array(states[1])
         n, height, width, n_channel = states[0].shape
         buf = np.empty((n,), dtype=np.int32)
         act_buf = as_int32_c_array(buf)
         attack_base = self.attack_base
-        
+
         view2attack_buf = as_int32_c_array(self.view2attack)
 
-        _LIB.gather_infer_action(obs_buf, hp_buf, n, height, width, n_channel,
-                                 act_buf, attack_base, view2attack_buf)
+        _LIB.gather_infer_action(
+            obs_buf,
+            hp_buf,
+            n,
+            height,
+            width,
+            n_channel,
+            act_buf,
+            attack_base,
+            view2attack_buf,
+        )
         return buf

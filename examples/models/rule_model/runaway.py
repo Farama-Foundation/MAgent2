@@ -1,9 +1,9 @@
 """deprecated"""
 
 import numpy as np
-
 from model import BaseModel
-from magent.c_lib import _LIB, as_int32_c_array, as_float_c_array
+
+from magent.c_lib import _LIB, as_float_c_array, as_int32_c_array
 
 
 class RunawayPrey(BaseModel):
@@ -18,10 +18,20 @@ class RunawayPrey(BaseModel):
 
     def infer_action(self, observations, *args, **kwargs):
         obs_buf = as_float_c_array(observations[0])
-        hp_buf  = as_float_c_array(observations[1])
+        hp_buf = as_float_c_array(observations[1])
         n, height, width, n_channel = observations[0].shape
         buf = np.empty((n,), dtype=np.int32)
         act_buf = as_int32_c_array(buf)
-        _LIB.runaway_infer_action(obs_buf, hp_buf, n, height, width, n_channel,
-                                  self.attack_base, act_buf, self.away_channel, self.move_back)
+        _LIB.runaway_infer_action(
+            obs_buf,
+            hp_buf,
+            n,
+            height,
+            width,
+            n_channel,
+            self.attack_base,
+            act_buf,
+            self.away_channel,
+            self.move_back,
+        )
         return buf

@@ -3,6 +3,7 @@
 
 class Environment:
     """see subclass for detailed comment"""
+
     def __init__(self):
         pass
 
@@ -40,4 +41,3 @@ class Environment:
 
     def get_feature_space(self, handle):
         pass
-
