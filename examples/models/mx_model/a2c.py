@@ -1,20 +1,29 @@
 """advantage actor critic"""
 
-import os
-import time
-
-import numpy as np
 import mxnet as mx
+import numpy as np
 
-from .base import MXBaseModel
+from examples.models.mx_model.base import MXBaseModel
 
 
 class AdvantageActorCritic(MXBaseModel):
-    def __init__(self, env, handle, name, eval_obs=None,
-                 batch_size=64, reward_decay=0.99, learning_rate=1e-3,
-                 train_freq=1, value_coef=0.1, ent_coef=0.1,
-                 custom_view_space=None, custom_feature_space=None,
-                 *args, **kwargs):
+    def __init__(
+        self,
+        env,
+        handle,
+        name,
+        eval_obs=None,
+        batch_size=64,
+        reward_decay=0.99,
+        learning_rate=1e-3,
+        train_freq=1,
+        value_coef=0.1,
+        ent_coef=0.1,
+        custom_view_space=None,
+        custom_feature_space=None,
+        *args,
+        **kwargs
+    ):
         """init a model
 
         Parameters
@@ -48,16 +57,16 @@ class AdvantageActorCritic(MXBaseModel):
         self.handle = handle
         self.view_space = custom_view_space or env.get_view_space(handle)
         self.feature_space = custom_feature_space or env.get_feature_space(handle)
-        self.num_actions  = env.get_action_space(handle)[0]
+        self.num_actions = env.get_action_space(handle)[0]
         self.reward_decay = reward_decay
 
-        self.batch_size   = batch_size
-        self.learning_rate= learning_rate
-        self.train_freq   = train_freq   # train time of every sample (s,a,r,s')
-        self.eval_obs     = eval_obs
+        self.batch_size = batch_size
+        self.learning_rate = learning_rate
+        self.train_freq = train_freq  # train time of every sample (s,a,r,s')
+        self.eval_obs = eval_obs
 
         self.value_coef = value_coef
-        self.ent_coef   = ent_coef
+        self.ent_coef = ent_coef
 
         self.train_ct = 0
 
@@ -76,21 +85,32 @@ class AdvantageActorCritic(MXBaseModel):
         neg_entropy = mx.sym.MakeLoss(data=neg_entropy)
 
         self.sym = mx.sym.Group([log_policy, value, neg_entropy, out_policy])
-        self.model = mx.mod.Module(self.sym, data_names=['input_view', 'input_feature'],
-                                   label_names=None, context=self.ctx)
+        self.model = mx.mod.Module(
+            self.sym,
+            data_names=["input_view", "input_feature"],
+            label_names=None,
+            context=self.ctx,
+        )
 
         # bind (set initial batch size)
         self.bind_size = batch_size
-        self.model.bind(data_shapes=[('input_view', (batch_size,) + self.view_space),
-                                     ('input_feature', (batch_size,) + self.feature_space)],
-                        label_shapes=None)
+        self.model.bind(
+            data_shapes=[
+                ("input_view", (batch_size,) + self.view_space),
+                ("input_feature", (batch_size,) + self.feature_space),
+            ],
+            label_shapes=None,
+        )
 
         # init params
         self.model.init_params(initializer=mx.init.Xavier())
-        self.model.init_optimizer(optimizer='adam', optimizer_params={
-            'learning_rate': learning_rate,
-            'clip_gradient': 10,
-        })
+        self.model.init_optimizer(
+            optimizer="adam",
+            optimizer_params={
+                "learning_rate": learning_rate,
+                "clip_gradient": 10,
+            },
+        )
 
         # init training buffers
         self.view_buf = np.empty((1,) + self.view_space)
@@ -115,11 +135,13 @@ class AdvantageActorCritic(MXBaseModel):
         hidden_size = [256]
 
         if False:
-            h_conv1 = mx.sym.Convolution(data=input_view, kernel=(3, 3),
-                                         num_filter=kernel_num[0], layout="NHWC")
+            h_conv1 = mx.sym.Convolution(
+                data=input_view, kernel=(3, 3), num_filter=kernel_num[0], layout="NHWC"
+            )
             h_conv1 = mx.sym.Activation(data=h_conv1, act_type="relu")
-            h_conv2 = mx.sym.Convolution(data=h_conv1, kernel=(3, 3),
-                                         num_filter=kernel_num[1], layout="NHWC")
+            h_conv2 = mx.sym.Convolution(
+                data=h_conv1, kernel=(3, 3), num_filter=kernel_num[1], layout="NHWC"
+            )
             h_conv2 = mx.sym.Activation(data=h_conv2, act_type="relu")
         else:
             input_view = mx.sym.flatten(data=input_view)
@@ -135,10 +157,12 @@ class AdvantageActorCritic(MXBaseModel):
 
         dense = h_view + h_emb
 
-        policy = mx.sym.FullyConnected(data=dense, num_hidden=self.num_actions, no_bias=True)
+        policy = mx.sym.FullyConnected(
+            data=dense, num_hidden=self.num_actions, no_bias=True
+        )
         policy = mx.sym.SoftmaxActivation(data=policy)
         policy = mx.sym.clip(data=policy, a_min=1e-5, a_max=1 - 1e-5)
-        value  = mx.sym.FullyConnected(data=dense, num_hidden=1)
+        value = mx.sym.FullyConnected(data=dense, num_hidden=1)
 
         return policy, value
 
@@ -205,14 +229,19 @@ class AdvantageActorCritic(MXBaseModel):
         self.advantage_buf.resize(n)
         view, feature = self.view_buf, self.feature_buf
         action, value = self.action_buf, self.value_buf
-        advantage     = self.advantage_buf
+        advantage = self.advantage_buf
 
         ct = 0
         gamma = self.reward_decay
         # collect episodes from multiple separate buffers to a continuous buffer
 
         for episode in sample_buffer.episodes():
-            v, f, a, r = episode.views, episode.features, episode.actions, episode.rewards
+            v, f, a, r = (
+                episode.views,
+                episode.features,
+                episode.actions,
+                episode.rewards,
+            )
 
             m = len(episode.rewards)
             self._reset_bind_size(m)
@@ -222,10 +251,10 @@ class AdvantageActorCritic(MXBaseModel):
 
             delta_t = np.empty(m)
             if episode.terminal:
-                delta_t[:m-1] = r[:m-1] + gamma * value[1:m] - value[:m-1]
-                delta_t[m-1]  = r[m-1]  + gamma * 0          - value[m-1]
+                delta_t[: m - 1] = r[: m - 1] + gamma * value[1:m] - value[: m - 1]
+                delta_t[m - 1] = r[m - 1] + gamma * 0 - value[m - 1]
             else:
-                delta_t[:m-1] = r[:m-1] + gamma * value[1:m] - value[:m-1]
+                delta_t[: m - 1] = r[: m - 1] + gamma * value[1:m] - value[: m - 1]
                 m -= 1
                 v, f, a = v[:-1], f[:-1], a[:-1]
 
@@ -236,11 +265,11 @@ class AdvantageActorCritic(MXBaseModel):
             keep = 0
             for i in reversed(range(m)):
                 keep = keep * gamma + delta_t[i]
-                advantage[ct+i] = keep
+                advantage[ct + i] = keep
 
-            view[ct:ct+m] = v
-            feature[ct:ct+m] = f
-            action[ct:ct+m]  = a
+            view[ct : ct + m] = v
+            feature[ct : ct + m] = f
+            action[ct : ct + m] = a
             ct += m
         assert n == ct
 
@@ -266,7 +295,10 @@ class AdvantageActorCritic(MXBaseModel):
         entropy_loss = np.mean(entropy_loss.asnumpy())
         value_loss = self.value_coef * np.mean(np.square(advantage))
 
-        print("sample %d  %.4f %.4f %.4f %.4f" % (n, pg_loss, value_loss, entropy_loss, value))
+        print(
+            "sample %d  %.4f %.4f %.4f %.4f"
+            % (n, pg_loss, value_loss, entropy_loss, value)
+        )
         return [pg_loss, value_loss, entropy_loss], value
 
     def _reset_bind_size(self, new_size):
@@ -283,8 +315,9 @@ class AdvantageActorCritic(MXBaseModel):
             self.bind_size = new_size
             self.model.reshape(
                 data_shapes=[
-                    ('input_view',    (new_size,) + self.view_space),
-                    ('input_feature', (new_size,) + self.feature_space)],
+                    ("input_view", (new_size,) + self.view_space),
+                    ("input_feature", (new_size,) + self.feature_space),
+                ],
             )
 
     def get_info(self):

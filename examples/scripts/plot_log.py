@@ -1,6 +1,7 @@
 """plot general log file according to given indexes"""
 
 import sys
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -8,13 +9,13 @@ filename = sys.argv[1]
 
 data = []
 
-with open(filename, 'r') as fin:
+with open(filename) as fin:
     for line in fin.readlines():
-        items = line.split('\t')
+        items = line.split("\t")
 
         row = []
         for item in items[1:]:
-            t = eval(item.split(':')[1])
+            t = eval(item.split(":")[1])
             if isinstance(t, list):
                 for x in t:
                     row.append(x)

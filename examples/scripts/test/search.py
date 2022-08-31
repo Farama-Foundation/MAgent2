@@ -1,11 +1,9 @@
 """do search task"""
 
 import os
-import sys
-import argparse
 import time
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 
 
 def do_task(task_item):
@@ -16,10 +14,11 @@ def do_task(task_item):
         # cmd = "time " + cmd
         cmd += " --name " + tmp_name
         cmd = cmd + " >> " + tmp_name + ".out"
-        print("%s : %s" % (tmp_name, cmd))
+        print(f"{tmp_name} : {cmd}")
         start = time.time()
         os.system(cmd)
         use_time = time.time() - start
-        recorder.write("log_file: %s\t time: %.2f\n" % (tmp_name + ".log", use_time))
+        recorder.write(
+            "log_file: {}\t time: {:.2f}\n".format(tmp_name + ".log", use_time)
+        )
     recorder.close()
-
