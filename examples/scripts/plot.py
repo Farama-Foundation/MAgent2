@@ -4,16 +4,16 @@ import matplotlib.pyplot as plt
 
 class DynamicPlot:
     def __init__(self, n):
-        self.x_data  = []
+        self.x_data = []
         self.y_datas = []
-        self.lines   = []
+        self.lines = []
 
         plt.show()
         axes = plt.gca()
 
         for i in range(n):
             self.y_datas.append([])
-            line, = axes.plot(self.x_data, self.y_datas[-1])
+            (line,) = axes.plot(self.x_data, self.y_datas[-1])
             self.lines.append(line)
 
         self.axes = axes
@@ -40,4 +40,3 @@ class DynamicPlot:
 
     def save(self, filename):
         plt.savefig(filename)
-

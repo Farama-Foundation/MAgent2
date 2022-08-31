@@ -1,6 +1,4 @@
-
-from . import gridworld
-from . import utility
+from . import gridworld, utility
 from .render import Renderer
 
 # some alias

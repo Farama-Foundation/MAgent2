@@ -1,18 +1,11 @@
 """ some utilities """
 
-import math
-import collections
-import platform
-
-import numpy as np
-import logging
 import collections
 import os
 
 
-
 def rec_round(x, ndigits=2):
-    """ round x recursively
+    """round x recursively
 
     Parameters
     ----------
@@ -28,13 +21,15 @@ def rec_round(x, ndigits=2):
 
 def download_file(filename, url):
     """download url to filename"""
-    print("Download %s from %s..." % (filename, url))
+    print(f"Download {filename} from {url}...")
 
-    ret = os.system("wget -O %s '%s'" % (filename, url))
+    ret = os.system(f"wget -O {filename} '{url}'")
 
     if ret != 0:
         print("ERROR: wget fails!")
-        print("If you are an OSX user, you can install wget by 'brew install wget' and retry.")
+        print(
+            "If you are an OSX user, you can install wget by 'brew install wget' and retry."
+        )
         exit(-1)
     else:
         print("download done!")
@@ -42,12 +37,14 @@ def download_file(filename, url):
 
 def download_model(url):
     """download model from url"""
-    name = url.split('/')[-1]
-    name = os.path.join('data', name)
+    name = url.split("/")[-1]
+    name = os.path.join("data", name)
     download_file(name, url)
+
     def do_commond(cmd):
         print(cmd)
         os.system(cmd)
+
     do_commond("tar xzf %s -C data" % name)
     do_commond("rm %s" % name)
 
@@ -55,18 +52,21 @@ def download_model(url):
 def check_model(name):
     """check whether a model is downloaded"""
     infos = {
-        'against':
-            (('data/battle_model/battle/tfdqn_0.index',),
-            'https://raw.githubusercontent.com/merrymercy/merrymercy.github.io/master/_data/magent/against-0.tar.gz'),
-
-        'battle-game':
-            (("data/battle_model/trusty-battle-game-l/tfdqn_0.index",
-             "data/battle_model/trusty-battle-game-r/tfdqn_0.index"),
-             'https://raw.githubusercontent.com/merrymercy/merrymercy.github.io/master/_data/magent/battle_model.tar.gz'),
-
-        'arrange':
-            (('data/arrange_model/arrange/tfdqn_10.index',),
-             'https://raw.githubusercontent.com/merrymercy/merrymercy.github.io/master/_data/magent/arrange_game.tar.gz',)
+        "against": (
+            ("data/battle_model/battle/tfdqn_0.index",),
+            "https://raw.githubusercontent.com/merrymercy/merrymercy.github.io/master/_data/magent/against-0.tar.gz",
+        ),
+        "battle-game": (
+            (
+                "data/battle_model/trusty-battle-game-l/tfdqn_0.index",
+                "data/battle_model/trusty-battle-game-r/tfdqn_0.index",
+            ),
+            "https://raw.githubusercontent.com/merrymercy/merrymercy.github.io/master/_data/magent/battle_model.tar.gz",
+        ),
+        "arrange": (
+            ("data/arrange_model/arrange/tfdqn_10.index",),
+            "https://raw.githubusercontent.com/merrymercy/merrymercy.github.io/master/_data/magent/arrange_game.tar.gz",
+        ),
     }
 
     if name not in infos:
@@ -83,18 +83,19 @@ def check_model(name):
 
 class FontProvider:
     """provide pixel font"""
+
     def __init__(self, filename):
         data = []
         # read raw
         with open(filename) as fin:
             for line in fin.readlines():
                 char = []
-                for x in line.split(','):
+                for x in line.split(","):
                     char.append(eval(x))
                 data.append(char)
 
         height = 8
-        width  = 8
+        width = 8
 
         # expand bit compress
         expand_data = []

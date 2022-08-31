@@ -15,7 +15,7 @@ class BaseServer:
     @abstractmethod
     def add_agents(self, x, y, g):
         pass
-        
+
     @abstractmethod
     def get_map_size(self):
         pass

@@ -2,21 +2,23 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 def plot_heatmap(x, y, z):
     x, y = np.meshgrid(y, x)
     fig, ax = plt.subplots()
     im = ax.pcolormesh(x, y, z)
     fig.colorbar(im)
 
+
 def smooth(data, alpha, beta=None):
     beta = beta or alpha
     for i in range(0, len(data)):
         for j in range(1, len(data[0])):
-            data[i][j] = alpha * data[i][j-1] + (1-alpha) * data[i][j]
+            data[i][j] = alpha * data[i][j - 1] + (1 - alpha) * data[i][j]
 
     for j in range(0, len(data[0])):
         for i in range(1, len(data)):
-            data[i][j] = alpha * data[i-1][j] + (1-alpha) * data[i][j]
+            data[i][j] = alpha * data[i - 1][j] + (1 - alpha) * data[i][j]
 
     return data
 
@@ -57,7 +59,7 @@ heat_data = np.array(heat_data)
 rounds = np.sort(np.array(round2index.keys()))
 
 pick = 60
-heat_data = heat_data[:pick,:pick]
+heat_data = heat_data[:pick, :pick]
 rounds = rounds[:pick]
 
 plot_heatmap(rounds, rounds, heat_data)

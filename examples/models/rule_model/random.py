@@ -1,7 +1,6 @@
 """A random agent"""
 
 import numpy as np
-
 from model import BaseModel
 
 

@@ -3,9 +3,9 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
+from models.tf_model import DeepQNetwork
 
 import magent
-from models.tf_model import DeepQNetwork
 from magent.renderer.server import BaseServer
 
 
@@ -20,20 +20,30 @@ def load_config(map_size):
 
     small = cfg.register_agent_type(
         "small",
-        {'width': 1, 'length': 1, 'hp': 10, 'speed': 2,
-         'view_range': gw.CircleRange(6), 'attack_range': gw.CircleRange(1.5),
-         'damage': 2, 'step_recover': 0.1,
-         'step_reward': -0.001, 'kill_reward': 100, 'dead_penalty': -0.05, 'attack_penalty': -1,
-         })
+        {
+            "width": 1,
+            "length": 1,
+            "hp": 10,
+            "speed": 2,
+            "view_range": gw.CircleRange(6),
+            "attack_range": gw.CircleRange(1.5),
+            "damage": 2,
+            "step_recover": 0.1,
+            "step_reward": -0.001,
+            "kill_reward": 100,
+            "dead_penalty": -0.05,
+            "attack_penalty": -1,
+        },
+    )
 
     g0 = cfg.add_group(small)
     g1 = cfg.add_group(small)
 
-    a = gw.AgentSymbol(g0, index='any')
-    b = gw.AgentSymbol(g1, index='any')
+    a = gw.AgentSymbol(g0, index="any")
+    b = gw.AgentSymbol(g1, index="any")
 
-    cfg.add_reward_rule(gw.Event(a, 'attack', b), receiver=a, value=2)
-    cfg.add_reward_rule(gw.Event(b, 'attack', a), receiver=b, value=2)
+    cfg.add_reward_rule(gw.Event(a, "attack", b), receiver=a, value=2)
+    cfg.add_reward_rule(gw.Event(b, "attack", a), receiver=b, value=2)
 
     return cfg
 
@@ -83,7 +93,9 @@ def generate_map(env, map_size, handles):
 
 
 class BattleServer(BaseServer):
-    def __init__(self, path="data/battle_model", total_step=1000, add_counter=10, add_interval=50):
+    def __init__(
+        self, path="data/battle_model", total_step=1000, add_counter=10, add_interval=50
+    ):
         # some parameter
         map_size = 125
         eps = 0.05
@@ -93,12 +105,16 @@ class BattleServer(BaseServer):
 
         handles = env.get_handles()
         models = []
-        models.append(DeepQNetwork(env, handles[0], 'trusty-battle-game-l', use_conv=True))
-        models.append(DeepQNetwork(env, handles[1], 'trusty-battle-game-r', use_conv=True))
+        models.append(
+            DeepQNetwork(env, handles[0], "trusty-battle-game-l", use_conv=True)
+        )
+        models.append(
+            DeepQNetwork(env, handles[1], "trusty-battle-game-r", use_conv=True)
+        )
 
         # load model
-        models[0].load(path, 0, 'trusty-battle-game-l')
-        models[1].load(path, 0, 'trusty-battle-game-r')
+        models[0].load(path, 0, "trusty-battle-game-l")
+        models[1].load(path, 0, "trusty-battle-game-r")
 
         # init environment
         env.reset()
@@ -118,7 +134,11 @@ class BattleServer(BaseServer):
         plt.show()
 
     def get_info(self):
-        return (self.map_size, self.map_size), self.env._get_groups_info(), {'wall': self.env._get_walls_info()}
+        return (
+            (self.map_size, self.map_size),
+            self.env._get_groups_info(),
+            {"wall": self.env._get_walls_info()},
+        )
 
     def step(self):
         handles = self.handles
@@ -130,7 +150,7 @@ class BattleServer(BaseServer):
 
         counter = []
         for i in range(len(handles)):
-            acts = models[i].infer_action(obs[i], ids[i], 'e_greedy', eps=self.eps)
+            acts = models[i].infer_action(obs[i], ids[i], "e_greedy", eps=self.eps)
             env.set_action(handles[i], acts)
             counter.append(np.zeros(shape=env.get_action_space(handles[i])))
             for j in acts:
@@ -182,19 +202,22 @@ class BattleServer(BaseServer):
         return self.map_size, self.map_size
 
     def get_banners(self, frame_id, resolution):
-        red = '{}'.format(self.env.get_num(self.handles[0])), (200, 0, 0)
-        vs = ' vs ', (0, 0, 0)
-        blue = '{}'.format(self.env.get_num(self.handles[1])), (0, 0, 200)
+        red = f"{self.env.get_num(self.handles[0])}", (200, 0, 0)
+        vs = " vs ", (0, 0, 0)
+        blue = f"{self.env.get_num(self.handles[1])}", (0, 0, 200)
         result = [(red, vs, blue)]
 
-        tmp = '{} chance(s) remained'.format(
-            max(0, self.add_counter)), (0, 0, 0)
+        tmp = f"{max(0, self.add_counter)} chance(s) remained", (0, 0, 0)
         result.append((tmp,))
 
-        tmp = '{} / {} steps'.format(frame_id, self.total_step), (0, 0, 0)
+        tmp = f"{frame_id} / {self.total_step} steps", (0, 0, 0)
         result.append((tmp,))
-        if frame_id % self.add_interval == 0 and frame_id < self.total_step and self.add_counter > 0:
-            tmp = 'Please press your left mouse button to add agents', (0, 0, 0)
+        if (
+            frame_id % self.add_interval == 0
+            and frame_id < self.total_step
+            and self.add_counter > 0
+        ):
+            tmp = "Please press your left mouse button to add agents", (0, 0, 0)
             result.append((tmp,))
         return result
 
@@ -210,8 +233,13 @@ class BattleServer(BaseServer):
         return False
 
     def mousedown(self, frame_id, pressed, mouse_x, mouse_y):
-        if frame_id % self.add_interval == 0 and frame_id < self.total_step and pressed[0] \
-                and self.add_counter > 0 and not self.done:
+        if (
+            frame_id % self.add_interval == 0
+            and frame_id < self.total_step
+            and pressed[0]
+            and self.add_counter > 0
+            and not self.done
+        ):
             self.add_counter -= 1
             pos = []
             for i in range(-5, 5):

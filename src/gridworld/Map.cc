@@ -420,7 +420,7 @@ int Map::get_align(Agent *agent) {
         ((Agent *)slots[pos_int].occupier)->get_group() == group);
 
     pos_int = pos2int(pos);
-    do {  // negtive direction
+    do {  // negative direction
         x_align++;
         pos_int--;
     } while (slots[pos_int].occupier != nullptr &&
@@ -436,7 +436,7 @@ int Map::get_align(Agent *agent) {
         ((Agent *)slots[pos_int].occupier)->get_group() == group);
 
     pos_int = pos2int(pos);
-    do {  // negtive direction
+    do {  // negative direction
         y_align++;
         pos_int -= MAP_INNER_Y_ADD;
     } while (slots[pos_int].occupier != nullptr &&

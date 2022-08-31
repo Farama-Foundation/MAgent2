@@ -1,17 +1,28 @@
 """ advantage actor critic """
-import os
 
 import numpy as np
 import tensorflow as tf
 
-from .base import TFBaseModel
+from examples.models.tf_model.base import TFBaseModel
 
 
 class AdvantageActorCritic(TFBaseModel):
-    def __init__(self, env, handle, name, learning_rate=1e-3,
-                 batch_size=64, reward_decay=0.99, eval_obs=None,
-                 train_freq=1, value_coef=0.1, ent_coef=0.08, use_comm=False,
-                 custom_view_space=None, custom_feature_space=None):
+    def __init__(
+        self,
+        env,
+        handle,
+        name,
+        learning_rate=1e-3,
+        batch_size=64,
+        reward_decay=0.99,
+        eval_obs=None,
+        train_freq=1,
+        value_coef=0.1,
+        ent_coef=0.08,
+        use_comm=False,
+        custom_view_space=None,
+        custom_feature_space=None,
+    ):
         """init a model
 
         Parameters
@@ -48,15 +59,15 @@ class AdvantageActorCritic(TFBaseModel):
         self.name = name
         self.view_space = custom_view_space or env.get_view_space(handle)
         self.feature_space = custom_feature_space or env.get_feature_space(handle)
-        self.num_actions  = env.get_action_space(handle)[0]
+        self.num_actions = env.get_action_space(handle)[0]
         self.reward_decay = reward_decay
 
-        self.batch_size   = batch_size
-        self.learning_rate= learning_rate
-        self.train_freq   = train_freq   # train time of every sample (s,a,r,s')
+        self.batch_size = batch_size
+        self.learning_rate = learning_rate
+        self.train_freq = train_freq  # train time of every sample (s,a,r,s')
 
-        self.value_coef = value_coef     # coefficient of value in the total loss
-        self.ent_coef = ent_coef         # coefficient of entropy in the total loss
+        self.value_coef = value_coef  # coefficient of value in the total loss
+        self.ent_coef = ent_coef  # coefficient of entropy in the total loss
 
         self.train_ct = 0
         self.use_comm = use_comm
@@ -91,7 +102,7 @@ class AdvantageActorCritic(TFBaseModel):
         name: str
         hidden_size: int
         """
-        mask = (tf.ones((n, n)) - tf.eye(n))
+        mask = tf.ones((n, n)) - tf.eye(n)
         mask *= tf.where(n > 1, 1.0 / (tf.cast(n, tf.float32) - 1.0), 0)
 
         C = tf.get_variable(name + "_C", shape=(hidden_size, hidden_size))
@@ -102,7 +113,7 @@ class AdvantageActorCritic(TFBaseModel):
         return tf.tanh(tf.matmul(message, C) + tf.matmul(hidden, H) + skip)
 
     def _commnet(self, n, dense, hidden_size, n_step=2):
-        """ CommNet Learning Multiagent Communication with Backpropagation by S. Sukhbaatar et al. NIPS 2016
+        """CommNet Learning Multiagent Communication with Backpropagation by S. Sukhbaatar et al. NIPS 2016
 
         Parameters
         ----------
@@ -135,20 +146,26 @@ class AdvantageActorCritic(TFBaseModel):
             the input shape
         """
         # input
-        input_view    = tf.placeholder(tf.float32, (None,) + view_space)
+        input_view = tf.placeholder(tf.float32, (None,) + view_space)
         input_feature = tf.placeholder(tf.float32, (None,) + feature_space)
         action = tf.placeholder(tf.int32, [None])
         reward = tf.placeholder(tf.float32, [None])
         num_agent = tf.placeholder(tf.int32, [])
 
-        kernel_num = [32, 32]
+        # kernel_num = [32, 32]
         hidden_size = [256]
 
         # fully connected
-        flatten_view = tf.reshape(input_view, [-1, np.prod([v.value for v in input_view.shape[1:]])])
-        h_view = tf.layers.dense(flatten_view, units=hidden_size[0], activation=tf.nn.relu)
+        flatten_view = tf.reshape(
+            input_view, [-1, np.prod([v.value for v in input_view.shape[1:]])]
+        )
+        h_view = tf.layers.dense(
+            flatten_view, units=hidden_size[0], activation=tf.nn.relu
+        )
 
-        h_emb = tf.layers.dense(input_feature,  units=hidden_size[0], activation=tf.nn.relu)
+        h_emb = tf.layers.dense(
+            input_feature, units=hidden_size[0], activation=tf.nn.relu
+        )
 
         dense = tf.concat([h_view, h_emb], axis=1)
         dense = tf.layers.dense(dense, units=hidden_size[0] * 2, activation=tf.nn.relu)
@@ -156,8 +173,10 @@ class AdvantageActorCritic(TFBaseModel):
         if self.use_comm:
             dense = self._commnet(num_agent, dense, dense.shape[-1].value)
 
-        policy = tf.layers.dense(dense, units=self.num_actions, activation=tf.nn.softmax)
-        policy = tf.clip_by_value(policy, 1e-10, 1-1e-10)
+        policy = tf.layers.dense(
+            dense, units=self.num_actions, activation=tf.nn.softmax
+        )
+        policy = tf.clip_by_value(policy, 1e-10, 1 - 1e-10)
         value = tf.layers.dense(dense, units=1)
         value = tf.reshape(value, (-1,))
         advantage = tf.stop_gradient(reward - value)
@@ -168,7 +187,9 @@ class AdvantageActorCritic(TFBaseModel):
         log_prob = tf.reduce_sum(log_policy * action_mask, axis=1)
         pg_loss = -tf.reduce_mean(advantage * log_prob)
         vf_loss = self.value_coef * tf.reduce_mean(tf.square(reward - value))
-        neg_entropy = self.ent_coef * tf.reduce_mean(tf.reduce_sum(policy * log_policy, axis=1))
+        neg_entropy = self.ent_coef * tf.reduce_mean(
+            tf.reduce_sum(policy * log_policy, axis=1)
+        )
         total_loss = pg_loss + vf_loss + neg_entropy
 
         # train op (clip gradient)
@@ -177,13 +198,15 @@ class AdvantageActorCritic(TFBaseModel):
         gradients, _ = tf.clip_by_global_norm(gradients, 5.0)
         self.train_op = optimizer.apply_gradients(zip(gradients, variables))
 
-        train_op = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(total_loss)
+        train_op = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(
+            total_loss
+        )
 
         self.input_view = input_view
         self.input_feature = input_feature
-        self.action     = action
-        self.reward     = reward
-        self.num_agent  = num_agent
+        self.action = action
+        self.reward = reward
+        self.num_agent = num_agent
 
         self.policy, self.value = policy, value
         self.train_op = train_op
@@ -208,9 +231,10 @@ class AdvantageActorCritic(TFBaseModel):
         view, feature = raw_obs[0], raw_obs[1]
         n = len(view)
 
-        policy = self.sess.run(self.policy, {self.input_view: view,
-                                             self.input_feature: feature,
-                                             self.num_agent: n})
+        policy = self.sess.run(
+            self.policy,
+            {self.input_view: view, self.input_feature: feature, self.num_agent: n},
+        )
         actions = np.arange(self.num_actions)
 
         ret = np.empty(n, dtype=np.int32)
@@ -244,43 +268,53 @@ class AdvantageActorCritic(TFBaseModel):
         self.feature_buf.resize((n,) + self.feature_space)
         self.action_buf.resize(n)
         self.reward_buf.resize(n)
-        view, feature  = self.view_buf, self.feature_buf
+        view, feature = self.view_buf, self.feature_buf
         action, reward = self.action_buf, self.reward_buf
 
         ct = 0
         gamma = self.reward_decay
         # collect episodes from multiple separate buffers to a continuous buffer
         for episode in sample_buffer.episodes():
-            v, f, a, r = episode.views, episode.features, episode.actions, episode.rewards
+            v, f, a, r = (
+                episode.views,
+                episode.features,
+                episode.actions,
+                episode.rewards,
+            )
             m = len(episode.rewards)
 
             r = np.array(r)
-            keep = self.sess.run(self.value, feed_dict={
-                self.input_view: [v[-1]],
-                self.input_feature: [f[-1]],
-                self.num_agent: 1
-            })[0]
+            keep = self.sess.run(
+                self.value,
+                feed_dict={
+                    self.input_view: [v[-1]],
+                    self.input_feature: [f[-1]],
+                    self.num_agent: 1,
+                },
+            )[0]
             for i in reversed(range(m)):
                 keep = keep * gamma + r[i]
                 r[i] = keep
 
-            view[ct:ct+m] = v
-            feature[ct:ct+m] = f
-            action[ct:ct+m]  = a
-            reward[ct:ct+m] = r
+            view[ct : ct + m] = v
+            feature[ct : ct + m] = f
+            action[ct : ct + m] = a
+            reward[ct : ct + m] = r
             ct += m
 
         assert n == ct
 
         # train
         _, pg_loss, vf_loss, ent_loss, state_value = self.sess.run(
-            [self.train_op, self.pg_loss, self.vf_loss, self.reg_loss, self.value], feed_dict={
-                self.input_view:    view,
+            [self.train_op, self.pg_loss, self.vf_loss, self.reg_loss, self.value],
+            feed_dict={
+                self.input_view: view,
                 self.input_feature: feature,
-                self.action:        action,
-                self.reward:        reward,
-                self.num_agent:     len(reward)
-        })
+                self.action: action,
+                self.reward: reward,
+                self.num_agent: len(reward),
+            },
+        )
         print("sample", n, pg_loss, vf_loss, ent_loss)
 
         return [pg_loss, vf_loss, ent_loss], np.mean(state_value)

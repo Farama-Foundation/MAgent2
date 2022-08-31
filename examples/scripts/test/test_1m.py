@@ -1,14 +1,16 @@
 """test one million random agents"""
 
+import argparse
+import math
+import os
 import time
 
-import magent
-import os
-import math
-import argparse
 from models.rule_model import RandomActor
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+import magent
+
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+
 
 def load_forest(map_size):
     gw = magent.gridworld
@@ -19,25 +21,35 @@ def load_forest(map_size):
     predator = cfg.register_agent_type(
         "predator",
         {
-            'width': 2, 'length': 2, 'hp': 1, 'speed': 1,
-            'view_range': gw.CircleRange(5), 'attack_range': gw.CircleRange(2),
-            'attack_penalty': -0.2
-        })
+            "width": 2,
+            "length": 2,
+            "hp": 1,
+            "speed": 1,
+            "view_range": gw.CircleRange(5),
+            "attack_range": gw.CircleRange(2),
+            "attack_penalty": -0.2,
+        },
+    )
 
     prey = cfg.register_agent_type(
         "prey",
         {
-            'width': 1, 'length': 1, 'hp': 1, 'speed': 1.5,
-            'view_range': gw.CircleRange(4), 'attack_range': gw.CircleRange(0)
-        })
+            "width": 1,
+            "length": 1,
+            "hp": 1,
+            "speed": 1.5,
+            "view_range": gw.CircleRange(4),
+            "attack_range": gw.CircleRange(0),
+        },
+    )
 
-    predator_group  = cfg.add_group(predator)
+    predator_group = cfg.add_group(predator)
     prey_group = cfg.add_group(prey)
 
-    a = gw.AgentSymbol(predator_group, index='any')
-    b = gw.AgentSymbol(prey_group, index='any')
+    a = gw.AgentSymbol(predator_group, index="any")
+    b = gw.AgentSymbol(prey_group, index="any")
 
-    cfg.add_reward_rule(gw.Event(a, 'attack', b), receiver=[a, b], value=[1, -1])
+    cfg.add_reward_rule(gw.Event(a, "attack", b), receiver=[a, b], value=[1, -1])
 
     return cfg
 
@@ -54,12 +66,12 @@ if __name__ == "__main__":
     parser.add_argument("--n_step", type=int, default=20)
     parser.add_argument("--agent_number", type=int, default=1000)
     parser.add_argument("--num_gpu", type=int, default=0)
-    parser.add_argument('--frame', default='tf', choices=['tf', 'mx'])
+    parser.add_argument("--frame", default="tf", choices=["tf", "mx"])
     args = parser.parse_args()
 
     n_step = args.n_step
     agent_number = args.agent_number
-    skip = 20    # warm up steps
+    skip = 20  # warm up steps
     n_step += skip
 
     # init the game "forest" (or "battle" here)
@@ -70,7 +82,7 @@ if __name__ == "__main__":
     deer_handle, tiger_handle = env.get_handles()
 
     env.add_walls(method="random", n=agent_number / 10)
-    env.add_agents(deer_handle,  method="random", n=agent_number / 2)
+    env.add_agents(deer_handle, method="random", n=agent_number / 2)
     env.add_agents(tiger_handle, method="random", n=agent_number / 2)
 
     # init two models
@@ -78,12 +90,16 @@ if __name__ == "__main__":
         model1 = RandomActor(env, deer_handle, "deer")
         model2 = RandomActor(env, tiger_handle, "tiger")
     else:
-        if args.frame == 'tf':
+        if args.frame == "tf":
             from models.tf_model import DeepQNetwork
         else:
             from models.mx_model import DeepQNetwork
-        model1 = DeepQNetwork(env, deer_handle, "deer", num_gpu=args.num_gpu, infer_batch_size=100000)
-        model2 = DeepQNetwork(env, tiger_handle, "tiger", num_gpu=args.num_gpu, infer_batch_size=100000)
+        model1 = DeepQNetwork(
+            env, deer_handle, "deer", num_gpu=args.num_gpu, infer_batch_size=100000
+        )
+        model2 = DeepQNetwork(
+            env, tiger_handle, "tiger", num_gpu=args.num_gpu, infer_batch_size=100000
+        )
 
     total_reward = 0
 
@@ -118,7 +134,7 @@ if __name__ == "__main__":
         print("all time: %.2f\n" % (step_time))
 
         # print info
-        print("number of deer: %d"  % env.get_num(deer_handle))
+        print("number of deer: %d" % env.get_num(deer_handle))
         print("number of tiger: %d" % env.get_num(tiger_handle))
         print("total reward: %d" % total_reward)
 

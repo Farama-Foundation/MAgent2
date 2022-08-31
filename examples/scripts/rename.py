@@ -2,8 +2,9 @@
 
 import sys
 
-import magent
 from models.tf_model import DeepQNetwork
+
+import magent
 
 env = magent.GridWorld("battle", map_size=125)
 
