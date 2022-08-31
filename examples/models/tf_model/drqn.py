@@ -161,7 +161,7 @@ class DeepRecurrentQNetwork(TFBaseModel):
         self.view_buf = np.empty((1,) + self.view_space)
         self.feature_buf = np.empty((1,) + self.feature_space)
         self.action_buf, self.reward_buf = np.empty(1, dtype=np.int32), np.empty(1)
-        self.terminal_buf = np.empty(1, dtype=np.bool)
+        self.terminal_buf = np.empty(1, dtype=bool)
 
     def _create_network(self, input_view, input_feature, reuse=None):
         """define computation graph of network
@@ -362,7 +362,7 @@ class DeepRecurrentQNetwork(TFBaseModel):
             m = len(r)
 
             mask = np.ones((m,))
-            terminal = np.zeros((m,), dtype=np.bool)
+            terminal = np.zeros((m,), dtype=bool)
             if episode.terminal:
                 terminal[-1] = True
             else:
@@ -414,7 +414,7 @@ class DeepRecurrentQNetwork(TFBaseModel):
         batch_feature = np.zeros((max_ + 1,) + self.feature_space, dtype=np.float32)
         batch_action = np.zeros((max_,), dtype=np.int32)
         batch_reward = np.zeros((max_,), dtype=np.float32)
-        batch_terminal = np.zeros((max_,), dtype=np.bool)
+        batch_terminal = np.zeros((max_,), dtype=bool)
         batch_mask = np.zeros((max_,), dtype=np.float32)
 
         # calc batch number
@@ -540,10 +540,10 @@ class DeepRecurrentQNetwork(TFBaseModel):
         batch_feature = np.zeros((max_ + 1,) + self.feature_space, dtype=np.float32)
         batch_action = np.zeros((max_,), dtype=np.int32)
         batch_reward = np.zeros((max_,), dtype=np.float32)
-        batch_terminal = np.zeros((max_,), dtype=np.bool)
+        batch_terminal = np.zeros((max_,), dtype=bool)
         batch_mask = np.zeros((max_,), dtype=np.float32)
         batch_hidden = np.zeros((batch_size, self.state_size), dtype=np.float32)
-        batch_pick = np.zeros((batch_size, max_len), dtype=np.bool)
+        batch_pick = np.zeros((batch_size, max_len), dtype=bool)
         pick_buffer = np.arange(max_, dtype=np.int32)
 
         print(
@@ -591,7 +591,7 @@ class DeepRecurrentQNetwork(TFBaseModel):
                     rows.append(row)
             n_rows = len(rows)
 
-            batch_reset = np.zeros((train_length, batch_size), dtype=np.bool)
+            batch_reset = np.zeros((train_length, batch_size), dtype=bool)
             batch_mask[:] = 0
 
             # copy from replay buffer to batch buffer

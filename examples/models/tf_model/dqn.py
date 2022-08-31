@@ -178,7 +178,7 @@ class DeepQNetwork(TFBaseModel):
         )
         self.replay_buf_action = ReplayBuffer(shape=(memory_size,), dtype=np.int32)
         self.replay_buf_reward = ReplayBuffer(shape=(memory_size,))
-        self.replay_buf_terminal = ReplayBuffer(shape=(memory_size,), dtype=np.bool)
+        self.replay_buf_terminal = ReplayBuffer(shape=(memory_size,), dtype=bool)
         self.replay_buf_mask = ReplayBuffer(shape=(memory_size,))
         # if mask[i] == 0, then the item is used for padding, not for training
 
@@ -344,7 +344,7 @@ class DeepQNetwork(TFBaseModel):
             m = len(r)
 
             mask = np.ones((m,))
-            terminal = np.zeros((m,), dtype=np.bool)
+            terminal = np.zeros((m,), dtype=bool)
             if episode.terminal:
                 terminal[-1] = True
             else:
