@@ -3,7 +3,7 @@ import os
 import mxnet as mx
 from model import BaseModel
 
-from magent.utility import has_gpu
+from magent2.utility import has_gpu
 
 
 class MXBaseModel(BaseModel):
@@ -12,7 +12,7 @@ class MXBaseModel(BaseModel):
 
         Parameters
         ----------
-        env: magent.Environment
+        env: magent2.Environment
         handle: handle (ctypes.c_int32)
         name: str
         subclass_name: str

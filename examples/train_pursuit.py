@@ -11,7 +11,7 @@ from model import ProcessingModel
 from models import buffer
 from models.tf_model import DeepQNetwork
 
-import magent
+import magent2
 
 
 def play_a_round(
@@ -104,7 +104,7 @@ def play_a_round(
         train_time = time.time() - start_time
         print("train_time %.2f" % train_time)
 
-    return magent.round(total_loss), magent.round(total_reward), magent.round(value)
+    return magent2.round(total_loss), magent2.round(total_reward), magent2.round(value)
 
 
 if __name__ == "__main__":
@@ -125,7 +125,7 @@ if __name__ == "__main__":
     buffer.init_logger(args.name)
 
     # init the game
-    env = magent.GridWorld("pursuit", map_size=args.map_size)
+    env = magent2.GridWorld("pursuit", map_size=args.map_size)
     env.set_render_dir("build/render")
 
     # two groups of agents

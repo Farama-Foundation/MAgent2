@@ -2,7 +2,7 @@
     <img src="MAgent2-text.png" width="500px"/>
 </p>
 
-MAgent is a library for creating 2D environments with very large numbers of agents for conducting research in Multi-Agent Reinforcement Learning. These can look like this:
+MAgent2 is a library for creating 2D environments with very large numbers of agents for conducting research in Multi-Agent Reinforcement Learning. These can look like this:
 
 <img src="magent-graph-1.gif" width="200"><img src="magent-graph-2.gif" width="200">
 
@@ -11,7 +11,7 @@ This is a maintained fork from the original repo- https://github.com/geek-ai/MAg
 This maintainenace was primarily done in the service of the [PettingZoo library](https://github.com/Farama-Foundation/PettingZoo). PettingZoo is the easiest way to use environments in this library, and has comprehensive documentation of them.
 
 ## Requirements
-MAgent supports Linux and macOS and Python 3.6+
+MAgent2 supports Linux and macOS and Python 3.6+
 
 
 ## Install instructions

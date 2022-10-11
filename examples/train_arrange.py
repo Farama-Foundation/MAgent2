@@ -11,8 +11,8 @@ import numpy as np
 from models import buffer
 from models.tf_model import DeepQNetwork as RLModel
 
-import magent
-from magent.utility import FontProvider
+import magent2
+from magent2.utility import FontProvider
 
 
 def remove_wall(d, cur_pos, wall_set, unit):
@@ -253,7 +253,7 @@ def create_naive_maze(pos, width, height, unit, font_area):
 
 
 def load_config(map_size):
-    gw = magent.gridworld
+    gw = magent2.gridworld
     cfg = gw.Config()
 
     cfg.set({"map_width": map_size, "map_height": map_size})
@@ -541,7 +541,7 @@ if __name__ == "__main__":
     log.getLogger("").addHandler(console)
 
     # init env
-    env = magent.GridWorld(load_config(map_size=args.map_size))
+    env = magent2.GridWorld(load_config(map_size=args.map_size))
     env.set_render_dir("build/render")
 
     handles = env.get_handles()

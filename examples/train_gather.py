@@ -9,13 +9,13 @@ import time
 from models import buffer
 from models.mx_model import DeepQNetwork as RLModel
 
-import magent
+import magent2
 
 # change this line to models.tf_model to use tensorflow
 
 
 def load_config(size):
-    gw = magent.gridworld
+    gw = magent2.gridworld
     cfg = gw.Config()
 
     cfg.set({"map_width": size, "map_height": size})
@@ -1147,7 +1147,7 @@ if __name__ == "__main__":
     log.getLogger("").addHandler(console)
 
     # init env
-    env = magent.GridWorld(load_config(size=args.map_size))
+    env = magent2.GridWorld(load_config(size=args.map_size))
     env.set_render_dir("build/render")
 
     handles = env.get_handles()

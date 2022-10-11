@@ -6,9 +6,9 @@ Type messages and let agents to arrange themselves to form these characters
 
 import argparse
 
-from magent import utility
-from magent.renderer import PyGameRenderer
-from magent.renderer.server import ArrangeServer as Server
+from magent2 import utility
+from magent2.renderer import PyGameRenderer
+from magent2.renderer.server import ArrangeServer as Server
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
