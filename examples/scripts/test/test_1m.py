@@ -7,13 +7,13 @@ import time
 
 from models.rule_model import RandomActor
 
-import magent
+import magent2
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 
 
 def load_forest(map_size):
-    gw = magent.gridworld
+    gw = magent2.gridworld
     cfg = gw.Config()
 
     cfg.set({"map_width": map_size, "map_height": map_size})
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     n_step += skip
 
     # init the game "forest" (or "battle" here)
-    env = magent.GridWorld(load_forest(int(math.sqrt(agent_number * 20))))
+    env = magent2.GridWorld(load_forest(int(math.sqrt(agent_number * 20))))
     env.reset()
 
     # add two groups of animals

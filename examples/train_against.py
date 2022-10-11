@@ -12,8 +12,8 @@ import numpy as np
 from models import buffer
 from models.rule_model import RandomActor
 
-import magent
-from magent import utility
+import magent2
+from magent2 import utility
 
 
 def generate_map(env, map_size, handles):
@@ -151,10 +151,10 @@ def play_a_round(
         print("train_time %.2f" % train_time)
 
     return (
-        magent.round(total_loss),
+        magent2.round(total_loss),
         nums,
-        magent.round(total_reward),
-        magent.round(value),
+        magent2.round(total_reward),
+        magent2.round(value),
     )
 
 
@@ -182,7 +182,7 @@ if __name__ == "__main__":
     buffer.init_logger(args.name)
 
     # init the game
-    env = magent.GridWorld("battle", map_size=args.map_size)
+    env = magent2.GridWorld("battle", map_size=args.map_size)
     env.set_render_dir("build/render")
 
     # two groups of agents
@@ -210,12 +210,12 @@ if __name__ == "__main__":
         from models.tf_model import DeepQNetwork
 
         models.append(
-            magent.ProcessingModel(env, handles[1], names[1], 20000, 0, DeepQNetwork)
+            magent2.ProcessingModel(env, handles[1], names[1], 20000, 0, DeepQNetwork)
         )
         models[0].load("data/battle_model", args.opponent)
     else:
         models.append(
-            magent.ProcessingModel(env, handles[1], names[1], 20000, 0, RandomActor)
+            magent2.ProcessingModel(env, handles[1], names[1], 20000, 0, RandomActor)
         )
 
     # load our model
@@ -223,7 +223,7 @@ if __name__ == "__main__":
         from models.tf_model import DeepQNetwork
 
         models.append(
-            magent.ProcessingModel(
+            magent2.ProcessingModel(
                 env,
                 handles[0],
                 names[0],
@@ -243,7 +243,7 @@ if __name__ == "__main__":
         from models.tf_model import DeepRecurrentQNetwork
 
         models.append(
-            magent.ProcessingModel(
+            magent2.ProcessingModel(
                 env,
                 handles[0],
                 names[0],
@@ -264,7 +264,7 @@ if __name__ == "__main__":
 
         step_batch_size = 10 * args.map_size * args.map_size * 0.04
         models.append(
-            magent.ProcessingModel(
+            magent2.ProcessingModel(
                 env,
                 handles[0],
                 names[0],

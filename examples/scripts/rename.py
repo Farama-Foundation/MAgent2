@@ -4,9 +4,9 @@ import sys
 
 from models.tf_model import DeepQNetwork
 
-import magent
+import magent2
 
-env = magent.GridWorld("battle", map_size=125)
+env = magent2.GridWorld("battle", map_size=125)
 
 handles = env.get_handles()
 

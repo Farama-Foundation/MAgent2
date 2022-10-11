@@ -12,7 +12,7 @@ class TFBaseModel(BaseModel):
 
         Parameters
         ----------
-        env: magent.Environment
+        env: magent2.Environment
         handle: handle (ctypes.c_int32)
         name: str
         subclass_name: str

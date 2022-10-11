@@ -10,7 +10,7 @@ import numpy as np
 from models import buffer
 from models.rule_model import RandomActor
 
-import magent
+import magent2
 
 
 def generate_map(env, map_size, handles):
@@ -132,7 +132,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # init the game
-    env = magent.GridWorld("double_attack", map_size=args.map_size)
+    env = magent2.GridWorld("double_attack", map_size=args.map_size)
     env.set_render_dir("build/render")
 
     # two groups of animal

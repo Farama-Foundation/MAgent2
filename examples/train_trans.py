@@ -11,11 +11,11 @@ import numpy as np
 from models import buffer
 from models.tf_model import DeepQNetwork, DeepRecurrentQNetwork
 
-import magent
+import magent2
 
 
 def get_config(map_size):
-    gw = magent.gridworld
+    gw = magent2.gridworld
     cfg = gw.Config()
 
     cfg.set({"map_width": map_size * 2, "map_height": map_size})
@@ -216,7 +216,7 @@ if __name__ == "__main__":
     log.getLogger("").addHandler(console)
 
     # init the game
-    env = magent.GridWorld(get_config(args.map_size))
+    env = magent2.GridWorld(get_config(args.map_size))
     env.set_render_dir("build/render")
 
     # two groups of agents

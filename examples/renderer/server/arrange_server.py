@@ -4,9 +4,9 @@ import time
 import numpy as np
 from models.tf_model import DeepQNetwork
 
-import magent
-from magent.renderer.server import BaseServer
-from magent.utility import FontProvider
+import magent2
+from magent2.renderer.server import BaseServer
+from magent2.utility import FontProvider
 
 
 def remove_wall(d, cur_pos, wall_set, unit):
@@ -195,7 +195,7 @@ def create_maze(pos, width, height, unit, font_area):
 
 
 def load_config(map_size):
-    gw = magent.gridworld
+    gw = magent2.gridworld
     cfg = gw.Config()
 
     cfg.set({"map_width": map_size, "map_height": map_size})
@@ -338,7 +338,7 @@ class ArrangeServer(BaseServer):
         eps = 0.15
 
         # init the game
-        env = magent.GridWorld(load_config(map_size))
+        env = magent2.GridWorld(load_config(map_size))
         font = FontProvider("data/font_8x8/basic.txt")
 
         handles = env.get_handles()

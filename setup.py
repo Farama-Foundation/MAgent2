@@ -103,17 +103,17 @@ class CMakeBuild(build_ext):
 
 
 setuptools.setup(
-    name="magent",
+    name="magent2",
     version="0.2.4",
     author="Farama Foundation",
     author_email="jkterry@farama.org",
     description="Multi-Agent Reinforcement Learning environments with very large numbers of agents",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Farama-Foundation/MAgent",
+    url="https://github.com/Farama-Foundation/MAgent2",
     keywords=["Reinforcement Learning", "game", "RL", "AI"],
     packages=setuptools.find_packages(),
-    ext_modules=[CMakeExtension("magent.libmagent", ".", [])],
+    ext_modules=[CMakeExtension("magent2.libmagent", ".", [])],
     install_requires=["numpy>=1.18.0", "pygame==2.1.0"],
     python_requires=">=3.7",
     classifiers=[
@@ -127,5 +127,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     include_package_data=True,
-    cmdclass={"build_ext": CMakeBuild},
+    # cmdclass={"build_ext": CMakeBuild},
 )
