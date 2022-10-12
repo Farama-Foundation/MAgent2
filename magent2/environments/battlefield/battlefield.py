@@ -124,13 +124,13 @@ last_reward(extra_features=True)| 1
 
 import math
 
-import magent2
 import numpy as np
 from gym.utils import EzPickle
+from pettingzoo.utils.conversions import parallel_to_aec_wrapper
 
+import magent2
 from magent2.environments.battle.battle import KILL_REWARD, get_config
 from magent2.environments.magent_env import magent_parallel_env, make_env
-from pettingzoo.utils.conversions import parallel_to_aec_wrapper
 
 default_map_size = 80
 max_cycles_default = 1000

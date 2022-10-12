@@ -1,11 +1,10 @@
-import gym
 import numpy as np
 from gym.spaces import Box, Discrete
 from gym.utils import seeding
-from magent2 import Renderer
-
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.env import ParallelEnv
+
+from magent2 import Renderer
 
 
 def make_env(raw_env):
