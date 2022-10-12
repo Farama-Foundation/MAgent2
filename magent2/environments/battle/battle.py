@@ -193,7 +193,7 @@ def get_config(
         "speed": 2,
         "view_range": gw.CircleRange(6),
         "attack_range": gw.CircleRange(1.5),
-        "damage": 5,
+        "damage": 2,
         "kill_reward": KILL_REWARD,
         "step_recover": 0.1,
         "step_reward": step_reward,
