@@ -104,7 +104,7 @@ class CMakeBuild(build_ext):
 
 setuptools.setup(
     name="magent2",
-    version="0.2.4",
+    version="0.3.0",
     author="Farama Foundation",
     author_email="jkterry@farama.org",
     description="Multi-Agent Reinforcement Learning environments with very large numbers of agents",
@@ -127,5 +127,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     include_package_data=True,
-    # cmdclass={"build_ext": CMakeBuild},
+    cmdclass={"build_ext": CMakeBuild},
 )
