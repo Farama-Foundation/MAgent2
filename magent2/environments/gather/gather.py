@@ -111,12 +111,12 @@ last_reward(extra_features=True)| 1
 
 """
 
-import magent2
 import numpy as np
 from gym.utils import EzPickle
-
-from magent2.environments.magent_env import magent_parallel_env, make_env
 from pettingzoo.utils.conversions import parallel_to_aec_wrapper
+
+import magent2
+from magent2.environments.magent_env import magent_parallel_env, make_env
 
 map_size = 200
 max_cycles_default = 500
