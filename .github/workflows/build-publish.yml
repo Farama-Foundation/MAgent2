@@ -91,23 +91,23 @@ jobs:
         path: ./wheelhouse/*.whl        
         
   # Publish package to TestPyPI
-  test-publish:
-    runs-on: ubuntu-latest
-    needs:
-    - build-wheels
-    - build-wheels-ms
-    - build-src
-    steps:
-    - name: Download dists
-      uses: actions/download-artifact@v2
-      with:
-        name: artifact
-        path: dist
-    - name: Publish package to TestPyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-        repository_url: https://test.pypi.org/legacy/
+  # test-publish:
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #   - build-wheels
+  #   - build-wheels-ms
+  #   - build-src
+  #   steps:
+  #   - name: Download dists
+  #     uses: actions/download-artifact@v2
+  #     with:
+  #       name: artifact
+  #       path: dist
+  #   - name: Publish package to TestPyPI
+  #     uses: pypa/gh-action-pypi-publish@release/v1
+  #     with:
+  #       password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+  #       repository_url: https://test.pypi.org/legacy/
 
   # Publish package to PyPI
   publish:
@@ -118,6 +118,11 @@ jobs:
     - build-src
     if: github.event_name == 'release' && github.event.action == 'published'
     steps:
+    - name: Download dists
+      uses: actions/download-artifact@v2
+      with:
+        name: artifact
+        path: dist
     - name: Publish
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
