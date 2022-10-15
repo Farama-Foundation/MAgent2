@@ -14,8 +14,32 @@ from setuptools.command.build_ext import build_ext
 # move libmagent -> build/
 ###
 
-with open("README.md") as fh:
-    long_description = fh.read()
+
+def get_description():
+    """Gets the description from the readme."""
+    with open("README.md") as fh:
+        long_description = ""
+        header_count = 0
+        for line in fh:
+            if line.startswith("##"):
+                header_count += 1
+            if header_count < 2:
+                long_description += line
+            else:
+                break
+    return header_count, long_description
+
+
+def get_version():
+    """Gets the pettingzoo version."""
+    path = "pettingzoo/__init__.py"
+    with open(path) as file:
+        lines = file.readlines()
+
+    for line in lines:
+        if line.startswith("__version__"):
+            return line.strip().split()[-1].strip().strip('"')
+    raise RuntimeError("bad version data in __init__.py")
 
 
 class CMakeExtension(Extension):
@@ -102,20 +126,26 @@ class CMakeBuild(build_ext):
             # )
 
 
+version = get_version()
+header_count, long_description = get_description()
+
 setuptools.setup(
-    name="magent",
-    version="0.2.4",
+    name="Magent",
+    version=version,
     author="Farama Foundation",
-    author_email="jkterry@farama.org",
+    author_email="contact@farama.org",
     description="Multi-Agent Reinforcement Learning environments with very large numbers of agents",
+    url="https://github.com/Farama-Foundation/MAgent",
+    license="MIT",
+    license_files=("LICENSE",),
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Farama-Foundation/MAgent",
     keywords=["Reinforcement Learning", "game", "RL", "AI"],
+    python_requires=">=3.7",
     packages=setuptools.find_packages(),
     ext_modules=[CMakeExtension("magent.libmagent", ".", [])],
+    include_package_data=True,
     install_requires=["numpy>=1.18.0", "pygame==2.1.0"],
-    python_requires=">=3.7",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Programming Language :: Python :: 3",
@@ -126,6 +156,5 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    include_package_data=True,
     cmdclass={"build_ext": CMakeBuild},
 )
