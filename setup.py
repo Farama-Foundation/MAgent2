@@ -140,7 +140,6 @@ setuptools.setup(
     license_files=("LICENSE",),
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Farama-Foundation/MAgent2",
     keywords=["Reinforcement Learning", "game", "RL", "AI"],
     python_requires=">=3.7",
     packages=setuptools.find_packages(),
