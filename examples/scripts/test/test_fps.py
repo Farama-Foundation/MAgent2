@@ -4,7 +4,7 @@ import argparse
 import os
 import sys
 
-import magent
+import magent2
 
 if len(sys.argv) < 2:
     print("usage python test_fps.py max_gpu frame")
@@ -47,4 +47,4 @@ for n in number:
     ret.append(row)
 
 for row in ret:
-    print(magent.round(row))
+    print(magent2.round(row))

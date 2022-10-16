@@ -31,8 +31,8 @@ def get_description():
 
 
 def get_version():
-    """Gets the pettingzoo version."""
-    path = "pettingzoo/__init__.py"
+    """Gets the magent2 version."""
+    path = "magent2/__init__.py"
     with open(path) as file:
         lines = file.readlines()
 
@@ -130,7 +130,7 @@ version = get_version()
 header_count, long_description = get_description()
 
 setuptools.setup(
-    name="Magent",
+    name="magent2",
     version=version,
     author="Farama Foundation",
     author_email="contact@farama.org",
@@ -143,8 +143,7 @@ setuptools.setup(
     keywords=["Reinforcement Learning", "game", "RL", "AI"],
     python_requires=">=3.7",
     packages=setuptools.find_packages(),
-    ext_modules=[CMakeExtension("magent.libmagent", ".", [])],
-    include_package_data=True,
+    ext_modules=[CMakeExtension("magent2.libmagent", ".", [])],
     install_requires=["numpy>=1.18.0", "pygame==2.1.0"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -156,5 +155,6 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    include_package_data=True,
     cmdclass={"build_ext": CMakeBuild},
 )

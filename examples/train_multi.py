@@ -12,11 +12,11 @@ import numpy as np
 from model import ProcessingModel
 from models import buffer
 
-import magent
+import magent2
 
 
 def load_config(map_size):
-    gw = magent.gridworld
+    gw = magent2.gridworld
     cfg = gw.Config()
 
     cfg.set({"map_width": map_size, "map_height": map_size})
@@ -245,7 +245,7 @@ if __name__ == "__main__":
     buffer.init_logger(args.name)
 
     # init the game
-    env = magent.GridWorld(load_config(args.map_size))
+    env = magent2.GridWorld(load_config(args.map_size))
     env.set_render_dir("build/render")
 
     # two groups of agents

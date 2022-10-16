@@ -4,6 +4,7 @@
 cmake-build-debug
 
 build
+libmagent.*
 
 *.pyc
 *.log
@@ -11,5 +12,5 @@ __pycache__
 save_video
 save_model
 
-magent.egg-info/
+magent2.egg-info/
 dist/

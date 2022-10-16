@@ -11,7 +11,7 @@ import numpy as np
 from model import ProcessingModel
 from models import buffer
 
-import magent
+import magent2
 
 leftID, rightID = 0, 1
 
@@ -162,7 +162,7 @@ if __name__ == "__main__":
     buffer.init_logger(args.name)
 
     # init the game
-    env = magent.GridWorld("battle", map_size=args.map_size)
+    env = magent2.GridWorld("battle", map_size=args.map_size)
     env.set_render_dir("build/render")
 
     # two groups of agents

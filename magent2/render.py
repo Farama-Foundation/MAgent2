@@ -103,7 +103,7 @@ class Renderer:
             self.display = pygame.display.set_mode(resolution, pygame.DOUBLEBUF, 0)
             canvas_resolution = (resolution[0], resolution[1])
             self.canvas = pygame.Surface(canvas_resolution)
-            pygame.display.set_caption("MAgent Renderer Window")
+            pygame.display.set_caption("MAgent2 Renderer Window")
         elif mode == "rgb_array":
             pygame.font.init()
             self.resolution = base_resolution

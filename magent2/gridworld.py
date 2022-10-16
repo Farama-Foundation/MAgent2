@@ -6,8 +6,8 @@ import os
 
 import numpy as np
 
-from magent.c_lib import _LIB, as_float_c_array, as_int32_c_array
-from magent.environment import Environment
+from magent2.c_lib import _LIB, as_float_c_array, as_int32_c_array
+from magent2.environment import Environment
 
 
 class GridWorld(Environment):
@@ -31,7 +31,7 @@ class GridWorld(Environment):
         if isinstance(config, str):
             # built-in config are stored in python/magent/builtin/config
             try:
-                demo_game = importlib.import_module("magent.builtin.config." + config)
+                demo_game = importlib.import_module("magent2.builtin.config." + config)
                 config = getattr(demo_game, "get_config")(**kwargs)
             except AttributeError:
                 raise BaseException('unknown built-in game "' + config + '"')

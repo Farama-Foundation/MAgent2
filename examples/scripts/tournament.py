@@ -8,7 +8,7 @@ import time
 import numpy as np
 from models.tf_model import DeepQNetwork
 
-import magent
+import magent2
 from examples.model import ProcessingModel
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
@@ -89,7 +89,7 @@ def extract_model_names(savedir, name, model_class, begin=0, pick_every=4):
 
 if __name__ == "__main__":
     map_size = 125
-    env = magent.GridWorld("battle", map_size=map_size)
+    env = magent2.GridWorld("battle", map_size=map_size)
     env.set_render_dir("build/render")
 
     # scan file names

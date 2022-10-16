@@ -3,7 +3,7 @@
 import numpy as np
 from model import BaseModel
 
-from magent.c_lib import _LIB, as_float_c_array, as_int32_c_array
+from magent2.c_lib import _LIB, as_float_c_array, as_int32_c_array
 
 
 class RunawayPrey(BaseModel):
