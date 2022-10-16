@@ -1,10 +1,10 @@
 """ battle of two armies """
 
-import magent
+import magent2
 
 
 def get_config(map_size):
-    gw = magent.gridworld
+    gw = magent2.gridworld
     cfg = gw.Config()
 
     cfg.set({"map_width": map_size, "map_height": map_size})

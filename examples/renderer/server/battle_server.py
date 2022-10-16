@@ -5,12 +5,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 from models.tf_model import DeepQNetwork
 
-import magent
-from magent.renderer.server import BaseServer
+import magent2
+from magent2.renderer.server import BaseServer
 
 
 def load_config(map_size):
-    gw = magent.gridworld
+    gw = magent2.gridworld
     cfg = gw.Config()
 
     cfg.set({"map_width": map_size, "map_height": map_size})
@@ -101,7 +101,7 @@ class BattleServer(BaseServer):
         eps = 0.05
 
         # init the game
-        env = magent.GridWorld(load_config(map_size))
+        env = magent2.GridWorld(load_config(map_size))
 
         handles = env.get_handles()
         models = []
@@ -163,7 +163,7 @@ class BattleServer(BaseServer):
 
         # code for checking the correctness of observation
         # for channel in range(7):
-        #     x = magent.round(list(obs[1][0][0][:,:,channel]), 2)
+        #     x = magent2.round(list(obs[1][0][0][:,:,channel]), 2)
         #     for row in x:
         #         print row
         #     print("-------------")

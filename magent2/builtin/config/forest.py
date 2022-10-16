@@ -1,10 +1,10 @@
 """ tigers eat deer to get health point and reward"""
 
-import magent
+import magent2
 
 
 def get_config(map_size):
-    gw = magent.gridworld
+    gw = magent2.gridworld
 
     cfg = gw.Config()
 

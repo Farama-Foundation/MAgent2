@@ -7,13 +7,13 @@ First demo, show the usage of API
 # except ImportError as e:
 from models.tf_model import DeepQNetwork
 
-import magent
+import magent2
 
 if __name__ == "__main__":
     map_size = 100
 
     # init the game "pursuit"  (config file are stored in python/magent/builtin/config/)
-    env = magent.GridWorld("pursuit", map_size=map_size)
+    env = magent2.GridWorld("pursuit", map_size=map_size)
     env.set_render_dir("build/render")
 
     # get group handles

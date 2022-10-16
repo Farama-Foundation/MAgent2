@@ -3,8 +3,8 @@ import math
 import numpy as np
 import pygame
 
-from magent.renderer.base_renderer import BaseRenderer
-from magent.renderer.server import BaseServer
+from magent2.renderer.base_renderer import BaseRenderer
+from magent2.renderer.server import BaseServer
 
 
 class PyGameRenderer(BaseRenderer):
@@ -121,7 +121,7 @@ class PyGameRenderer(BaseRenderer):
         else:
             canvas = pygame.display.set_mode(resolution, pygame.DOUBLEBUF, 0)
 
-        pygame.display.set_caption("MAgent Renderer Window")
+        pygame.display.set_caption("MAgent2 Renderer Window")
         text_formatter = pygame.font.SysFont(None, text_size, True)
         banner_formatter = pygame.font.SysFont(None, banner_size, True)
         bigscreen_formatter = pygame.font.SysFont(None, bigscreen_size, True)
