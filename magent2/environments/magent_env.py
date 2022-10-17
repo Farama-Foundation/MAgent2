@@ -1,6 +1,6 @@
 import numpy as np
-from gym.spaces import Box, Discrete
-from gym.utils import seeding
+from gymnasium.spaces import Box, Discrete
+from gymnasium.utils import seeding
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.env import ParallelEnv
 
@@ -140,7 +140,7 @@ class magent_parallel_env(ParallelEnv):
 
     def render(self):
         if self.render_mode is None:
-            # gym.logger.WARN(
+            # gymnasium.logger.WARN(
             #     "You are calling render method without specifying any render mode."
             # )
             return
