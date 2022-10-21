@@ -15,7 +15,7 @@ MAgent2 supports Linux and macOS and Python 3.6+
 
 
 ## Install instructions
-You can simply use `pip install magent`
+You can simply use `pip install magent2`
 
 
 If you use this in your research, please cite the original paper:
