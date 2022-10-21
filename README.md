@@ -6,7 +6,7 @@ MAgent2 is a library for creating 2D environments with very large numbers of age
 
 <img src="magent-graph-1.gif" width="200"><img src="magent-graph-2.gif" width="200">
 
-This is a maintained fork from the original repo- https://github.com/geek-ai/MAgent. The code is significantly cleaned up in many aspects and some unfortunate names have been fixed, but there are no major differences. These environments used to be included in the PettingZoo itself, but have been moved here to exist independently. These environments are being regularly maintained and will recieve bug fixes, new versions of Python, and so on.
+This is a maintained fork from the original repo- https://github.com/geek-ai/MAgent. The code is significantly cleaned up in many aspects and some unfortunate names have been fixed, but there are no major differences. These environments used to be included in the PettingZoo itself, but have been moved here to exist independently. These environments are being regularly maintained and will recieve bug fixes, new versions of Python, and so on. We used to develop this repo at https://github.com/Farama-Foundation/MAgent, but moved it to this repo so that it could have a more clear and distinct name from the original MAgent repo for users.
 
 ## Requirements
 MAgent2 supports Linux and macOS and Python 3.7+
