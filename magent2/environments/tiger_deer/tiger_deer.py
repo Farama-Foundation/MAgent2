@@ -7,8 +7,6 @@
 :name: tiger_deer
 ```
 
-This environment is part of the <a href='..'>MAgent2 environments</a>. Please read that page first for general information.
-
 | Import             | `from magent2.environments import tiger_deer_v3` |
 |--------------------|-----------------------------------------------|
 | Actions            | Discrete                                      |
