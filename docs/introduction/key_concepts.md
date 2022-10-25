@@ -1,19 +1,6 @@
----
-title: MAgent Environments
-firstpage:
----
+# Key Concepts
 
-# MAgent2
-
-MAgent2 is a library for the creation of environments where large numbers of pixel agents in a gridworld interact in battles or other competitive scenarios. It is a maintained fork of the original [MAgent](https://github.com/geek-ai/MAgent) codebase and contains some [environments](https://github.com/Farama-Foundation/MAgent2/tree/main/magent2/environments) implemented using the [PettingZoo](https://github.com/Farama-Foundation/PettingZoo) API.
-
-### Types of Environments
-
-All environments, except Gather, are competitive team games where agents in each team must cooperate to defeat the other team. Note that reward is allocated individually.
-
-Gather is a competitive free-for-all game where agents try to stay alive for as long as possible, either by gathering food or killing other agents.
-
-### Key Concepts
+The following points detail some of the functionality found in the library:
 
 * **Observation view**: All agents observe a box around themselves. They see whether the coordinates are empty, contain an obstacle, or contain an agent in any of the observation channels. If an agent is on a coordinate, that entry will contain the value (agent's HP / max agent HP).
 
@@ -30,21 +17,3 @@ Gather is a competitive free-for-all game where agents try to stay alive for as 
 ### Termination
 
 The game terminates after all agents of either team have died. This means that in the battle environments, where HP heals over time, the game will go on for a very long time with random actions.
-
-### Citation
-
-The MAgent environments were originally created for the following work:
-
-```
-@article{DBLP:journals/corr/abs-1712-00600,
-  author    = {Lianmin Zheng and Jiacheng Yang and Han Cai and Weinan Zhang and Jun Wang and Yong Yu},
-  title     = {MAgent: {A} Many-Agent Reinforcement Learning Platform for Artificial Collective Intelligence},
-  journal   = {CoRR},
-  volume    = {abs/1712.00600},
-  year      = {2017},
-  url       = {http://arxiv.org/abs/1712.00600},
-  eprint    = {1712.00600},
-}
-```
-
-Please cite this paper if you use these environments in your research.
