@@ -7,8 +7,6 @@
 :name: combined_arms
 ```
 
-This environment is part of the <a href='..'>MAgent2 environments</a>. Please read that page first for general information.
-
 | Import             | `from magent2.environments import combined_arms_v6`                                   |
 |--------------------|------------------------------------------------------------------------------------|
 | Actions            | Discrete                                                                           |

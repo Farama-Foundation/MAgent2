@@ -7,8 +7,6 @@
 :name: adversarial_pursuit
 ```
 
-This environment is part of the <a href='..'>MAgent2 environments</a>. Please read that page first for general information.
-
 | Import             | `from magent2.environments import adversarial_pursuit_v4` |
 |--------------------|--------------------------------------------------------|
 | Actions            | Discrete                                               |
