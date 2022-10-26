@@ -14,3 +14,8 @@ save_model
 
 magent2.egg-info/
 dist/
+
+# docs
+_build/*
+docs/environments/*
+!docs/environments/index.md

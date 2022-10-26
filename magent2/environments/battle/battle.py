@@ -1,6 +1,6 @@
 # noqa
 """
-# Battle
+## Battle
 
 ```{figure} magent_battle.gif
 :width: 140px

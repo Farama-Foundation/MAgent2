@@ -1,6 +1,6 @@
 # noqa
 """
-# Gather
+## Gather
 
 ```{figure} magent_gather.gif
 :width: 140px
