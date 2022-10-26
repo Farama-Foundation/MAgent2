@@ -1,6 +1,6 @@
 # noqa
 """
-# Combined Arms
+## Combined Arms
 
 ```{figure} magent_combined_arms.gif
 :width: 140px
