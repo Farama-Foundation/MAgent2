@@ -2,7 +2,7 @@
 """
 # Gather
 
-```{figure} magent_gather.gif
+```{figure} gather.gif
 :width: 140px
 :name: gather
 ```
@@ -21,7 +21,7 @@
 | State Shape        | (200, 200, 5)                             |
 | State Values       | (0, 2)                                    |
 
-```{figure} ../../_static/img/aec/magent_gather_aec.svg
+```{figure} ../../_static/img/aec/gather_aec.svg
 :width: 200px
 :name: gather
 ```

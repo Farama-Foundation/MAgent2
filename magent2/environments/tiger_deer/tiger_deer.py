@@ -2,7 +2,7 @@
 """
 # Tiger-Deer
 
-```{figure} magent_tiger_deer.gif
+```{figure} tiger_deer.gif
 :width: 140px
 :name: tiger_deer
 ```
@@ -21,7 +21,7 @@
 | State Shape        | (45, 45, 5)                                   |
 | State Values       | (0, 2)                                        |
 
-```{figure} ../../_static/img/aec/magent_tiger_deer_aec.svg
+```{figure} ../../_static/img/aec/tiger_deer_aec.svg
 :width: 200px
 :name: tiger_deer
 ```

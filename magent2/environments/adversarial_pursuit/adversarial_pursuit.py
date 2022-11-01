@@ -2,7 +2,7 @@
 """
 # Adversarial Pursuit
 
-```{figure} magent_adversarial_pursuit.gif
+```{figure} adversarial_pursuit.gif
 :width: 140px
 :name: adversarial_pursuit
 ```
@@ -21,7 +21,7 @@
 | State Shape        | (45, 45, 5)                                            |
 | State Values       | (0, 2)                                                 |
 
-```{figure} ../../_static/img/aec/magent_adversarial_pursuit_aec.svg
+```{figure} ../../_static/img/aec/adversarial_pursuit_aec.svg
 :width: 200px
 :name: adversarial_pursuit
 ```

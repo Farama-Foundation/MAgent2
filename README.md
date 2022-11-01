@@ -6,7 +6,7 @@ MAgent2 is a library for the creation of environments where large numbers of pix
 
 
 
-<img src="magent-graph-1.gif" width="200"><img src="magent-graph-2.gif" width="200">
+<img src="https://raw.githubusercontent.com/Farama-Foundation/MAgent2/main/magent-graph-1.gif" width="200"><img src="https://raw.githubusercontent.com/Farama-Foundation/MAgent2/main/magent-graph-2.gif" width="200">
 
 This is a maintained fork of the original [MAgent](https://github.com/geek-ai/MAgent) codebase and contains some reference [environments](https://github.com/Farama-Foundation/MAgent2/tree/main/magent2/environments) implemented using the [PettingZoo](https://github.com/Farama-Foundation/PettingZoo) API. These environments used to be included in PettingZoo itself, but have been moved here to exist independently. They are being regularly maintained and will receive bug fixes, support new versions of Python, etc. We used to develop this repo at https://github.com/Farama-Foundation/MAgent, but moved development here so that the distinction from the original MAgent package is clear to users.
 
