@@ -10,7 +10,7 @@ lastpage:
 :width: 200px
 ```
 
-```{figure} _static/img/magent-graph-1.gif
+```{figure} _static/img/magent-graph-2.gif
 :width: 200px
 ```
 
