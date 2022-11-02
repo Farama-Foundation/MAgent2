@@ -21,7 +21,7 @@
 | State Shape        | (45, 45, 9)                                                                        |
 | State Values       | (0, 2)                                                                             |
 
-```{figure} _static/img/aec/combined_arms_aec.svg
+```{figure} combined_arms_aec.svg
 :width: 200px
 :name: combined_arms
 ```

@@ -21,7 +21,7 @@
 | State Shape        | (200, 200, 5)                             |
 | State Values       | (0, 2)                                    |
 
-```{figure} _static/img/aec/gather_aec.svg
+```{figure} gather_aec.svg
 :width: 200px
 :name: gather
 ```
