@@ -21,7 +21,7 @@
 | State Shape        | (45, 45, 5)                                            |
 | State Values       | (0, 2)                                                 |
 
-```{figure} _static/img/aec/adversarial_pursuit_aec.svg
+```{figure} adversarial_pursuit_aec.svg
 :width: 200px
 :name: adversarial_pursuit
 ```

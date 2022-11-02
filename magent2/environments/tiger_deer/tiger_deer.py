@@ -21,7 +21,7 @@
 | State Shape        | (45, 45, 5)                                   |
 | State Values       | (0, 2)                                        |
 
-```{figure} _static/img/aec/tiger_deer_aec.svg
+```{figure} tiger_deer_aec.svg
 :width: 200px
 :name: tiger_deer
 ```
