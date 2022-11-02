@@ -2,7 +2,7 @@
 """
 ## Combined Arms
 
-```{figure} magent_combined_arms.gif
+```{figure} combined_arms.gif
 :width: 140px
 :name: combined_arms
 ```
@@ -21,7 +21,7 @@
 | State Shape        | (45, 45, 9)                                                                        |
 | State Values       | (0, 2)                                                                             |
 
-```{figure} ../../_static/img/aec/magent_combined_arms_aec.svg
+```{figure} ../../_static/img/aec/combined_arms_aec.svg
 :width: 200px
 :name: combined_arms
 ```

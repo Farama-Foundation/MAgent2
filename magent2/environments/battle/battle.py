@@ -2,7 +2,7 @@
 """
 ## Battle
 
-```{figure} magent_battle.gif
+```{figure} battle.gif
 :width: 140px
 :name: battle
 ```
@@ -21,7 +21,7 @@
 | State Shape        | (45, 45, 5)                               |
 | State Values       | (0, 2)                                    |
 
-```{figure} ../../_static/img/aec/magent_battle_aec.svg
+```{figure} ../../_static/img/aec/battle_aec.svg
 :width: 200px
 :name: battle
 ```
