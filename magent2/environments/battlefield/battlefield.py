@@ -21,10 +21,6 @@
 | State Shape        | (80, 80, 5)                                    |
 | State Values       | (0, 2)                                         |
 
-```{figure} ../../_static/img/aec/battlefield_aec.svg
-:width: 200px
-:name: battlefield
-```
 
 Same as [battle](./battle) but with fewer agents arrayed in a larger space with obstacles.
 
