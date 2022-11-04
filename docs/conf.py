@@ -70,13 +70,13 @@ napoleon_custom_sections = [("Returns", "params_style")]
 #
 html_theme = "furo"
 html_title = "MAgent2 Documentation"
-html_baseurl = "https://magent2.fenggu.me/"
+html_baseurl = "https://magent2.farama.org/"
 html_copy_source = False
 html_favicon = "_static/img/magent2.svg"
 html_theme_options = {
     "light_logo": "img/magent2.svg",
     "dark_logo": "img/magent2-white.svg",
-    "gtag": "G-FBXJQQLXKD",
+    "gtag": "G-07SGW5KKJF",
 }
 html_context: Dict[str, Any] = {}
 html_context["conf_py_path"] = "/docs/"
