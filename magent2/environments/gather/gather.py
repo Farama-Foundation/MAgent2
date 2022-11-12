@@ -126,12 +126,19 @@ def parallel_env(
     minimap_mode=minimap_mode_default,
     extra_features=False,
     render_mode=None,
+    seed=None,
     **reward_args
 ):
     env_reward_args = dict(**default_reward_args)
     env_reward_args.update(reward_args)
     return _parallel_env(
-        map_size, minimap_mode, env_reward_args, max_cycles, extra_features, render_mode
+        map_size,
+        minimap_mode,
+        env_reward_args,
+        max_cycles,
+        extra_features,
+        render_mode,
+        seed,
     )
 
 
@@ -139,24 +146,33 @@ def raw_env(
     max_cycles=max_cycles_default,
     minimap_mode=minimap_mode_default,
     extra_features=False,
+    seed=None,
     **reward_args
 ):
     return parallel_to_aec_wrapper(
-        parallel_env(max_cycles, minimap_mode, extra_features, **reward_args)
+        parallel_env(max_cycles, minimap_mode, extra_features, seed=seed, **reward_args)
     )
 
 
 env = make_env(raw_env)
 
 
-def load_config(
-    size, minimap_mode, step_reward, attack_penalty, dead_penalty, attack_food_reward
+def get_config(
+    size,
+    minimap_mode,
+    seed,
+    step_reward,
+    attack_penalty,
+    dead_penalty,
+    attack_food_reward,
 ):
     gw = magent2.gridworld
     cfg = gw.Config()
 
     cfg.set({"map_width": size, "map_height": size})
     cfg.set({"minimap_mode": minimap_mode})
+    if seed is not None:
+        cfg.set({"seed": seed})
 
     options = {
         "width": 1,
@@ -212,11 +228,21 @@ class _parallel_env(magent_parallel_env, EzPickle):
         max_cycles,
         extra_features,
         render_mode=None,
+        seed=None,
     ):
         EzPickle.__init__(
-            self, map_size, minimap_mode, reward_args, max_cycles, extra_features
+            self,
+            map_size,
+            minimap_mode,
+            reward_args,
+            max_cycles,
+            extra_features,
+            render_mode,
+            seed,
         )
-        env = magent2.GridWorld(load_config(map_size, minimap_mode, **reward_args))
+        env = magent2.GridWorld(
+            get_config(map_size, minimap_mode, seed=seed, **reward_args)
+        )
         handles = env.get_handles()
         reward_vals = np.array([5] + list(reward_args.values()))
         reward_range = [

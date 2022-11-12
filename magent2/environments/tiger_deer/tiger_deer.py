@@ -107,12 +107,19 @@ def parallel_env(
     minimap_mode=minimap_mode_default,
     extra_features=False,
     render_mode=None,
+    seed=None,
     **env_args
 ):
     env_env_args = dict(**default_env_args)
     env_env_args.update(env_args)
     return _parallel_env(
-        map_size, minimap_mode, env_env_args, max_cycles, extra_features, render_mode
+        map_size,
+        minimap_mode,
+        env_env_args,
+        max_cycles,
+        extra_features,
+        render_mode,
+        seed,
     )
 
 
@@ -121,23 +128,28 @@ def raw_env(
     max_cycles=max_cycles_default,
     minimap_mode=minimap_mode_default,
     extra_features=False,
+    seed=None,
     **env_args
 ):
     return parallel_to_aec_wrapper(
-        parallel_env(map_size, max_cycles, minimap_mode, extra_features, **env_args)
+        parallel_env(
+            map_size, max_cycles, minimap_mode, extra_features, seed=seed, **env_args
+        )
     )
 
 
 env = make_env(raw_env)
 
 
-def get_config(map_size, minimap_mode, tiger_step_recover, deer_attacked):
+def get_config(map_size, minimap_mode, seed, tiger_step_recover, deer_attacked):
     gw = magent2.gridworld
     cfg = gw.Config()
 
     cfg.set({"map_width": map_size, "map_height": map_size})
     cfg.set({"embedding_size": 10})
     cfg.set({"minimap_mode": minimap_mode})
+    if seed is not None:
+        cfg.set({"seed": seed})
 
     options = {
         "width": 1,
@@ -200,6 +212,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
         max_cycles,
         extra_features,
         render_mode=None,
+        seed=None,
     ):
         EzPickle.__init__(
             self,
@@ -209,10 +222,11 @@ class _parallel_env(magent_parallel_env, EzPickle):
             max_cycles,
             extra_features,
             render_mode,
+            seed,
         )
         assert map_size >= 10, "size of map must be at least 10"
         env = magent2.GridWorld(
-            get_config(map_size, minimap_mode, **reward_args), map_size=map_size
+            get_config(map_size, minimap_mode, seed, **reward_args), map_size=map_size
         )
 
         handles = env.get_handles()
