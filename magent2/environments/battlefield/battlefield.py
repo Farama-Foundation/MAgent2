@@ -143,12 +143,19 @@ def parallel_env(
     minimap_mode=minimap_mode_default,
     extra_features=False,
     render_mode=None,
+    seed=None,
     **reward_args
 ):
     env_reward_args = dict(**default_reward_args)
     env_reward_args.update(reward_args)
     return _parallel_env(
-        map_size, minimap_mode, env_reward_args, max_cycles, extra_features, render_mode
+        map_size,
+        minimap_mode,
+        env_reward_args,
+        max_cycles,
+        extra_features,
+        render_mode,
+        seed,
     )
 
 
@@ -157,10 +164,13 @@ def raw_env(
     max_cycles=max_cycles_default,
     minimap_mode=minimap_mode_default,
     extra_features=False,
+    seed=None,
     **reward_args
 ):
     return parallel_to_aec_wrapper(
-        parallel_env(map_size, max_cycles, minimap_mode, extra_features, **reward_args)
+        parallel_env(
+            map_size, max_cycles, minimap_mode, extra_features, seed=seed, **reward_args
+        )
     )
 
 
@@ -182,6 +192,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
         max_cycles,
         extra_features,
         render_mode=None,
+        seed=None,
     ):
         EzPickle.__init__(
             self,
@@ -191,10 +202,11 @@ class _parallel_env(magent_parallel_env, EzPickle):
             max_cycles,
             extra_features,
             render_mode,
+            seed,
         )
         assert map_size >= 46, "size of map must be at least 46"
         env = magent2.GridWorld(
-            get_config(map_size, minimap_mode, **reward_args), map_size=map_size
+            get_config(map_size, minimap_mode, seed, **reward_args), map_size=map_size
         )
         self.leftID = 0
         self.rightID = 1
