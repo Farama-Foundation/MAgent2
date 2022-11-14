@@ -146,12 +146,19 @@ def parallel_env(
     minimap_mode=minimap_mode_default,
     extra_features=False,
     render_mode=None,
+    seed=None,
     **reward_args
 ):
     env_reward_args = dict(**default_reward_args)
     env_reward_args.update(reward_args)
     return _parallel_env(
-        map_size, minimap_mode, env_reward_args, max_cycles, extra_features, render_mode
+        map_size,
+        minimap_mode,
+        env_reward_args,
+        max_cycles,
+        extra_features,
+        render_mode,
+        seed,
     )
 
 
@@ -161,6 +168,7 @@ def raw_env(
     minimap_mode=minimap_mode_default,
     extra_features=False,
     render_mode=None,
+    seed=None,
     **reward_args
 ):
     return parallel_to_aec_wrapper(
@@ -170,6 +178,7 @@ def raw_env(
             minimap_mode,
             extra_features,
             render_mode=render_mode,
+            seed=seed,
             **reward_args
         )
     )
@@ -178,9 +187,10 @@ def raw_env(
 env = make_env(raw_env)
 
 
-def load_config(
+def get_config(
     map_size,
     minimap_mode,
+    seed,
     step_reward,
     dead_penalty,
     attack_penalty,
@@ -193,6 +203,8 @@ def load_config(
     cfg.set({"minimap_mode": minimap_mode})
 
     cfg.set({"embedding_size": 10})
+    if seed is not None:
+        cfg.set({"seed": seed})
 
     options = {
         "width": 1,
@@ -371,12 +383,20 @@ class _parallel_env(magent_parallel_env, EzPickle):
         max_cycles,
         extra_features,
         render_mode=None,
+        seed=None,
     ):
         EzPickle.__init__(
-            self, map_size, minimap_mode, reward_args, max_cycles, extra_features
+            self,
+            map_size,
+            minimap_mode,
+            reward_args,
+            max_cycles,
+            extra_features,
+            render_mode,
+            seed,
         )
         assert map_size >= 16, "size of map must be at least 16"
-        env = magent2.GridWorld(load_config(map_size, minimap_mode, **reward_args))
+        env = magent2.GridWorld(get_config(map_size, minimap_mode, seed, **reward_args))
         reward_vals = np.array([KILL_REWARD] + list(reward_args.values()))
         reward_range = [
             np.minimum(reward_vals, 0).sum(),

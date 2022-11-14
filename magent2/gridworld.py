@@ -265,6 +265,7 @@ class GridWorld(Environment):
             "goal_mode": bool,
             "embedding_size": int,
             "render_dir": str,
+            "seed": int,
         }
 
         for key in config.config_dict:
