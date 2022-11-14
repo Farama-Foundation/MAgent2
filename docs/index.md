@@ -55,6 +55,13 @@ introduction/key_concepts
 
 ```{toctree}
 :hidden:
+:caption: API
+api/config
+api/gridworld
+```
+
+```{toctree}
+:hidden:
 :caption: Environments
 environments/index
 ```
