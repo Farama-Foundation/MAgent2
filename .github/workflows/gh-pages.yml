@@ -18,6 +18,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r docs/requirements.txt
 
+      - name: Install package
+        run: pip install -e .
+
       - name: Build Envs Docs
         run: python docs/scripts/gen_mds.py
 
