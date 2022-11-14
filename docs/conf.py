@@ -20,13 +20,15 @@ import os
 import sys
 from typing import Any, Dict
 
+from magent2 import __version__
+
 project = "MAgent2"
 copyright = "2022"
 author = "Farama Foundation"
 
 # The full version, including alpha/beta/rc tags
 # TODO: change to magent version
-release = "0.3.0"
+release = __version__
 # from magent2 import __version__ as magent_version
 
 sys.path.insert(0, os.path.abspath("../.."))
