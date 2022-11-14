@@ -4,9 +4,9 @@ title: battle
 ---
 
 
-# Battle
+## Battle
 
-```{figure} magent_battle.gif
+```{figure} battle.gif
 :width: 140px
 :name: battle
 ```
@@ -25,10 +25,6 @@ title: battle
 | State Shape        | (45, 45, 5)                               |
 | State Values       | (0, 2)                                    |
 
-```{figure} ../../_static/img/aec/magent_battle_aec.svg
-:width: 200px
-:name: battle
-```
 
 A large-scale team battle. Agents are rewarded for their individual performance, and not for the performance of their neighbors, so coordination is difficult.  Agents slowly regain HP over time, so it is best to kill an opposing agent quickly. Specifically, agents have 10 HP, are damaged 2 HP by
 each attack, and recover 0.1 HP every turn.

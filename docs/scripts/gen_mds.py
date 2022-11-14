@@ -42,7 +42,6 @@ for dir in subfolder_dirs:
     docstring = ast.get_docstring(module)
     if docstring is None:
         docstring = ""
-    print(docstring)
 
     # output path
     output_path = os.path.join(
