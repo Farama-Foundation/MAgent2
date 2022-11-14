@@ -3,6 +3,7 @@
 import ctypes
 import importlib
 import os
+from typing import Tuple
 
 import numpy as np
 
@@ -10,12 +11,224 @@ from magent2.c_lib import _LIB, as_float_c_array, as_int32_c_array
 from magent2.environment import Environment
 
 
+class EventNode:
+    """an AST node of the event expression"""
+
+    OP_AND = 0
+    OP_OR = 1
+    OP_NOT = 2
+
+    OP_KILL = 3
+    OP_AT = 4
+    OP_IN = 5
+    OP_COLLIDE = 6
+    OP_ATTACK = 7
+    OP_DIE = 8
+    OP_IN_A_LINE = 9
+    OP_ALIGN = 10
+
+    # can extend more operation below
+
+    def __init__(self):
+        # for non-leaf node
+        self.op = None
+        # for leaf node
+        self.predicate = None
+
+        self.inputs = []
+
+    def __call__(self, subject, predicate, *args):
+        node = EventNode()
+        node.predicate = predicate
+        if predicate == "kill":
+            node.op = EventNode.OP_KILL
+            node.inputs = [subject, args[0]]
+        elif predicate == "at":
+            node.op = EventNode.OP_AT
+            coor = args[0]
+            node.inputs = [subject, coor[0], coor[1]]
+        elif predicate == "in":
+            node.op = EventNode.OP_IN
+            coor = args[0]
+            x1, y1 = min(coor[0][0], coor[1][0]), min(coor[0][1], coor[1][1])
+            x2, y2 = max(coor[0][0], coor[1][0]), max(coor[0][1], coor[1][1])
+            node.inputs = [subject, x1, y1, x2, y2]
+        elif predicate == "attack":
+            node.op = EventNode.OP_ATTACK
+            node.inputs = [subject, args[0]]
+        elif predicate == "collide":
+            node.op = EventNode.OP_COLLIDE
+            node.inputs = [subject, args[0]]
+        elif predicate == "die":
+            node.op = EventNode.OP_DIE
+            node.inputs = [subject]
+        elif predicate == "in_a_line":
+            node.op = EventNode.OP_IN_A_LINE
+            node.inputs = [subject]
+        elif predicate == "align":
+            node.op = EventNode.OP_ALIGN
+            node.inputs = [subject]
+        else:
+            raise Exception("invalid predicate of event " + predicate)
+        return node
+
+    def __and__(self, other):
+        node = EventNode()
+        node.op = EventNode.OP_AND
+        node.inputs = [self, other]
+        return node
+
+    def __or__(self, other):
+        node = EventNode()
+        node.op = EventNode.OP_OR
+        node.inputs = [self, other]
+        return node
+
+    def __invert__(self):
+        node = EventNode()
+        node.op = EventNode.OP_NOT
+        node.inputs = [self]
+        return node
+
+
+Event = EventNode()
+
+
+class AgentSymbol:
+    """Symbol to represent some agents in defining events."""
+
+    def __init__(self, group: ctypes.c_int32, index):
+        """Define an agent symbol. It can be the object or subject of EventNode.
+
+        Args:
+            group (ctypes.c_int32): group handle
+            index (int or str): int: a deterministic integer id.
+                str: can be 'all' or 'any', represents all or any agents in a group.
+        """
+        self.group = group if group is not None else -1
+        if index == "any":
+            self.index = -1
+        elif index == "all":
+            self.index = -2
+        else:
+            assert isinstance(self.index, int), "index must be a deterministic int"
+            self.index = index
+
+    def __str__(self):
+        return "agent(%d,%d)" % (self.group, self.index)
+
+
+class Config:
+    """Configuration class for a Gridworld game."""
+
+    def __init__(self):
+        self.config_dict = {}
+        self.agent_type_dict = {}
+        self.groups = []
+        self.reward_rules = []
+
+    def set(self, args: dict):
+        """Set parameters of global configuration.
+
+        Args:
+            args (dict): Key-value pairs containing the configuration attributes.
+
+        Attributes:
+
+            map_width (int): Number of horizontal grid squares in the Gridworld.
+            map_height (int): Number of vertical grid squares in the Gridworld.
+            embedding_size (int): Embedding size for the observation features.
+            render_dir (str): Directory to save render file.
+            seed (int): Random seed.
+            food_mode (bool): Dead agents drop food on the map.
+            turn_mode (bool): Include 2 more actions -- turn left and turn right.
+            minimap_mode (bool): Include minimap in observations.
+        """
+        for key in args:
+            self.config_dict[key] = args[key]
+
+    def register_agent_type(self, name: str, attr: dict):
+        """Register an agent type.
+
+        Args:
+            name (str): Name of the type (should be unique).
+            attr (dict): Key-value pairs of the type Attributes.
+
+        Attributes:
+            height (int):   Height of agent body.
+            width (int):    Width of agent body.
+            speed (float):  Maximum speed, i.e. the radius of move circle of the agent.
+            hp: (float):    Maximum health point of the agent.
+            view_range (gw.CircleRange or gw.SectorRange): Field of view of the agent.
+
+            damage (float):         Attack damage.
+            step_recover (float):   Step recover (healing) of health points (can be negative).
+            kill_supply (float):    Hp gain for killing this type of agent.
+
+            step_reward (float):    Reward gained in every step.
+            kill_reward (float):    Reward gained for killing this type of agent.
+            dead_penalty (float):   Reward gained for dying.
+            attack_penalty (float): Reward gained when performing an attack (to discourage attacking empty grid cells).
+
+        Returns:
+            name (str): Name of the type.
+        """
+        if name in self.agent_type_dict:
+            raise Exception("type name %s already exists" % name)
+        self.agent_type_dict[name] = attr
+        return name
+
+    def add_group(self, agent_type: str):
+        """Add a group to the configuration.
+
+        Args:
+            agent_type (str): Name of agent type contained in this group.
+        Returns:
+            group_handle (int): Handle for the new group.
+        """
+        no = len(self.groups)
+        self.groups.append(agent_type)
+        return no
+
+    def add_reward_rule(
+        self,
+        on: EventNode,
+        receiver: list[AgentSymbol],
+        value: list[float],
+        terminal: bool = False,
+    ):
+        """Add a reward rule.
+
+        Args:
+            on (Event): An objecting representing a bool expression of the trigger event.
+            receiver (list[AgentSymbol]): Receiver of this reward rule. If the receiver is not a deterministic agent,
+                it must be one of the agents involved in the triggering event.
+            value list[float]: Value to assign.
+            terminal (bool): Whether this event will terminate the game.
+
+        """
+        if not (isinstance(receiver, tuple) or isinstance(receiver, list)):
+            assert not (isinstance(value, tuple) or isinstance(value, tuple))
+            receiver = [receiver]
+            value = [value]
+        if len(receiver) != len(value):
+            raise Exception("the length of receiver and value should be equal")
+        self.reward_rules.append([on, receiver, value, terminal])
+
+
 class GridWorld(Environment):
+    """
+    The main MAgent2 class for implementing environments. MAgent2 environments are square Gridworlds wherein each coordinate may contain an agent, a wall, or nothing.
+
+    The class attributes are not accessible directly due to them living in the underlying C++ code.
+    Thus, there are get/set methods for retrieving and manipulating their values.
+    """
+
     # constant
     OBS_INDEX_VIEW = 0
     OBS_INDEX_HP = 1
 
-    def __init__(self, config, **kwargs):
+    def __init__(self, config: Config, **kwargs):
         """
         Parameters
         ----------
@@ -152,58 +365,60 @@ class GridWorld(Environment):
             self.action_space[handle.value] = (buf[0],)
 
     def reset(self):
-        """reset environment"""
+        """Resets the environment to an initial internal state."""
         _LIB.env_reset(self.game)
 
-    def add_walls(self, method, **kwargs):
-        """add wall to environment
+    def add_walls(self, method: str, **kwargs):
+        """Adds walls to the environment.
 
-        Parameters
-        ----------
-        method: str
-            can be 'random' or 'custom'
-            if method is 'random', then kwargs["n"] is a int
-            if method is 'custom', then kwargs["pos"] is a list of coordination
+        Args:
+            method (str): Can be 'random' or 'custom'. If method is 'random', then kwargs["n"] is an int.
+                If method is 'custom', then kwargs["pos"] is a list of coordination
 
-        Examples
-        --------
+        ```
         # add 1000 walls randomly
         >>> env.add_walls(method="random", n=1000)
 
         # add 3 walls to (1,2), (4,5) and (9, 8) in map
         >>> env.add_walls(method="custom", pos=[(1,2), (4,5), (9,8)])
+        ```
         """
         # handle = -1 for walls
         kwargs["dir"] = 0
         self.add_agents(-1, method, **kwargs)
 
     # ====== AGENT ======
-    def new_group(self, name):
-        """register a new group into environment"""
+    def new_group(self, name: str) -> ctypes.c_int32:
+        """Registers a new group of agents into environment.
+
+        Args:
+            name (str): Name of the group.
+
+        Returns:
+            handle (ctypes.c_int32): A handle to reference the group in future gets and sets.
+
+        """
         handle = ctypes.c_int32()
         _LIB.gridworld_new_group(
             self.game, ctypes.c_char_p(name.encode("ascii")), ctypes.byref(handle)
         )
         return handle
 
-    def add_agents(self, handle, method, **kwargs):
-        """add agents to environment
+    def add_agents(self, handle: ctypes.c_int32, method: str, **kwargs):
+        """Adds agents to environment.
 
-        Parameters
-        ----------
-        handle: group handle
-        method: str
-            can be 'random' or 'custom'
-            if method is 'random', then kwargs["n"] is a int
-            if method is 'custom', then kwargs["pos"] is a list of coordination
+        Args:
+            handle (ctypes.c_int32): The handle of the group to which to add the agents.
+            method (str): Can be 'random' or 'custom'. If method is 'random', then kwargs["n"] is a int.
+                If method is 'custom', then kwargs["pos"] is a list of coordination.
 
-        Examples
-        --------
+        ```
         # add 1000 walls randomly
         >>> env.add_agents(handle, method="random", n=1000)
 
         # add 3 agents to (1,2), (4,5) and (9, 8) in map
         >>> env.add_agents(handle, method="custom", pos=[(1,2), (4,5), (9,8)])
+        ```
         """
         if method == "random":
             _LIB.gridworld_add_agents(
@@ -273,19 +488,17 @@ class GridWorld(Environment):
         self.obs_bufs.append({})
         self.obs_bufs.append({})
 
-    def get_observation(self, handle):
-        """get observation of a whole group
+    def get_observation(self, handle: ctypes.c_int32) -> Tuple[np.ndarray, np.ndarray]:
+        """Returns the observation for each agent in a group.
 
-        Parameters
-        ----------
-        handle : group handle
+        Args:
+            handle (ctypes.c_int32): Group handle.
 
-        Returns
-        -------
-        obs : tuple (views, features)
-            views is a numpy array, whose shape is n * view_width * view_height * n_channel
-            features is a numpy array, whose shape is n * feature_size
-            for agent i, (views[i], features[i]) is its observation at this step
+        Returns:
+            obs (Tuple[np.ndarray, np.ndarray]): (views, features)
+                Views is a numpy array whose shape is n * view_width * view_height * n_channel.
+                Features is a numpy array whose shape is n * feature_size.
+                For agent i, (views[i], features[i]) is its observation at this step.
         """
         view_space = self.view_space[handle.value]
         feature_space = self.feature_space[handle.value]
@@ -306,14 +519,12 @@ class GridWorld(Environment):
 
         return view_buf, feature_buf
 
-    def set_action(self, handle, actions):
-        """set actions for whole group
+    def set_action(self, handle: ctypes.c_int32, actions: np.ndarray):
+        """Set actions for whole group.
 
-        Parameters
-        ----------
-        handle: group handle
-        actions: numpy array
-            the dtype of actions must be int32
+        Args:
+            handle (ctypes.c_int32): Group handle.
+            actions (np.ndarray): Array of actions, 1 per agent. The dtype must be int32.
         """
         assert isinstance(actions, np.ndarray)
         assert actions.dtype == np.int32
@@ -322,24 +533,23 @@ class GridWorld(Environment):
         )
 
     def step(self):
-        """simulation one step after set actions
+        """Runs one timestep of the environment using the agents' actions.
 
-        Returns
-        -------
-        done: bool
-            whether the game is done
+        Returns:
+            done (bool): Flag indicating whether the game is done or not.
         """
         done = ctypes.c_int32()
         _LIB.env_step(self.game, ctypes.byref(done))
         return bool(done)
 
-    def get_reward(self, handle):
-        """get reward for a whole group
+    def get_reward(self, handle: ctypes.c_int32) -> np.ndarray:
+        """Returns the rewards for all agents in a group.
 
-        Returns
-        -------
-        rewards: numpy array (float32)
-            reward for all the agents in the group
+        Args:
+            handle (ctypes.c_int32): Group handle.
+
+        Returns:
+            rewards (np.ndarray[float32]): Rewards for all agents in the group.
         """
         n = self.get_num(handle)
         buf = np.empty((n,), dtype=np.float32)
@@ -349,56 +559,72 @@ class GridWorld(Environment):
         return buf
 
     def clear_dead(self):
-        """clear dead agents in the engine
-        must be called after step()
-        """
+        """Clears dead agents in the engine. Must be called after step()."""
         _LIB.gridworld_clear_dead(self.game)
 
     # ====== INFO ======
-    def get_handles(self):
-        """get all group handles in the environment"""
+    def get_handles(self) -> list[ctypes.c_int32]:
+        """Returns all group handles in the environment.
+
+        Returns:
+            handles (list[ctypes.c_int32]): All group handles in the environment.
+        """
         return self.group_handles
 
-    def get_num(self, handle):
-        """get the number of agents in a group"""
+    def get_num(self, handle: ctypes.c_int32) -> int:
+        """Returns the number of agents in a group.
+
+        Args:
+            handle (ctypes.c_int32): Group handle.
+
+        Returns:
+            num (int): Number of agents in the group.
+        """
         num = ctypes.c_int32()
         _LIB.env_get_info(self.game, handle, b"num", ctypes.byref(num))
         return num.value
 
-    def get_action_space(self, handle):
-        """get action space
+    def get_action_space(self, handle: ctypes.c_int32) -> Tuple[int]:
+        """Returns the action space for a group.
 
-        Returns
-        -------
-        action_space : tuple
+        Args:
+            handle (ctypes.c_int32): Group handle.
+
+        Returns:
+            action_space (Tuple[int]): Action space for the group.
         """
         return self.action_space[handle.value]
 
-    def get_view_space(self, handle):
-        """get view space
+    def get_view_space(self, handle: ctypes.c_int32) -> Tuple[int, int, int]:
+        """Returns the view space for a group.
 
-        Returns
-        -------
-        view_space : tuple
+        Args:
+            handle (ctypes.c_int32): Group handle.
+
+        Returns:
+            view_space (Tuple[int, int, int]): View space for the group.
         """
         return self.view_space[handle.value]
 
-    def get_feature_space(self, handle):
-        """get feature space
+    def get_feature_space(self, handle: ctypes.c_int32) -> Tuple[int]:
+        """Returns the feature space for a group.
 
-        Returns
-        -------
-        feature_space : tuple
+        Args:
+            handle (ctypes.c_int32): Group handle.
+
+        Returns:
+            feature_space (Tuple[int]): Feature space for the group.
         """
         return self.feature_space[handle.value]
 
-    def get_agent_id(self, handle):
-        """get agent id
+    def get_agent_id(self, handle: ctypes.c_int32) -> np.ndarray:
+        """Returns the ids of all agents in the group.
 
-        Returns
-        -------
-        ids : numpy array (int32)
-            id of all the agents in the group
+        Args:
+            handle (ctypes.c_int32): Group handle.
+
+        Returns:
+            ids (np.ndarray[int32]): Ids of all agents in the group.
         """
         n = self.get_num(handle)
         buf = np.empty((n,), dtype=np.int32)
@@ -407,13 +633,14 @@ class GridWorld(Environment):
         )
         return buf
 
-    def get_alive(self, handle):
-        """get alive status of agents in a group
+    def get_alive(self, handle: ctypes.c_int32) -> np.ndarray:
+        """Returns the alive status of all agents in a group.
 
-        Returns
-        -------
-        alives: numpy array (bool)
-            whether the agents are alive
+        Args:
+            handle (ctypes.c_int32): Group handle.
+
+        Returns:
+            alives (np.ndarray[bool]): Whether the agents are alive or not.
         """
         n = self.get_num(handle)
         buf = np.empty((n,), dtype=bool)
@@ -425,13 +652,15 @@ class GridWorld(Environment):
         )
         return buf
 
-    def get_pos(self, handle):
-        """get position of agents in a group
+    def get_pos(self, handle: ctypes.c_int32) -> np.ndarray:
+        """Returns the positions of all agents in a group.
 
-        Returns
-        -------
-        pos: numpy array (int)
-            the shape of pos is (n, 2)
+        Args:
+            handle (ctypes.c_int32): Group handle.
+
+        Returns:
+            pos (np.ndarray[int]): The positions of all agents in the group.
+                The shape is (n, 2).
         """
         n = self.get_num(handle)
         buf = np.empty((n, 2), dtype=np.int32)
@@ -443,15 +672,17 @@ class GridWorld(Environment):
         )
         return buf
 
-    def get_view2attack(self, handle):
-        """get a matrix with the same size of view_range,
-            if element >= 0, then it means it is a attackable point, and the corresponding
-                                    action number is the value of that element
-        Returns
-        -------
-        attack_back: int
-        buf: numpy array
-            map attack action into view
+    def get_view2attack(self, handle: ctypes.c_int32) -> Tuple[int, np.ndarray]:
+        """Get a matrix with the same size of view_range.
+        If element >= 0, then it is an attackable point, and the corresponding
+        action number is the value of that element.
+
+        Args:
+            handle (ctypes.c_int32): Group handle.
+
+        Returns:
+            attack_base (int): Attack action base value.
+            buf (np.ndarray): Map attack action into view.
         """
         size = self.get_view_space(handle)[0:2]
         buf = np.empty(size, dtype=np.int32)
@@ -465,19 +696,15 @@ class GridWorld(Environment):
         _LIB.env_get_info(self.game, handle, b"attack_base", ctypes.byref(attack_base))
         return attack_base.value, buf
 
-    def get_global_minimap(self, height, width):
-        """compress global map into a minimap of given size
-        Parameters
-        ----------
-        height: int
-            the height of minimap
-        width:  int
-            the width of minimap
+    def get_global_minimap(self, height: int, width: int) -> np.ndarray:
+        """Compress global map into a minimap of given size.
 
-        Returns
-        -------
-        minimap : numpy array
-            the shape (n_group + 1, height, width)
+        Args:
+            height (int): Height of minimap.
+            width (int): Width of minimap.
+
+        Returns:
+            minimap (np.ndarray): Map of shape (n_group + 1, height, width).
         """
         buf = np.empty((height, width, len(self.group_handles)), dtype=np.float32)
         buf[0, 0, 0] = height
@@ -490,19 +717,27 @@ class GridWorld(Environment):
         )
         return buf
 
-    def set_seed(self, seed):
-        """set random seed of the engine"""
+    def set_seed(self, seed: int):
+        """Set random seed of the engine.
+
+        Args:
+            seed (int): Seed value.
+
+        """
         _LIB.env_config_game(self.game, b"seed", ctypes.byref(ctypes.c_int(seed)))
 
     # ====== RENDER ======
-    def set_render_dir(self, name):
-        """set directory to save render file"""
+    def set_render_dir(self, name: str):
+        """Sets the directory to save render file.
+
+        Args:
+            name (str): Name of render directory."""
         if not os.path.exists(name):
             os.mkdir(name)
         _LIB.env_config_game(self.game, b"render_dir", name.encode("ascii"))
 
     def render(self):
-        """render a step"""
+        """Renders a step."""
         _LIB.env_render(self.game)
 
     def _get_groups_info(self):
@@ -653,221 +888,12 @@ class GridWorld(Environment):
             )
 
 
-"""
-the following classes are for reward description
-"""
-
-
-class EventNode:
-    """an AST node of the event expression"""
-
-    OP_AND = 0
-    OP_OR = 1
-    OP_NOT = 2
-
-    OP_KILL = 3
-    OP_AT = 4
-    OP_IN = 5
-    OP_COLLIDE = 6
-    OP_ATTACK = 7
-    OP_DIE = 8
-    OP_IN_A_LINE = 9
-    OP_ALIGN = 10
-
-    # can extend more operation below
-
-    def __init__(self):
-        # for non-leaf node
-        self.op = None
-        # for leaf node
-        self.predicate = None
-
-        self.inputs = []
-
-    def __call__(self, subject, predicate, *args):
-        node = EventNode()
-        node.predicate = predicate
-        if predicate == "kill":
-            node.op = EventNode.OP_KILL
-            node.inputs = [subject, args[0]]
-        elif predicate == "at":
-            node.op = EventNode.OP_AT
-            coor = args[0]
-            node.inputs = [subject, coor[0], coor[1]]
-        elif predicate == "in":
-            node.op = EventNode.OP_IN
-            coor = args[0]
-            x1, y1 = min(coor[0][0], coor[1][0]), min(coor[0][1], coor[1][1])
-            x2, y2 = max(coor[0][0], coor[1][0]), max(coor[0][1], coor[1][1])
-            node.inputs = [subject, x1, y1, x2, y2]
-        elif predicate == "attack":
-            node.op = EventNode.OP_ATTACK
-            node.inputs = [subject, args[0]]
-        elif predicate == "kill":
-            node.op = EventNode.OP_KILL
-            node.inputs = [subject, args[0]]
-        elif predicate == "collide":
-            node.op = EventNode.OP_COLLIDE
-            node.inputs = [subject, args[0]]
-        elif predicate == "die":
-            node.op = EventNode.OP_DIE
-            node.inputs = [subject]
-        elif predicate == "in_a_line":
-            node.op = EventNode.OP_IN_A_LINE
-            node.inputs = [subject]
-        elif predicate == "align":
-            node.op = EventNode.OP_ALIGN
-            node.inputs = [subject]
-        else:
-            raise Exception("invalid predicate of event " + predicate)
-        return node
-
-    def __and__(self, other):
-        node = EventNode()
-        node.op = EventNode.OP_AND
-        node.inputs = [self, other]
-        return node
-
-    def __or__(self, other):
-        node = EventNode()
-        node.op = EventNode.OP_OR
-        node.inputs = [self, other]
-        return node
-
-    def __invert__(self):
-        node = EventNode()
-        node.op = EventNode.OP_NOT
-        node.inputs = [self]
-        return node
-
-
-Event = EventNode()
-
-
-class AgentSymbol:
-    """symbol to represent some agents"""
-
-    def __init__(self, group, index):
-        """define a agent symbol, it can be the object or subject of EventNode
-
-        group: group handle
-            it is the return value of cfg.add_group()
-        index: int or str
-            int: a deterministic integer id
-            str: can be 'all' or 'any', represents all or any agents in a group
-        """
-        self.group = group if group is not None else -1
-        if index == "any":
-            self.index = -1
-        elif index == "all":
-            self.index = -2
-        else:
-            assert isinstance(self.index, int), "index must be a deterministic int"
-            self.index = index
-
-    def __str__(self):
-        return "agent(%d,%d)" % (self.group, self.index)
-
-
-class Config:
-    """configuration class of gridworld game"""
-
-    def __init__(self):
-        self.config_dict = {}
-        self.agent_type_dict = {}
-        self.groups = []
-        self.reward_rules = []
-
-    def set(self, args):
-        """set parameters of global configuration
-
-        Parameters
-        ----------
-        args : dict
-            key value pair of the configuration
-        """
-        for key in args:
-            self.config_dict[key] = args[key]
-
-    def register_agent_type(self, name, attr):
-        """register an agent type
-
-        Parameters
-        ----------
-        name : str
-            name of the type (should be unique)
-        attr: dict
-            key value pair of the agent type
-            see notes below to know the available attributes
-
-        Notes
-        -----
-        height: int, height of agent body
-        width:  int, width of agent body
-        speed:  float, maximum speed, i.e. the radius of move circle of the agent
-        hp:     float, maximum health point of the agent
-        view_range: gw.CircleRange or gw.SectorRange
-
-        damage: float, attack damage
-        step_recover: float, step recover of health point (can be negative)
-        kill_supply: float, the hp gain when kill this type of agents
-
-        step_reward: float, reward get in every step
-        kill_reward: float, reward gain when kill this type of agent
-        dead_penalty: float, reward get when dead
-        attack_penalty: float, reward get when perform an attack (this is used to make agents do not attack blank grid)
-        """
-        if name in self.agent_type_dict:
-            raise Exception("type name %s already exists" % name)
-        self.agent_type_dict[name] = attr
-        return name
-
-    def add_group(self, agent_type):
-        """add a group to the configuration
-
-        Returns
-        -------
-        group_handle : int
-            a handle for the new added group
-        """
-        no = len(self.groups)
-        self.groups.append(agent_type)
-        return no
-
-    def add_reward_rule(self, on, receiver, value, terminal=False):
-        """add a reward rule
-
-        Some note:
-        1. if the receiver is not a deterministic agent,
-           it must be one of the agents involved in the triggering event
-
-        Parameters
-        ----------
-        on: Expr
-            a bool expression of the trigger event
-        receiver:  (list of) AgentSymbol
-            receiver of this reward rule
-        value: (list of) float
-            value to assign
-        terminal: bool
-            whether this event will terminate the game
-        """
-        if not (isinstance(receiver, tuple) or isinstance(receiver, list)):
-            assert not (isinstance(value, tuple) or isinstance(value, tuple))
-            receiver = [receiver]
-            value = [value]
-        if len(receiver) != len(value):
-            raise Exception("the length of receiver and value should be equal")
-        self.reward_rules.append([on, receiver, value, terminal])
-
-
 class CircleRange:
     def __init__(self, radius):
-        """define a circle range for attack or view
+        """Define a circle range for attack or view
 
-        Parameters
-        ----------
-        radius : float
+        Args:
+            radius (float): Radius of vision around the agent.
         """
         self.radius = radius
         self.angle = 360
@@ -878,13 +904,11 @@ class CircleRange:
 
 class SectorRange:
     def __init__(self, radius, angle):
-        """define a sector range for attack or view
+        """Define a sector range for attack or view.
 
-        Parameters
-        ----------
-        radius : float
-        angle :  float
-            angle should be less than 180
+        Args:
+            radius (float): Radius of vision around the agent.
+            angle (float): Angle (<180 degrees) describing the width of vision.
         """
         self.radius = radius
         self.angle = angle
