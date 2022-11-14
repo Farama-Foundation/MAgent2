@@ -62,7 +62,7 @@ More examples can be found in the [reference environments](https://github.com/Fa
 ## View Range
 When using `register_agent_type()`, the attribute `view_range` is defined using one of the following classes:
 ```{eval-rst}
-.. autofunction:: magent2.gridworld.CircleRange
-.. autofunction:: magent2.gridworld.SectorRange
+.. autoclass:: magent2.gridworld.CircleRange
+.. autoclass:: magent2.gridworld.SectorRange
 ```
  
