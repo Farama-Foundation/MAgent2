@@ -4,9 +4,9 @@ title: battlefield
 ---
 
 
-# Battlefield
+## Battlefield
 
-```{figure} magent_battlefield.gif
+```{figure} battlefield.gif
 :width: 140px
 :name: battlefield
 ```
@@ -25,10 +25,6 @@ title: battlefield
 | State Shape        | (80, 80, 5)                                    |
 | State Values       | (0, 2)                                         |
 
-```{figure} ../../_static/img/aec/magent_battlefield_aec.svg
-:width: 200px
-:name: battlefield
-```
 
 Same as [battle](./battle) but with fewer agents arrayed in a larger space with obstacles.
 

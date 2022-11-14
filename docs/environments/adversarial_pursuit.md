@@ -4,9 +4,9 @@ title: adversarial_pursuit
 ---
 
 
-# Adversarial Pursuit
+## Adversarial Pursuit
 
-```{figure} magent_adversarial_pursuit.gif
+```{figure} adversarial_pursuit.gif
 :width: 140px
 :name: adversarial_pursuit
 ```
@@ -25,10 +25,6 @@ title: adversarial_pursuit
 | State Shape        | (45, 45, 5)                                            |
 | State Values       | (0, 2)                                                 |
 
-```{figure} ../../_static/img/aec/magent_adversarial_pursuit_aec.svg
-:width: 200px
-:name: adversarial_pursuit
-```
 
 The red agents must navigate the obstacles and tag (similar to attacking, but without damaging) the blue agents. The blue agents should try to avoid being tagged. To be effective, the red agents, who are much are slower and larger than the blue agents, must work together to trap blue agents so
 they can be tagged continually.

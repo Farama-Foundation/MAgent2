@@ -4,9 +4,9 @@ title: gather
 ---
 
 
-# Gather
+## Gather
 
-```{figure} magent_gather.gif
+```{figure} gather.gif
 :width: 140px
 :name: gather
 ```
@@ -25,10 +25,6 @@ title: gather
 | State Shape        | (200, 200, 5)                             |
 | State Values       | (0, 2)                                    |
 
-```{figure} ../../_static/img/aec/magent_gather_aec.svg
-:width: 200px
-:name: gather
-```
 
 In gather, the agents gain reward by eating food. Food needs to be broken down by 5 "attacks" before it is absorbed. Since there is finite food on the map, there is competitive pressure between agents over the food. You expect to see that agents coordinate by not attacking each other until food is
 scarce. When food is scarce, agents may attack each other to try to monopolize the food. Agents can kill each other with a single attack.
