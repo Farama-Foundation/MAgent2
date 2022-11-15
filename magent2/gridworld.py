@@ -413,11 +413,8 @@ class GridWorld(Environment):
                 If method is 'custom', then kwargs["pos"] is a list of coordination.
 
         Example:
-            # add 1000 walls randomly
-            >>> env.add_agents(handle, method="random", n=1000)
-
-            # add 3 agents to (1,2), (4,5) and (9, 8) in map
-            >>> env.add_agents(handle, method="custom", pos=[(1,2), (4,5), (9,8)])
+            >>> env.add_agents(handle, method="random", n=1000)                    # add 1000 walls randomly
+            >>> env.add_agents(handle, method="custom", pos=[(1,2), (4,5), (9,8)]) # add 3 agents to (1,2), (4,5) and (9, 8) in map
         """
         if method == "random":
             _LIB.gridworld_add_agents(
