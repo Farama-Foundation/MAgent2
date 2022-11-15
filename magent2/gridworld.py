@@ -376,13 +376,12 @@ class GridWorld(Environment):
             method (str): Can be 'random' or 'custom'. If method is 'random', then kwargs["n"] is an int.
                 If method is 'custom', then kwargs["pos"] is a list of coordination
 
-        ```
-        # add 1000 walls randomly
-        >>> env.add_walls(method="random", n=1000)
+        Example:
+            # add 1000 walls randomly
+            >>> env.add_walls(method="random", n=1000)
 
-        # add 3 walls to (1,2), (4,5) and (9, 8) in map
-        >>> env.add_walls(method="custom", pos=[(1,2), (4,5), (9,8)])
-        ```
+            # add 3 walls to (1,2), (4,5) and (9, 8) in map
+            >>> env.add_walls(method="custom", pos=[(1,2), (4,5), (9,8)])
         """
         # handle = -1 for walls
         kwargs["dir"] = 0
@@ -413,13 +412,12 @@ class GridWorld(Environment):
             method (str): Can be 'random' or 'custom'. If method is 'random', then kwargs["n"] is a int.
                 If method is 'custom', then kwargs["pos"] is a list of coordination.
 
-        ```
-        # add 1000 walls randomly
-        >>> env.add_agents(handle, method="random", n=1000)
+        Example:
+            # add 1000 walls randomly
+            >>> env.add_agents(handle, method="random", n=1000)
 
-        # add 3 agents to (1,2), (4,5) and (9, 8) in map
-        >>> env.add_agents(handle, method="custom", pos=[(1,2), (4,5), (9,8)])
-        ```
+            # add 3 agents to (1,2), (4,5) and (9, 8) in map
+            >>> env.add_agents(handle, method="custom", pos=[(1,2), (4,5), (9,8)])
         """
         if method == "random":
             _LIB.gridworld_add_agents(
