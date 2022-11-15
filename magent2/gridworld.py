@@ -379,7 +379,6 @@ class GridWorld(Environment):
         Example:
             # add 1000 walls randomly
             >>> env.add_walls(method="random", n=1000)
-
             # add 3 walls to (1,2), (4,5) and (9, 8) in map
             >>> env.add_walls(method="custom", pos=[(1,2), (4,5), (9,8)])
         """
