@@ -132,16 +132,16 @@ class Config:
 
         Args:
             args (dict): Key-value pairs containing the following configuration attributes.
-            <ul>
-            - **map_width** (*int*): Number of horizontal grid squares in the Gridworld.
+            
+            <ul>- **map_width** (*int*): Number of horizontal grid squares in the Gridworld.
             - **map_height** (*int*): Number of vertical grid squares in the Gridworld.
             - **embedding_size** (*int*): Embedding size for the observation features.
             - **render_dir** (*str*): Directory to save render file.
             - **seed** (*int*): Random seed.
             - **food_mode** (*bool*): Dead agents drop food on the map.
             - **turn_mode** (*bool*): Include 2 more actions -- turn left and turn right.
-            - **minimap_mode** (*bool*): Include minimap in observations.
-            </ul>
+            - **minimap_mode** (*bool*): Include minimap in observations.</ul>
+            
         """
         for key in args:
             self.config_dict[key] = args[key]
@@ -152,8 +152,8 @@ class Config:
         Args:
             name (str): Name of the type (should be unique).
             attr (dict): Key-value pairs containing the following configuration attributes.
-            <ul>
-            - **height** (*int*):   Height of agent body.
+            
+            <ul>- **height** (*int*):   Height of agent body.
             - **width** (*int*):    Width of agent body.
             - **speed** (*float*):  Maximum speed, i.e. the radius of move circle of the agent.
             - **hp** (*float*):    Maximum health point of the agent.
@@ -166,8 +166,8 @@ class Config:
             - **step_reward** (*float*):    Reward gained in every step.
             - **kill_reward** (*float*):    Reward gained for killing this type of agent.
             - **dead_penalty** (*float*):   Reward gained for dying.
-            - **attack_penalty** (*float*): Reward gained when performing an attack (to discourage attacking empty grid cells).
-            </ul>
+            - **attack_penalty** (*float*): Reward gained when performing an attack (to discourage attacking empty grid cells).</ul>
+            
         Returns:
             name (str): Name of the type.
         """
