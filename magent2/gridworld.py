@@ -131,7 +131,7 @@ class Config:
         """Set parameters of global configuration.
 
         :param dict args: Key-value pairs containing the following configuration attributes:
-            
+
             * **map_width** (*int*): Number of horizontal grid squares in the Gridworld.
             * **map_height** (*int*): Number of vertical grid squares in the Gridworld.
             * **embedding_size** (*int*): Embedding size for the observation features.
@@ -140,7 +140,7 @@ class Config:
             * **food_mode** (*bool*): Dead agents drop food on the map.
             * **turn_mode** (*bool*): Include 2 more actions -- turn left and turn right.
             * **minimap_mode** (*bool*): Include minimap in observations.
-            
+
         """
         for key in args:
             self.config_dict[key] = args[key]
@@ -150,7 +150,7 @@ class Config:
 
         :param str name: Name of the type (should be unique).
         :param dict attr: Key-value pairs containing the following configuration attributes.
-            
+
             * **height** (*int*):   Height of agent body.
             * **width** (*int*):    Width of agent body.
             * **speed** (*float*):  Maximum speed, i.e. the radius of move circle of the agent.
@@ -163,7 +163,7 @@ class Config:
             * **kill_reward** (*float*):    Reward gained for killing this type of agent.
             * **dead_penalty** (*float*):   Reward gained for dying.
             * **attack_penalty** (*float*): Reward gained when performing an attack (to discourage attacking empty grid cells).
-            
+
         :Returns:
             name (str): Name of the type.
         """
