@@ -130,7 +130,10 @@ class Config:
     def set(self, args: dict):
         """Set parameters of global configuration.
 
-        * :param dict args: Contains the following configuration attributes:
+        Parameters
+        ----------
+        * args : dict
+            Contains the following configuration attributes:
 
             * **map_width** (*int*): Number of horizontal grid squares in the Gridworld.
             * **map_height** (*int*): Number of vertical grid squares in the Gridworld.
@@ -148,8 +151,12 @@ class Config:
     def register_agent_type(self, name: str, attr: dict):
         """Register an agent type.
 
-        :param str name: Name of the type (should be unique).
-        :param dict attr: Contains the following configuration attributes:
+        Parameters
+        ----------
+        name : str
+            Name of the type (should be unique).
+        attr : dict
+            Contains the following configuration attributes:
 
             * **height** (*int*):   Height of agent body.
             * **width** (*int*):    Width of agent body.
