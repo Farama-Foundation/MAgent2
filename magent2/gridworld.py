@@ -130,7 +130,7 @@ class Config:
     def set(self, args: dict):
         """Set parameters of global configuration.
 
-        :param dict args: Contains the following configuration attributes:
+        * :param dict args: Contains the following configuration attributes:
 
             * **map_width** (*int*): Number of horizontal grid squares in the Gridworld.
             * **map_height** (*int*): Number of vertical grid squares in the Gridworld.
