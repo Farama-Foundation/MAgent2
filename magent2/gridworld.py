@@ -130,19 +130,17 @@ class Config:
     def set(self, args: dict):
         """Set parameters of global configuration.
 
-        Args:
-            args (dict): Key-value pairs containing the configuration attributes.
+        :param dict args:
 
-        Attributes:
-
-            map_width (int): Number of horizontal grid squares in the Gridworld.
-            map_height (int): Number of vertical grid squares in the Gridworld.
-            embedding_size (int): Embedding size for the observation features.
-            render_dir (str): Directory to save render file.
-            seed (int): Random seed.
-            food_mode (bool): Dead agents drop food on the map.
-            turn_mode (bool): Include 2 more actions -- turn left and turn right.
-            minimap_mode (bool): Include minimap in observations.
+        Contains the following configuration attributes:
+            * **map_width** (*int*): Number of horizontal grid squares in the Gridworld.
+            * **map_height** (*int*): Number of vertical grid squares in the Gridworld.
+            * **embedding_size** (*int*): Embedding size for the observation features.
+            * **render_dir** (*str*): Directory to save render file.
+            * **seed** (*int*): Random seed.
+            * **food_mode** (*bool*): Dead agents drop food on the map.
+            * **turn_mode** (*bool*): Include 2 more actions -- turn left and turn right.
+            * **minimap_mode** (*bool*): Include minimap in observations.
         """
         for key in args:
             self.config_dict[key] = args[key]
@@ -150,27 +148,24 @@ class Config:
     def register_agent_type(self, name: str, attr: dict):
         """Register an agent type.
 
-        Args:
-            name (str): Name of the type (should be unique).
-            attr (dict): Key-value pairs of the type Attributes.
+        :param str name: Name of the type (should be unique).
+        :param dict attr:
 
-        Attributes:
-            height (int):   Height of agent body.
-            width (int):    Width of agent body.
-            speed (float):  Maximum speed, i.e. the radius of move circle of the agent.
-            hp: (float):    Maximum health point of the agent.
-            view_range (gw.CircleRange or gw.SectorRange): Field of view of the agent.
+        Contains the following configuration attributes:
+            * **height** (*int*):   Height of agent body.
+            * **width** (*int*):    Width of agent body.
+            * **speed** (*float*):  Maximum speed, i.e. the radius of move circle of the agent.
+            * **hp** (*float*):    Maximum health point of the agent.
+            * **view_range** (*gw.CircleRange* or *gw.SectorRange*): Field of view of the agent.
+            * **damage** (*float*):         Attack damage.
+            * **step_recover** (*float*):   Step recover (healing) of health points (can be negative).
+            * **kill_supply** (*float*):    Hp gain for killing this type of agent.
+            * **step_reward** (*float*):    Reward gained in every step.
+            * **kill_reward** (*float*):    Reward gained for killing this type of agent.
+            * **dead_penalty** (*float*):   Reward gained for dying.
+            * **attack_penalty** (*float*): Reward gained when performing an attack (to discourage attacking empty grid cells).
 
-            damage (float):         Attack damage.
-            step_recover (float):   Step recover (healing) of health points (can be negative).
-            kill_supply (float):    Hp gain for killing this type of agent.
-
-            step_reward (float):    Reward gained in every step.
-            kill_reward (float):    Reward gained for killing this type of agent.
-            dead_penalty (float):   Reward gained for dying.
-            attack_penalty (float): Reward gained when performing an attack (to discourage attacking empty grid cells).
-
-        Returns:
+        :Returns:
             name (str): Name of the type.
         """
         if name in self.agent_type_dict:

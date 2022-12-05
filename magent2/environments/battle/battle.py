@@ -1,6 +1,6 @@
 # noqa
 """
-# Battle
+## Battle
 
 ```{figure} battle.gif
 :width: 140px

@@ -1,6 +1,6 @@
 # noqa
 """
-# Gather
+## Gather
 
 ```{figure} gather.gif
 :width: 140px

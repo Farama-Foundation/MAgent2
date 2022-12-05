@@ -1,6 +1,6 @@
 # noqa
 """
-# Combined Arms
+## Combined Arms
 
 ```{figure} combined_arms.gif
 :width: 140px

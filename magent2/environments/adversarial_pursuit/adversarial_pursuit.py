@@ -1,6 +1,6 @@
 # noqa
 """
-# Adversarial Pursuit
+## Adversarial Pursuit
 
 ```{figure} adversarial_pursuit.gif
 :width: 140px
