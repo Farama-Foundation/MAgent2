@@ -1,6 +1,6 @@
 # noqa
 """
-# Tiger-Deer
+## Tiger-Deer
 
 ```{figure} tiger_deer.gif
 :width: 140px
