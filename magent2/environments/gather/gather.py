@@ -12,7 +12,7 @@
 | Actions            | Discrete                                  |
 | Parallel API       | Yes                                       |
 | Manual Control     | No                                        |
-| Agents             | `agents= [ omnivore_[0-494] ]`            |
+| Agents             | `agents= [omnivore_[0-494]]`            |
 | Agents             | 495                                       |
 | Action Shape       | (33)                                      |
 | Action Values      | Discrete(33)                              |

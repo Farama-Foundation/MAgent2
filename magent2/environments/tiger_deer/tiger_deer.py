@@ -1,6 +1,6 @@
 # noqa
 """
-## Tiger-Deer
+## Tiger Deer
 
 ```{figure} tiger_deer.gif
 :width: 140px
@@ -12,7 +12,7 @@
 | Actions            | Discrete                                      |
 | Parallel API       | Yes                                           |
 | Manual Control     | No                                            |
-| Agents             | `agents= [ deer_[0-100], tiger_[0-19] ]`      |
+| Agents             | `agents= [deer_[0-100], tiger_[0-19]]`      |
 | Agents             | 121                                           |
 | Action Shape       | (5),(9)                                       |
 | Action Values      | Discrete(5),(9)                               |
