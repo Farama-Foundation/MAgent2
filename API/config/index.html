@@ -15,7 +15,7 @@
         <title>Config - MAgent2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=3cf7b839e8c50b5f3a39bb99d90baa7b845de926" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=67b82a225225040789e6a20eecd6d5216a5eebca" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=91b9f2a71a58ed2481980f1e5725e16457fde93d" />
     
     
 
@@ -82,7 +82,7 @@
                 <polyline style="stroke-linecap: round; stroke-linejoin: round; fill: none; stroke-width: 2px;" points="1 7 12 18 23 7"></polyline>
               </svg>
             </button>
-            <div class="farama-header-menu-container" aria-hidden="true" id="farama-menu">
+            <div class="farama-header-menu-container farama-hidden" aria-hidden="true" id="farama-menu">
               <div class="farama-header-menu__header">
                 <a href="https://farama.org">
                   <img class="farama-header-menu__logo farama-white-logo-invert" src="../../_static/img/farama_solid_white.svg" alt="Farama Foundation logo">
@@ -232,7 +232,6 @@
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
 <ul class="current">
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#helper-classes">Helper classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../gridworld/">GridWorld</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Environments</span></p>
@@ -242,7 +241,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../environments/battlefield/">Battlefield</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../environments/combined_arms/">Combined Arms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../environments/gather/">Gather</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../environments/tiger_deer/">Tiger-Deer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../environments/tiger_deer/">Tiger Deer</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul>
@@ -394,11 +393,10 @@ it must be one of the agents involved in the triggering event.</p></li>
 </dd></dl>
 
 </section>
-</section>
 <section id="helper-classes">
-<h1>Helper classes<a class="headerlink" href="#helper-classes" title="Permalink to this heading">#</a></h1>
+<h2>Helper classes<a class="headerlink" href="#helper-classes" title="Permalink to this heading">#</a></h2>
 <section id="agentsymbol-and-event">
-<h2>AgentSymbol and Event<a class="headerlink" href="#agentsymbol-and-event" title="Permalink to this heading">#</a></h2>
+<h3>AgentSymbol and Event<a class="headerlink" href="#agentsymbol-and-event" title="Permalink to this heading">#</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">AgentSymbol</span></code> and <code class="docutils literal notranslate"><span class="pre">Event</span></code> are helper classes used to design rewards that go into the Config.</p>
 <p><code class="docutils literal notranslate"><span class="pre">AgentSymbol</span></code>s are used to represent some set of agents. They are instantiated with a group handle and the relevant agents within that group. The index can be a single number or “any” or “all”.</p>
 <p>Here is an example of creating two symbols, one for each of two groups:</p>
@@ -460,7 +458,7 @@ it must be one of the agents involved in the triggering event.</p></li>
 <p>More examples can be found in the <a class="reference external" href="https://github.com/Farama-Foundation/MAgent2/tree/main/magent2/environments">reference environments</a>.</p>
 </section>
 <section id="view-range">
-<h2>View Range<a class="headerlink" href="#view-range" title="Permalink to this heading">#</a></h2>
+<h3>View Range<a class="headerlink" href="#view-range" title="Permalink to this heading">#</a></h3>
 <p>When using <code class="docutils literal notranslate"><span class="pre">register_agent_type()</span></code>, the attribute <code class="docutils literal notranslate"><span class="pre">view_range</span></code> is defined using one of the following classes:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="magent2.gridworld.CircleRange">
@@ -472,6 +470,7 @@ it must be one of the agents involved in the triggering event.</p></li>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">magent2.gridworld.</span></span><span class="sig-name descname"><span class="pre">SectorRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magent2.gridworld.SectorRange" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
+</section>
 </section>
 </section>
 
@@ -546,13 +545,13 @@ it must be one of the agents involved in the triggering event.</p></li>
 <li><a class="reference internal" href="#magent2.gridworld.Config.add_reward_rule"><code class="docutils literal notranslate"><span class="pre">add_reward_rule()</span></code></a></li>
 </ul>
 </li>
-</ul>
-</li>
 <li><a class="reference internal" href="#helper-classes">Helper classes</a><ul>
 <li><a class="reference internal" href="#agentsymbol-and-event">AgentSymbol and Event</a></li>
 <li><a class="reference internal" href="#view-range">View Range</a><ul>
 <li><a class="reference internal" href="#magent2.gridworld.CircleRange"><code class="docutils literal notranslate"><span class="pre">CircleRange</span></code></a></li>
 <li><a class="reference internal" href="#magent2.gridworld.SectorRange"><code class="docutils literal notranslate"><span class="pre">SectorRange</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
