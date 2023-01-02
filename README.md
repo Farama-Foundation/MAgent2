@@ -4,7 +4,9 @@
 
 MAgent2 is a library for the creation of environments where large numbers of pixel agents in a gridworld interact in battles or other competitive scenarios.
 
-<img src="https://github.com/Farama-Foundation/MAgent2/blob/main/docs/environments/adversarial_pursuit.gif" width="200">
+<p align="center">
+  <img src="https://github.com/Farama-Foundation/MAgent2/blob/main/docs/environments/adversarial_pursuit.gif" width="200">
+</p>
 
 This is a maintained fork of the original [MAgent](https://github.com/geek-ai/MAgent) codebase and contains some reference [environments](https://github.com/Farama-Foundation/MAgent2/tree/main/magent2/environments) implemented using the [PettingZoo](https://github.com/Farama-Foundation/PettingZoo) API. These environments used to be included in PettingZoo itself, but have been moved here to exist independently. They are being regularly maintained and will receive bug fixes, support new versions of Python, etc. We used to develop this repo at https://github.com/Farama-Foundation/MAgent, but moved development here so that the distinction from the original MAgent package is clear to users.
 
