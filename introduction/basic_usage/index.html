@@ -295,12 +295,15 @@
 <h1>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this heading">#</a></h1>
 <section id="initializing-environments">
 <h2>Initializing Environments<a class="headerlink" href="#initializing-environments" title="Permalink to this heading">#</a></h2>
-<p>The reference environments in MAgent2 are implemented using <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo">PettingZoo</a>. They can be initialized by calling their <code class="docutils literal notranslate"><span class="pre">env()</span></code> method and passing desired parameters:</p>
+<p>The environments in MAgent2 are implemented using <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo">PettingZoo</a>. They can be initialized by calling their <code class="docutils literal notranslate"><span class="pre">env()</span></code> method and passing desired parameters:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">magent2.environments</span> <span class="kn">import</span> <span class="n">battle_v4</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">battle_v4</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">map_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s1">&#39;human&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Interacting with the environment then involves iterating through the agents, pulling environment information with the <code class="docutils literal notranslate"><span class="pre">last()</span></code> method, and sending actions through the <code class="docutils literal notranslate"><span class="pre">step()</span></code> method:</p>
+</section>
+<section id="interaction-workflow">
+<h2>Interaction Workflow<a class="headerlink" href="#interaction-workflow" title="Permalink to this heading">#</a></h2>
+<p>Interacting with the environment involves iterating through the agents, pulling environment information with the <code class="docutils literal notranslate"><span class="pre">last()</span></code> method, and sending actions through the <code class="docutils literal notranslate"><span class="pre">step()</span></code> method:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
     <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
@@ -308,7 +311,18 @@
     <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>For more details on the API components, see the <a class="reference external" href="https://pettingzoo.farama.org/content/basic_usage/">PettingZoo basic usage page</a>.</p>
+</section>
+<section id="demo">
+<h2>Demo<a class="headerlink" href="#demo" title="Permalink to this heading">#</a></h2>
+<p>Run a demo using PettingZoo’s <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/utils/random_demo.py"><code class="docutils literal notranslate"><span class="pre">random_demo</span></code></a> function which implements this workflow with random policies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">magent2.environments</span> <span class="kn">import</span> <span class="n">battle_v4</span>
+<span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">random_demo</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">battle_v4</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s1">&#39;human&#39;</span><span class="p">)</span>
+<span class="n">random_demo</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">episodes</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more details on the API components, see the <a class="reference external" href="https://pettingzoo.farama.org/content/basic_usage/">PettingZoo Basic Usage page</a>.</p>
 </section>
 <section id="creating-new-environments">
 <h2>Creating New Environments<a class="headerlink" href="#creating-new-environments" title="Permalink to this heading">#</a></h2>
@@ -380,6 +394,8 @@
             <ul>
 <li><a class="reference internal" href="#">Basic Usage</a><ul>
 <li><a class="reference internal" href="#initializing-environments">Initializing Environments</a></li>
+<li><a class="reference internal" href="#interaction-workflow">Interaction Workflow</a></li>
+<li><a class="reference internal" href="#demo">Demo</a></li>
 <li><a class="reference internal" href="#creating-new-environments">Creating New Environments</a></li>
 </ul>
 </li>
