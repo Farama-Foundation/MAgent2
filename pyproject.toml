@@ -1,7 +1,7 @@
 # Package ######################################################################
 
 [build-system]
-requires = ["setuptools >= 61.0.0"]
+requires = ["setuptools >= 61.0.0", "cmake"]
 build-backend = "setuptools.build_meta"
 
 [project]
