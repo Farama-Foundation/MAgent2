@@ -40,7 +40,7 @@ Documentation = "https://gymnasium.farama.org"
 include-package-data = true
 
 [tool.setuptools.packages.find]
-include = ["magent2", "magent2.*"]
+include = []
 
 # Linters and Test tools #######################################################
 
