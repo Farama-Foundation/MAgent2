@@ -33,7 +33,7 @@ dynamic = ["version"]
 [project.urls]
 Homepage = "https://farama.org"
 Repository = "https://github.com/Farama-Foundation/MAgent2"
-Documentation = "https://gymnasium.farama.org"
+Documentation = "https://magent2.farama.org"
 "Bug Report" = "https://github.com/Farama-Foundation/MAgent2/issues"
 
 [tool.setuptools]
