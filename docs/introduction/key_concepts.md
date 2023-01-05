@@ -12,7 +12,7 @@ The following points detail some of the functionality found in the library:
 
 * **Moving and attacking**: An agent can either move or attack each step, so the action space is the concatenation of all possible moves and all possible attacks.
 
-* **State** *: A global observation of the environment can be retrieved by calling `env.state()`. The state observation space is a 3D observation of the complete map with dimensions equal to the map size. The first channel shows the walls in the map, where each element represents whether the coordinate is empty or has an obstacle. Concatenated to this channel, there is another pair of channels for each agent type, which indicates whether the coordinates contain an agent of that type binned to the value (agent's HP/ max agent HP). If extra features are selected the respective feature vector is concatenated and binned to each agent in the observation state.
+* **State**: A global observation of the environment can be retrieved by calling `env.state()`. The state observation space is a 3D observation of the complete map with dimensions equal to the map size. The first channel shows the walls in the map, where each element represents whether the coordinate is empty or has an obstacle. Concatenated to this channel, there is another pair of channels for each agent type, which indicates whether the coordinates contain an agent of that type binned to the value (agent's HP/ max agent HP). If extra features are selected the respective feature vector is concatenated and binned to each agent in the observation state.
 
 ### Termination
 
