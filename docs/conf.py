@@ -25,10 +25,9 @@ copyright = "2022"
 author = "Farama Foundation"
 
 # The full version, including alpha/beta/rc tags
-# TODO: change to magent version
-release = "0.3.0"
-# from magent2 import __version__ as magent_version
+# release = get_version()
 
+sys.path.insert(0, os.path.abspath(".."))
 sys.path.insert(0, os.path.abspath("../.."))
 
 # -- General configuration ---------------------------------------------------
