@@ -19,7 +19,6 @@
 import os
 import sys
 from typing import Any, Dict
-import magent2
 
 project = "MAgent2"
 copyright = "2022"
