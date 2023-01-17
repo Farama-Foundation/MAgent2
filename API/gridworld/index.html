@@ -293,8 +293,311 @@
           
           <section id="gridworld">
 <h1>GridWorld<a class="headerlink" href="#gridworld" title="Permalink to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">magent2.gridworld.</span></span><span class="sig-name descname"><span class="pre">GridWorld</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../config/#magent2.gridworld.Config" title="magent2.gridworld.Config"><span class="pre">Config</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magent2.gridworld.GridWorld" title="Permalink to this definition">#</a></dt>
+<dd><p>The main MAgent2 class for implementing environments. MAgent2 environments are square Gridworlds wherein each coordinate may contain an agent, a wall, or nothing.</p>
+<p>The class attributes are not accessible directly due to them living in the underlying C++ code.
+Thus, there are get/set methods for retrieving and manipulating their values.</p>
+</dd></dl>
+
 <section id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.new_group">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">new_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">c_int</span></span></span><a class="headerlink" href="#magent2.gridworld.GridWorld.new_group" title="Permalink to this definition">#</a></dt>
+<dd><p>Registers a new group of agents into environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – Name of the group.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>handle</strong> (<em>ctypes.c_int32</em>) – A handle to reference the group in future gets and sets.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.add_agents">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">add_agents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">c_int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magent2.gridworld.GridWorld.add_agents" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds agents to environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> (<em>ctypes.c_int32</em>) – The handle of the group to which to add the agents.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be ‘random’ or ‘custom’. If method is ‘random’, then kwargs[“n”] is a int.
+If method is ‘custom’, then kwargs[“pos”] is a list of coordination.</p></li>
+</ul>
+</dd>
+</dl>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a>`
+# add 1000 walls randomly
+&gt;&gt;&gt; env.add_agents(handle, method=”random”, n=1000)</p>
+<p># add 3 agents to (1,2), (4,5) and (9, 8) in map
+&gt;&gt;&gt; env.add_agents(handle, method=”custom”, pos=[(1,2), (4,5), (9,8)])
+<a href="#id3"><span class="problematic" id="id4">``</span></a><a href="#id5"><span class="problematic" id="id6">`</span></a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.add_walls">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">add_walls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magent2.gridworld.GridWorld.add_walls" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds walls to the environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>method</strong> (<em>str</em>) – Can be ‘random’ or ‘custom’. If method is ‘random’, then kwargs[“n”] is an int.
+If method is ‘custom’, then kwargs[“pos”] is a list of coordination</p>
+</dd>
+</dl>
+<p><a href="#id7"><span class="problematic" id="id8">``</span></a>`
+# add 1000 walls randomly
+&gt;&gt;&gt; env.add_walls(method=”random”, n=1000)</p>
+<p># add 3 walls to (1,2), (4,5) and (9, 8) in map
+&gt;&gt;&gt; env.add_walls(method=”custom”, pos=[(1,2), (4,5), (9,8)])
+<a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.reset">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magent2.gridworld.GridWorld.reset" title="Permalink to this definition">#</a></dt>
+<dd><p>Resets the environment to an initial internal state.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.set_action">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">set_action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">c_int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magent2.gridworld.GridWorld.set_action" title="Permalink to this definition">#</a></dt>
+<dd><p>Set actions for whole group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> (<em>ctypes.c_int32</em>) – Group handle.</p></li>
+<li><p><strong>actions</strong> (<em>np.ndarray</em>) – Array of actions, 1 per agent. The dtype must be int32.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.step">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magent2.gridworld.GridWorld.step" title="Permalink to this definition">#</a></dt>
+<dd><p>Runs one timestep of the environment using the agents’ actions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>done</strong> (<em>bool</em>) – Flag indicating whether the game is done or not.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.render">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magent2.gridworld.GridWorld.render" title="Permalink to this definition">#</a></dt>
+<dd><p>Renders a step.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.set_seed">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">set_seed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magent2.gridworld.GridWorld.set_seed" title="Permalink to this definition">#</a></dt>
+<dd><p>Set random seed of the engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>seed</strong> (<em>int</em>) – Seed value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.set_render_dir">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">set_render_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magent2.gridworld.GridWorld.set_render_dir" title="Permalink to this definition">#</a></dt>
+<dd><p>Sets the directory to save render file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – Name of render directory.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.clear_dead">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">clear_dead</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magent2.gridworld.GridWorld.clear_dead" title="Permalink to this definition">#</a></dt>
+<dd><p>Clears dead agents in the engine. Must be called after step().</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.get_handles">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">get_handles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">ctypes.c_int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#magent2.gridworld.GridWorld.get_handles" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns all group handles in the environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>handles</strong> (<em>list[ctypes.c_int32]</em>) – All group handles in the environment.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.get_observation">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">get_observation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">c_int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#magent2.gridworld.GridWorld.get_observation" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the observation for each agent in a group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>handle</strong> (<em>ctypes.c_int32</em>) – Group handle.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>obs</strong> (<em>Tuple[np.ndarray, np.ndarray]</em>) – (views, features)
+Views is a numpy array whose shape is n * view_width * view_height * n_channel.
+Features is a numpy array whose shape is n * feature_size.
+For agent i, (views[i], features[i]) is its observation at this step.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.get_reward">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">get_reward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">c_int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#magent2.gridworld.GridWorld.get_reward" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the rewards for all agents in a group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>handle</strong> (<em>ctypes.c_int32</em>) – Group handle.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>rewards</strong> (<em>np.ndarray[float32]</em>) – Rewards for all agents in the group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.get_action_space">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">get_action_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">c_int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#magent2.gridworld.GridWorld.get_action_space" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the action space for a group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>handle</strong> (<em>ctypes.c_int32</em>) – Group handle.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>action_space</strong> (<em>Tuple[int]</em>) – Action space for the group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.get_view_space">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">get_view_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">c_int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#magent2.gridworld.GridWorld.get_view_space" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the view space for a group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>handle</strong> (<em>ctypes.c_int32</em>) – Group handle.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>view_space</strong> (<em>Tuple[int, int, int]</em>) – View space for the group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.get_feature_space">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">get_feature_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">c_int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#magent2.gridworld.GridWorld.get_feature_space" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the feature space for a group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>handle</strong> (<em>ctypes.c_int32</em>) – Group handle.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>feature_space</strong> (<em>Tuple[int]</em>) – Feature space for the group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.get_num">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">get_num</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">c_int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#magent2.gridworld.GridWorld.get_num" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the number of agents in a group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>handle</strong> (<em>ctypes.c_int32</em>) – Group handle.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>num</strong> (<em>int</em>) – Number of agents in the group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.get_agent_id">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">get_agent_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">c_int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#magent2.gridworld.GridWorld.get_agent_id" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the ids of all agents in the group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>handle</strong> (<em>ctypes.c_int32</em>) – Group handle.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ids</strong> (<em>np.ndarray[int32]</em>) – Ids of all agents in the group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.get_alive">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">get_alive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">c_int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#magent2.gridworld.GridWorld.get_alive" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the alive status of all agents in a group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>handle</strong> (<em>ctypes.c_int32</em>) – Group handle.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>alives</strong> (<em>np.ndarray[bool]</em>) – Whether the agents are alive or not.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.get_pos">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">get_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">c_int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#magent2.gridworld.GridWorld.get_pos" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the positions of all agents in a group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>handle</strong> (<em>ctypes.c_int32</em>) – Group handle.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>pos</strong> (<em>np.ndarray[int]</em>) – The positions of all agents in the group.
+The shape is (n, 2).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.get_view2attack">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">get_view2attack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">c_int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#magent2.gridworld.GridWorld.get_view2attack" title="Permalink to this definition">#</a></dt>
+<dd><p>Get a matrix with the same size of view_range.
+If element &gt;= 0, then it is an attackable point, and the corresponding
+action number is the value of that element.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>handle</strong> (<em>ctypes.c_int32</em>) – Group handle.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>attack_base</strong> (<em>int</em>) – Attack action base value.</p></li>
+<li><p><strong>buf</strong> (<em>np.ndarray</em>) – Map attack action into view.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.GridWorld.get_global_minimap">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.GridWorld.</span></span><span class="sig-name descname"><span class="pre">get_global_minimap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#magent2.gridworld.GridWorld.get_global_minimap" title="Permalink to this definition">#</a></dt>
+<dd><p>Compress global map into a minimap of given size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>height</strong> (<em>int</em>) – Height of minimap.</p></li>
+<li><p><strong>width</strong> (<em>int</em>) – Width of minimap.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>minimap</strong> (<em>np.ndarray</em>) – Map of shape (n_group + 1, height, width).</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 </section>
 
@@ -361,7 +664,32 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">GridWorld</a><ul>
-<li><a class="reference internal" href="#methods">Methods</a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld"><code class="docutils literal notranslate"><span class="pre">GridWorld</span></code></a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.new_group"><code class="docutils literal notranslate"><span class="pre">new_group()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.add_agents"><code class="docutils literal notranslate"><span class="pre">add_agents()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.add_walls"><code class="docutils literal notranslate"><span class="pre">add_walls()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.reset"><code class="docutils literal notranslate"><span class="pre">reset()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.set_action"><code class="docutils literal notranslate"><span class="pre">set_action()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.step"><code class="docutils literal notranslate"><span class="pre">step()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.render"><code class="docutils literal notranslate"><span class="pre">render()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.set_seed"><code class="docutils literal notranslate"><span class="pre">set_seed()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.set_render_dir"><code class="docutils literal notranslate"><span class="pre">set_render_dir()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.clear_dead"><code class="docutils literal notranslate"><span class="pre">clear_dead()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.get_handles"><code class="docutils literal notranslate"><span class="pre">get_handles()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.get_observation"><code class="docutils literal notranslate"><span class="pre">get_observation()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.get_reward"><code class="docutils literal notranslate"><span class="pre">get_reward()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.get_action_space"><code class="docutils literal notranslate"><span class="pre">get_action_space()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.get_view_space"><code class="docutils literal notranslate"><span class="pre">get_view_space()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.get_feature_space"><code class="docutils literal notranslate"><span class="pre">get_feature_space()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.get_num"><code class="docutils literal notranslate"><span class="pre">get_num()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.get_agent_id"><code class="docutils literal notranslate"><span class="pre">get_agent_id()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.get_alive"><code class="docutils literal notranslate"><span class="pre">get_alive()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.get_pos"><code class="docutils literal notranslate"><span class="pre">get_pos()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.get_view2attack"><code class="docutils literal notranslate"><span class="pre">get_view2attack()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.GridWorld.get_global_minimap"><code class="docutils literal notranslate"><span class="pre">get_global_minimap()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
