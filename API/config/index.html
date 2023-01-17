@@ -293,8 +293,105 @@
           
           <section id="config">
 <h1>Config<a class="headerlink" href="#config" title="Permalink to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="magent2.gridworld.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">magent2.gridworld.</span></span><span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#magent2.gridworld.Config" title="Permalink to this definition">#</a></dt>
+<dd><p>Configuration class for a Gridworld game.</p>
+</dd></dl>
+
 <section id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.Config.set">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.Config.</span></span><span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magent2.gridworld.Config.set" title="Permalink to this definition">#</a></dt>
+<dd><p>Set parameters of global configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>args</strong> (<em>dict</em>) – </p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Contains the following configuration attributes:</dt><dd><ul class="simple">
+<li><p><strong>map_width</strong> (<em>int</em>): Number of horizontal grid squares in the Gridworld.</p></li>
+<li><p><strong>map_height</strong> (<em>int</em>): Number of vertical grid squares in the Gridworld.</p></li>
+<li><p><strong>embedding_size</strong> (<em>int</em>): Embedding size for the observation features.</p></li>
+<li><p><strong>render_dir</strong> (<em>str</em>): Directory to save render file.</p></li>
+<li><p><strong>seed</strong> (<em>int</em>): Random seed.</p></li>
+<li><p><strong>food_mode</strong> (<em>bool</em>): Dead agents drop food on the map.</p></li>
+<li><p><strong>turn_mode</strong> (<em>bool</em>): Include 2 more actions – turn left and turn right.</p></li>
+<li><p><strong>minimap_mode</strong> (<em>bool</em>): Include minimap in observations.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.Config.register_agent_type">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.Config.</span></span><span class="sig-name descname"><span class="pre">register_agent_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magent2.gridworld.Config.register_agent_type" title="Permalink to this definition">#</a></dt>
+<dd><p>Register an agent type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name of the type (should be unique).</p></li>
+<li><p><strong>attr</strong> (<em>dict</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Contains the following configuration attributes:</dt><dd><ul class="simple">
+<li><p><strong>height</strong> (<em>int</em>):   Height of agent body.</p></li>
+<li><p><strong>width</strong> (<em>int</em>):    Width of agent body.</p></li>
+<li><p><strong>speed</strong> (<em>float</em>):  Maximum speed, i.e. the radius of move circle of the agent.</p></li>
+<li><p><strong>hp</strong> (<em>float</em>):    Maximum health point of the agent.</p></li>
+<li><p><strong>view_range</strong> (<em>gw.CircleRange</em> or <em>gw.SectorRange</em>): Field of view of the agent.</p></li>
+<li><p><strong>damage</strong> (<em>float</em>):         Attack damage.</p></li>
+<li><p><strong>step_recover</strong> (<em>float</em>):   Step recover (healing) of health points (can be negative).</p></li>
+<li><p><strong>kill_supply</strong> (<em>float</em>):    Hp gain for killing this type of agent.</p></li>
+<li><p><strong>step_reward</strong> (<em>float</em>):    Reward gained in every step.</p></li>
+<li><p><strong>kill_reward</strong> (<em>float</em>):    Reward gained for killing this type of agent.</p></li>
+<li><p><strong>dead_penalty</strong> (<em>float</em>):   Reward gained for dying.</p></li>
+<li><p><strong>attack_penalty</strong> (<em>float</em>): Reward gained when performing an attack (to discourage attacking empty grid cells).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>name (str): Name of the type.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.Config.add_group">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.Config.</span></span><span class="sig-name descname"><span class="pre">add_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magent2.gridworld.Config.add_group" title="Permalink to this definition">#</a></dt>
+<dd><p>Add a group to the configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>agent_type</strong> (<em>str</em>) – Name of agent type contained in this group.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>group_handle</strong> (<em>int</em>) – Handle for the new group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magent2.gridworld.Config.add_reward_rule">
+<span class="sig-prename descclassname"><span class="pre">magent2.gridworld.Config.</span></span><span class="sig-name descname"><span class="pre">add_reward_rule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">EventNode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">receiver</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">magent2.gridworld.AgentSymbol</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terminal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magent2.gridworld.Config.add_reward_rule" title="Permalink to this definition">#</a></dt>
+<dd><p>Add a reward rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>on</strong> (<em>Event</em>) – An objecting representing a bool expression of the trigger event.</p></li>
+<li><p><strong>receiver</strong> (<em>list</em><em>[</em><em>AgentSymbol</em><em>]</em>) – Receiver of this reward rule. If the receiver is not a deterministic agent,
+it must be one of the agents involved in the triggering event.</p></li>
+<li><p><strong>list</strong><strong>[</strong><strong>float</strong><strong>]</strong> (<em>value</em>) – Value to assign.</p></li>
+<li><p><strong>terminal</strong> (<em>bool</em>) – Whether this event will terminate the game.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="helper-classes">
 <h2>Helper classes<a class="headerlink" href="#helper-classes" title="Permalink to this heading">#</a></h2>
@@ -363,6 +460,16 @@
 <section id="view-range">
 <h3>View Range<a class="headerlink" href="#view-range" title="Permalink to this heading">#</a></h3>
 <p>When using <code class="docutils literal notranslate"><span class="pre">register_agent_type()</span></code>, the attribute <code class="docutils literal notranslate"><span class="pre">view_range</span></code> is defined using one of the following classes:</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="magent2.gridworld.CircleRange">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">magent2.gridworld.</span></span><span class="sig-name descname"><span class="pre">CircleRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magent2.gridworld.CircleRange" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="magent2.gridworld.SectorRange">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">magent2.gridworld.</span></span><span class="sig-name descname"><span class="pre">SectorRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magent2.gridworld.SectorRange" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
 </section>
 </section>
 </section>
@@ -430,10 +537,21 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Config</a><ul>
-<li><a class="reference internal" href="#methods">Methods</a></li>
+<li><a class="reference internal" href="#magent2.gridworld.Config"><code class="docutils literal notranslate"><span class="pre">Config</span></code></a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#magent2.gridworld.Config.set"><code class="docutils literal notranslate"><span class="pre">set()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.Config.register_agent_type"><code class="docutils literal notranslate"><span class="pre">register_agent_type()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.Config.add_group"><code class="docutils literal notranslate"><span class="pre">add_group()</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.Config.add_reward_rule"><code class="docutils literal notranslate"><span class="pre">add_reward_rule()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#helper-classes">Helper classes</a><ul>
 <li><a class="reference internal" href="#agentsymbol-and-event">AgentSymbol and Event</a></li>
-<li><a class="reference internal" href="#view-range">View Range</a></li>
+<li><a class="reference internal" href="#view-range">View Range</a><ul>
+<li><a class="reference internal" href="#magent2.gridworld.CircleRange"><code class="docutils literal notranslate"><span class="pre">CircleRange</span></code></a></li>
+<li><a class="reference internal" href="#magent2.gridworld.SectorRange"><code class="docutils literal notranslate"><span class="pre">SectorRange</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
