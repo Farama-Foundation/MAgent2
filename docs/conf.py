@@ -26,7 +26,7 @@ copyright = "2022"
 author = "Farama Foundation"
 
 # The full version, including alpha/beta/rc tags
-release = magent2.get_version()
+# release = get_version()
 
 sys.path.insert(0, os.path.abspath(".."))
 
