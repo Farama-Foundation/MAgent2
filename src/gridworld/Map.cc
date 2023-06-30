@@ -490,7 +490,7 @@ inline void * Map::get_collide(int x, int y, int width, int height, void *self) 
     for (int i = 0; i < width && collide_obj == nullptr; i++) {
         PositionInteger pos_int = pos2int(x + i, y);
         for (int j = 0; j < height && collide_obj == nullptr; j++) {
-            if (slots[pos_int].occupier != self && 
+            if (slots[pos_int].occupier != self &&
                 slots[pos_int].occ_type == OCC_AGENT) {
                 collide_obj = slots[pos_int].occupier;
             }

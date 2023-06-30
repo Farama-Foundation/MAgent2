@@ -2,6 +2,7 @@ import math
 
 import numpy as np
 
+
 animation_total = 2
 animation_stop = 0
 background_rgb = (255, 255, 255)

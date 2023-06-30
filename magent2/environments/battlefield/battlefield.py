@@ -122,6 +122,7 @@ import magent2
 from magent2.environments.battle.battle import KILL_REWARD, get_config
 from magent2.environments.magent_env import magent_parallel_env, make_env
 
+
 default_map_size = 80
 max_cycles_default = 1000
 minimap_mode_default = False
@@ -140,7 +141,7 @@ def parallel_env(
     extra_features=False,
     render_mode=None,
     seed=None,
-    **reward_args
+    **reward_args,
 ):
     env_reward_args = dict(**default_reward_args)
     env_reward_args.update(reward_args)
@@ -161,7 +162,7 @@ def raw_env(
     minimap_mode=minimap_mode_default,
     extra_features=False,
     seed=None,
-    **reward_args
+    **reward_args,
 ):
     return parallel_to_aec_wrapper(
         parallel_env(
