@@ -6,7 +6,7 @@ This tutorial will tell you how to modify the code to make it compatible for run
 - Add all your agents to the environment through `cfg.add_groups`
 - Construct a symbol for each kind of your agent through `cfg.AgentSymbol`
 - Finally, design the reward rules between all of your agents through `cfg.add_reward_rule`
- 
+
 You could refer to the [**Pursuit.py**](https://github.com/geek-ai/MAgent/blob/master/python/magent/builtin/config/pursuit.py) to easily finish these steps. Here is one thing you need to notice, when you do something wrong in modifying the config file like write a typo, the framework may just tell you that `there is no such an environment`. So carefully check you code and do not believe the error message.
 
 # Training Code
@@ -15,7 +15,7 @@ There is mainly several parts you need to modify.
 
 In the main part of the training code:
 
-- Add all your agents' model into the list `models` 
+- Add all your agents' model into the list `models`
 - Add all your agents' name into the list `names`
 - Add all the evaluation arguments into the list `eval_obs`
 

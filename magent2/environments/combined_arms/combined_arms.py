@@ -122,6 +122,7 @@ from pettingzoo.utils.conversions import parallel_to_aec_wrapper
 import magent2
 from magent2.environments.magent_env import magent_parallel_env, make_env
 
+
 default_map_size = 45
 max_cycles_default = 1000
 KILL_REWARD = 5
@@ -141,7 +142,7 @@ def parallel_env(
     extra_features=False,
     render_mode=None,
     seed=None,
-    **reward_args
+    **reward_args,
 ):
     env_reward_args = dict(**default_reward_args)
     env_reward_args.update(reward_args)
@@ -163,7 +164,7 @@ def raw_env(
     extra_features=False,
     render_mode=None,
     seed=None,
-    **reward_args
+    **reward_args,
 ):
     return parallel_to_aec_wrapper(
         parallel_env(
@@ -173,7 +174,7 @@ def raw_env(
             extra_features,
             render_mode=render_mode,
             seed=seed,
-            **reward_args
+            **reward_args,
         )
     )
 

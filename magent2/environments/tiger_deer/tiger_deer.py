@@ -92,6 +92,7 @@ from pettingzoo.utils.conversions import parallel_to_aec_wrapper
 import magent2
 from magent2.environments.magent_env import magent_parallel_env, make_env
 
+
 default_map_size = 45
 max_cycles_default = 300
 minimap_mode_default = False
@@ -105,7 +106,7 @@ def parallel_env(
     extra_features=False,
     render_mode=None,
     seed=None,
-    **env_args
+    **env_args,
 ):
     env_env_args = dict(**default_env_args)
     env_env_args.update(env_args)
@@ -126,7 +127,7 @@ def raw_env(
     minimap_mode=minimap_mode_default,
     extra_features=False,
     seed=None,
-    **env_args
+    **env_args,
 ):
     return parallel_to_aec_wrapper(
         parallel_env(

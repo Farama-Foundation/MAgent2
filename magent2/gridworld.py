@@ -3,7 +3,7 @@
 import ctypes
 import importlib
 import os
-from typing import Tuple
+from typing import List, Tuple
 
 import numpy as np
 
@@ -188,17 +188,17 @@ class Config:
     def add_reward_rule(
         self,
         on: EventNode,
-        receiver: list[AgentSymbol],
-        value: list[float],
+        receiver: List[AgentSymbol],
+        value: List[float],
         terminal: bool = False,
     ):
         """Add a reward rule.
 
         Args:
             on (Event): An objecting representing a bool expression of the trigger event.
-            receiver (list[AgentSymbol]): Receiver of this reward rule. If the receiver is not a deterministic agent,
+            receiver (List[AgentSymbol]): Receiver of this reward rule. If the receiver is not a deterministic agent,
                 it must be one of the agents involved in the triggering event.
-            value list[float]: Value to assign.
+            value List[float]: Value to assign.
             terminal (bool): Whether this event will terminate the game.
 
         """
@@ -559,11 +559,11 @@ class GridWorld(Environment):
         _LIB.gridworld_clear_dead(self.game)
 
     # ====== INFO ======
-    def get_handles(self) -> list[ctypes.c_int32]:
+    def get_handles(self) -> List[ctypes.c_int32]:
         """Returns all group handles in the environment.
 
         Returns:
-            handles (list[ctypes.c_int32]): All group handles in the environment.
+            handles (List[ctypes.c_int32]): All group handles in the environment.
         """
         return self.group_handles
 

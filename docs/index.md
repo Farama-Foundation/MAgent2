@@ -69,4 +69,3 @@ environments/index
 :caption: Development
 Github <https://github.com/Farama-Foundation/magent2>
 ```
-

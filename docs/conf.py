@@ -20,6 +20,7 @@ import os
 import sys
 from typing import Any, Dict
 
+
 project = "MAgent2"
 copyright = "2022"
 author = "Farama Foundation"

@@ -65,4 +65,3 @@ When using `register_agent_type()`, the attribute `view_range` is defined using 
 .. autoclass:: magent2.gridworld.CircleRange
 .. autoclass:: magent2.gridworld.SectorRange
 ```
- 
