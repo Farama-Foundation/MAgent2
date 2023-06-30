@@ -67,16 +67,16 @@ enableTypeIgnoreComments = true
 #   Therefore, we have to ignore missing imports
 reportMissingImports = "none"
 # Some modules are missing type stubs, which is an issue when running pyright locally
-reportMissingTypeStubs = false
+# reportMissingTypeStubs = false
 # For warning and error, will raise an error when
-reportInvalidTypeVarUse = "none"
+# reportInvalidTypeVarUse = "none"
 
 # reportUnknownMemberType = "warning"  # -> raises 6035 warnings
 # reportUnknownParameterType = "warning"  # -> raises 1327 warnings
 # reportUnknownVariableType = "warning"  # -> raises 2585 warnings
 # reportUnknownArgumentType = "warning"  # -> raises 2104 warnings
 reportGeneralTypeIssues = "none"  # -> commented out raises 489 errors
-reportUntypedFunctionDecorator = "none"  # -> pytest.mark.parameterize issues
+# reportUntypedFunctionDecorator = "none"  # -> pytest.mark.parameterize issues
 
 reportPrivateUsage = "warning"
 reportUnboundVariable = "warning"
