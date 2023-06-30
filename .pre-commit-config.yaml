@@ -1,54 +1,70 @@
----
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
 repos:
-  - repo: https://github.com/python/black
-    rev: 22.3.0
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
     hooks:
-      - id: black
+      - id: check-symlinks
+      - id: destroyed-symlinks
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-ast
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+      - id: detect-private-key
+      - id: debug-statements
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.1.0
+    rev: v2.2.4
     hooks:
       - id: codespell
         args:
-          - --ignore-words-list=magent, nd
+          - --ignore-words-list=magent,spacial
   - repo: https://github.com/PyCQA/flake8
-    rev: 4.0.1
+    rev: 6.0.0
     hooks:
       - id: flake8
         args:
           - '--per-file-ignores=*/__init__.py:F401'
-          - --ignore=E203, W503, E741
+          - --ignore=E203,W503,E741
           - --max-complexity=30
           - --max-line-length=456
           - --show-source
           - --statistics
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.10.1
-    hooks:
-      - id: isort
-        args: ["--profile", "black"]
-#  - repo: https://github.com/pycqa/pydocstyle
-#    rev: 6.1.1  # pick a git hash / tag to point to
-#    hooks:
-#      - id: pydocstyle
-#        exclude: ^(gym/version.py)|(gym/envs/)|(tests/)
-#        args:
-#          - --source
-#          - --explain
-#          - --convention=google
-#        additional_dependencies: ["toml"]
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.32.0
+    rev: v3.3.2
     hooks:
       - id: pyupgrade
         args: ["--py37-plus"]
-#  - repo: local
-#    hooks:
-#      - id: pyright
-#        name: pyright
-#        entry: pyright
-#        language: node
-#        pass_filenames: false
-#        types: [python]
-#        additional_dependencies: ["pyright"]
-#        args:
-#          - --project=pyproject.toml
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+  - repo: https://github.com/python/black
+    rev: 23.3.0
+    hooks:
+      - id: black
+  - repo: https://github.com/pycqa/pydocstyle
+    rev: 6.3.0
+    hooks:
+      - id: pydocstyle
+        exclude: ^|(docs/)
+        args:
+          - --source
+          - --explain
+          - --convention=google
+        additional_dependencies: ["tomli"]
+  - repo: local
+    hooks:
+      - id: pyright
+        name: pyright
+        entry: pyright
+        language: node
+        pass_filenames: false
+        types: [python]
+        additional_dependencies: ["pyright@1.1.308"]
+        args:
+          - --project=pyproject.toml

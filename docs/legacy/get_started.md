@@ -18,7 +18,7 @@ predator = register_agent_type(
 ```
 
 ## Observation
-There are two parts in observation, spacial local view and non-spacial feature (see figure below).
+There are two parts in observation, spatial local view and non-spactial feature (see figure below).
 - Spatial view consists of several rectangular channels. These channels will be masked by a circle or a sector as described in the agent type registration. (see view_range above).
 If the radius of a circle is 5, then the size of one channel is 11 x 11, where 11 = 5x2 + 1
 
@@ -29,9 +29,9 @@ ID embedding is the binary representation of agent's unique ID.
 
 The whole observation is an array of shape `(n_agents, view_width, view_height, n_channel)` for all agents.
 The above figure shows the observation for one agent. The spatial view contains 7 channels. `Wall` channel
-is a "0/1" indicator to show whether there is a wall. `Group 1`, `Group 2` is the "0/1" indicators for agents in 
-group 1, group 2. `Hp` is the normalized health point (range 0-1). `Minimap` is used to give a fuzzy global 
-observation to the agents （no fog of war). The value in the minimap channel is computed as follows: 
+is a "0/1" indicator to show whether there is a wall. `Group 1`, `Group 2` is the "0/1" indicators for agents in
+group 1, group 2. `Hp` is the normalized health point (range 0-1). `Minimap` is used to give a fuzzy global
+observation to the agents （no fog of war). The value in the minimap channel is computed as follows:
 1. Squeeze global map (e.g. 100x100) into minimap (e.g. 10x10)
 2. The value of a minimap cell = (number of agents in this cell) / (number of all the agents)
 
@@ -75,7 +75,7 @@ while not done:
     for i in range(n):
         acts[i] = models[i].fetch_action()  # fetch actions (blocking)
         env.set_action(handles[i], acts[i])
-    
+
     done = env.step()
 ```
 Also, you can train different groups in parallel.
@@ -97,7 +97,7 @@ python examples/api_demo.py
 
 In this environment, predators are pursuing preys. Predators can get rewards by attacking preys.
 The predators and preys are trained by Deep Q-Network.
-After training, predators learn to lock preys by cooperating with each other.  
+After training, predators learn to lock preys by cooperating with each other.
 See the source file [api_demo.py](../examples/api_demo.py) to know the basic api and workload of MAgent.
 See also [train_pursuit.py](../examples/train_pursuit.py) to know how the above agents are trained.
 
@@ -109,7 +109,7 @@ See also [train_pursuit.py](../examples/train_pursuit.py) to know how the above 
 * In the render, press arrow keys 'up', 'down', 'left', 'right' to move scope window. Press '<', '>' to zoom in or zoom out. Press 's' to adjust speed and progress. Press 'e' to re-input configuration file and map file.
 
 ## Play general-soldier game
-In this section, Pygame are required.  
+In this section, Pygame are required.
 **Note for OSX user**: Unluckily, there is something wrong with Pygame on OSX, which makes this game very slow. You can skip this game if you are on OSX.
 
 ```base

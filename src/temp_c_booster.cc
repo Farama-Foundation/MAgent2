@@ -10,7 +10,7 @@
 #include "utility/utility.h"
 #if defined(_WIN32)
 #define random rand
-#endif 
+#endif
 
 #ifdef _MSC_VER
 #define DLL_EXPORT  __declspec( dllexport )

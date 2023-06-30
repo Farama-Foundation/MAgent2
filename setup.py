@@ -7,6 +7,7 @@ import setuptools
 from setuptools import Extension
 from setuptools.command.build_ext import build_ext
 
+
 ###
 # Build process:
 # cmake .
@@ -114,6 +115,7 @@ class CMakeBuild(build_ext):
 setuptools.setup(
     name="magent2",
     version=get_version(),
+    packages=setuptools.find_packages(),
     ext_modules=[CMakeExtension("magent2.libmagent", ".", [])],
     cmdclass={"build_ext": CMakeBuild},
 )

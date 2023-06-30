@@ -16,4 +16,3 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     # Mac OSX
     make -j `sysctl -n hw.ncpu`
 fi
-

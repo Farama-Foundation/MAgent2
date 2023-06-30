@@ -95,7 +95,7 @@ private:
     bool minimap_mode;   // default = False
     bool goal_mode;      // default = False
     bool large_map_mode; // default = False
-    bool mean_mode;      
+    bool mean_mode;
     int embedding_size;  // default = 0
 
     // game states : map, agent and group
