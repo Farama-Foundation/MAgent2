@@ -14,7 +14,7 @@ def rec_round(x, ndigits=2):
     ndigits: int
         precision in decimal digits
     """
-    if isinstance(x, collections.Iterable):
+    if isinstance(x, collections.abc.Iterable):
         return [rec_round(item, ndigits) for item in x]
     return round(x, ndigits)
 
