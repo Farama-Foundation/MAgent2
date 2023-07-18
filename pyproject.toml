@@ -28,6 +28,7 @@ dependencies = [
     "numpy >=1.21.0",
     "pygame>=2.1.0",
     "pettingzoo>=1.23.1",
+    "gymnasium <= 0.29.0",
 ]
 dynamic = ["version"]
 
