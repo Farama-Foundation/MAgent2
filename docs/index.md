@@ -17,7 +17,7 @@ MAgent2 is a maintained fork of the original [MAgent](https://github.com/geek-ai
 Install using pip: `pip install magent2`
 
 ## Requirements
-MAgent2 supports Linux and macOS and Python 3.7+.
+MAgent2 supports Linux and macOS and Python 3.8+.
 
 ## References
 If you use this in your research, please cite the original paper:
