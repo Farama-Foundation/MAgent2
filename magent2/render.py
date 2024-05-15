@@ -136,7 +136,7 @@ class Renderer:
 
         if len(self.handles) == 1:
             result = [(form_txt(0),)]
-        if len(self.handles) == 2:
+        elif len(self.handles) == 2:
             vs = " vs ", (0, 0, 0)
             result = [(form_txt(0), vs, form_txt(1))]
         elif len(self.handles) == 4:
