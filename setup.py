@@ -118,9 +118,6 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     ext_modules=[CMakeExtension("magent2.libmagent", ".", [])],
     cmdclass={"build_ext": CMakeBuild},
-    install_requires=[
-        'pettingzoo',
-    ],
     package_data={
         'magent2': ['environments/*', 'config/*', 'scenarios/*']
     },
