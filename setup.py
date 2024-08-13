@@ -118,8 +118,6 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     ext_modules=[CMakeExtension("magent2.libmagent", ".", [])],
     cmdclass={"build_ext": CMakeBuild},
-    package_data={
-        'magent2': ['environments/*', 'config/*', 'scenarios/*']
-    },
+    package_data={"magent2": ["environments/*", "config/*", "scenarios/*"]},
     include_package_data=True,
 )
