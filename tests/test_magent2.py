@@ -1,9 +1,10 @@
-import magent2
 import importlib
+
+import magent2
 
 
 def test_version():
-    assert hasattr(magent2, '__version__'), "Version should not be None"
+    assert hasattr(magent2, "__version__"), "Version should not be None"
     assert isinstance(magent2.__version__, str), "Version should be a string"
 
 
@@ -21,6 +22,6 @@ def test_import_environments():
     for env in envs:
         try:
             # Dynamically import the environment module
-            module = importlib.import_module(f"magent2.environments.{env}")
+            importlib.import_module(f"magent2.environments.{env}")
         except ImportError:
             assert False, f"{env} should be importable"

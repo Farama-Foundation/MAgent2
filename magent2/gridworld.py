@@ -912,4 +912,4 @@ class SectorRange:
             raise Exception("the angle of a sector should be smaller than 180 degree")
 
     def __str__(self):
-        return f"sector({self.radius:g}, {self.angle:g})"
+        return f"sector({self.radius: g}, {self.angle: g})"
