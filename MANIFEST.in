@@ -1,6 +1,18 @@
+# Include the CMakeLists.txt file
 include CMakeLists.txt
+
+# Recursively include everything in the src directory
 recursive-include src *
+
+# Include all files in the environments, config, and scenarios directories within the magent2 package
+recursive-include magent2/environments *
+recursive-include magent2/config *
+recursive-include magent2/scenarios *
+
+# Include dynamic library files
 include *.dylib
 include *.dll
 include *.so
+
+# Include gif files
 include *.gif
