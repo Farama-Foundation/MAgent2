@@ -15,7 +15,7 @@ Install using pip: `pip install magent2`. See [docs](https://magent2.farama.org/
 
 
 ## Requirements
-MAgent2 supports Linux and macOS and Python 3.7+.
+MAgent2 supports Linux and macOS and Python 3.8+.
 
 ## References
 ```
