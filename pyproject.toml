@@ -24,7 +24,7 @@ classifiers = [
     'Topic :: Scientific/Engineering :: Artificial Intelligence',
 ]
 dependencies = [
-    "numpy >=1.21.0",
+    "numpy>=1.21.0,<2.0",
     "pygame>=2.1.0",
     "pettingzoo>=1.23.1",
 ]
@@ -59,7 +59,7 @@ exclude = ["**/__pycache__"]
 strict = []
 
 typeCheckingMode = "basic"
-pythonVersion = "3.7"
+pythonVersion = "3.8"
 pythonPlatform = "All"
 enableTypeIgnoreComments = true
 
