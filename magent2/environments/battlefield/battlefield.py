@@ -32,7 +32,7 @@ Like all MAgent2 environments, agents can either move or attack each turn. An at
 ### Arguments
 
 ``` python
-battle_v4.env(map_size=80, minimap_mode=False, step_reward-0.005,
+battlefield_v5.env(map_size=80, minimap_mode=False, step_reward=-0.005,
 dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2,
 max_cycles=1000, extra_features=False)
 ```
