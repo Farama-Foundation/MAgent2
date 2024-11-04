@@ -92,7 +92,7 @@ class Renderer:
         self.env = env
         self.mode = mode
         self.handles = self.env.get_handles()
-        base_resolution = (map_size * 8, map_size * 8 + 15)
+        base_resolution = (map_size * 8, map_size * 8 + 16)
         if mode == "human":
             pygame.init()
             pygame.display.init()
