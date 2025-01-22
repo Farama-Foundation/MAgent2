@@ -10,7 +10,7 @@ import platform
 def _load_lib():
     """Load library in local."""
     cur_path = os.path.dirname(os.path.abspath(os.path.expanduser(__file__)))
-    lib_path = os.path.join(cur_path, '..', 'venv', 'Lib', 'site-packages', 'magent2')
+    lib_path = os.path.join(cur_path, "..", "venv", "Lib", "site-packages", "magent2")
     if platform.system() == "Darwin":
         path_to_so_file = os.path.join(lib_path, "libmagent.dylib")
     elif platform.system() == "Linux":
