@@ -8,6 +8,7 @@ recursive-include src *
 recursive-include magent2/environments *
 recursive-include magent2/config *
 recursive-include magent2/scenarios *
+include magent2/__init__.py
 
 # Include dynamic library files
 include *.dylib
