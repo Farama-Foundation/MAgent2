@@ -13,9 +13,9 @@
 
     <link rel="shortcut icon" href="../../_static/magent2.svg"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
         <title>Basic Usage - MAgent2 Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=3e7f4c72" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=49cbaffd" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=82c8b628" />
     
     
 
@@ -284,7 +284,7 @@
 <section id="initializing-environments">
 <h2>Initializing Environments<a class="headerlink" href="#initializing-environments" title="Link to this heading">¶</a></h2>
 <p>The environments in MAgent2 are implemented using <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo">PettingZoo</a>. They can be initialized by calling their <code class="docutils literal notranslate"><span class="pre">env()</span></code> method and passing desired parameters:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">magent2.environments</span> <span class="kn">import</span> <span class="n">battle_v4</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">magent2.environments</span><span class="w"> </span><span class="kn">import</span> <span class="n">battle_v4</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">battle_v4</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">map_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s1">&#39;human&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -303,8 +303,8 @@
 <section id="demo">
 <h2>Demo<a class="headerlink" href="#demo" title="Link to this heading">¶</a></h2>
 <p>Run a demo using PettingZoo’s <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/utils/random_demo.py"><code class="docutils literal notranslate"><span class="pre">random_demo</span></code></a> function which implements this workflow with random policies:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">magent2.environments</span> <span class="kn">import</span> <span class="n">battle_v4</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">random_demo</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">magent2.environments</span><span class="w"> </span><span class="kn">import</span> <span class="n">battle_v4</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pettingzoo.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">random_demo</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">battle_v4</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s1">&#39;human&#39;</span><span class="p">)</span>
 <span class="n">random_demo</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">episodes</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
