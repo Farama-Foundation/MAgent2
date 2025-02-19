@@ -10,7 +10,7 @@ import platform
 def _load_lib():
     """Load library in local."""
     cur_path = os.path.dirname(os.path.abspath(os.path.expanduser(__file__)))
-    lib_path = cur_path
+    lib_path = os.path.join(cur_path, "..", "venv", "Lib", "site-packages", "magent2")
     if platform.system() == "Darwin":
         path_to_so_file = os.path.join(lib_path, "libmagent.dylib")
     elif platform.system() == "Linux":
@@ -19,6 +19,10 @@ def _load_lib():
         path_to_so_file = os.path.join(lib_path, "magent.dll")
     else:
         raise BaseException("unsupported system: " + platform.system())
+
+    if not os.path.exists(path_to_so_file):
+        raise FileNotFoundError(f"Could not find the DLL file at: {path_to_so_file}")
+
     lib = ctypes.CDLL(path_to_so_file, ctypes.RTLD_GLOBAL)
     return lib
 
