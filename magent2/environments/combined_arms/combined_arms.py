@@ -397,7 +397,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
             np.minimum(reward_vals, 0).sum(),
             np.maximum(reward_vals, 0).sum(),
         ]
-        names = ["redmelee", "redranged", "bluemele", "blueranged"]
+        names = ["redmelee", "redranged", "bluemelee", "blueranged"]
         super().__init__(
             env,
             env.get_handles(),
