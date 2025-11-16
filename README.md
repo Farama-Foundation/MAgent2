@@ -39,3 +39,7 @@ If you wish to cite this repo with it's modifications specifically, please cite:
   howpublished = {\url{https://github.com/Farama-Foundation/MAgent}}
 }
 ```
+
+## Project Maintainers
+- Project Manager: [Travis Virgil](https://github.com/virgilt) - `travis@farama.org`
+- Maintenance for this project is also contributed by the broader Farama team: [farama.org/team](https://farama.org/team).
