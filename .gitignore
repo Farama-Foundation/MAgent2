@@ -23,3 +23,12 @@ Parallel_Demo.py
 
 # Environments
 .venv
+
+# Build artifacts
+*.pyd
+*.egg-info/
+_frames/
+.pytest_cache/
+
+# Demo outputs
+battle_video.mp4

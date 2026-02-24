@@ -8,23 +8,37 @@ import platform
 
 
 def _load_lib():
-    """Load library in local."""
+    """Load the native magent shared library."""
     cur_path = os.path.dirname(os.path.abspath(os.path.expanduser(__file__)))
-    lib_path = os.path.join(cur_path, "..", "venv", "Lib", "site-packages", "magent2")
+
     if platform.system() == "Darwin":
-        path_to_so_file = os.path.join(lib_path, "libmagent.dylib")
+        lib_names = ["libmagent.dylib"]
     elif platform.system() == "Linux":
-        path_to_so_file = os.path.join(lib_path, "libmagent.so")
+        lib_names = ["libmagent.so"]
     elif platform.system() == "Windows":
-        path_to_so_file = os.path.join(lib_path, "magent.dll")
+        lib_names = ["magent.dll"]
     else:
-        raise BaseException("unsupported system: " + platform.system())
+        raise OSError("unsupported system: " + platform.system())
 
-    if not os.path.exists(path_to_so_file):
-        raise FileNotFoundError(f"Could not find the DLL file at: {path_to_so_file}")
+    # Also search for .pyd files (setuptools editable installs on Windows)
+    import glob
 
-    lib = ctypes.CDLL(path_to_so_file, ctypes.RTLD_GLOBAL)
-    return lib
+    pyd_files = glob.glob(os.path.join(cur_path, "libmagent*.pyd"))
+    lib_names.extend(os.path.basename(f) for f in pyd_files)
+
+    search_paths = []
+    for lib_name in lib_names:
+        search_paths.append(os.path.join(cur_path, lib_name))
+        search_paths.append(os.path.join(cur_path, "build", lib_name))
+
+    for path in search_paths:
+        if os.path.exists(path):
+            return ctypes.CDLL(path, ctypes.RTLD_GLOBAL)
+
+    raise FileNotFoundError(
+        f"Could not find native magent library. Searched:\n"
+        + "\n".join(f"  - {p}" for p in search_paths)
+    )
 
 
 def as_float_c_array(buf):
