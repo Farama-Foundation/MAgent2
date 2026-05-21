@@ -4,6 +4,10 @@ firstpage:
 lastpage:
 ---
 
+```{project-logo} _static/img/magent2-text.png
+:alt: MAgent2 Logo
+```
+
 ## MAgent2 is a library for the creation of environments where large numbers of pixel agents in a gridworld interact in battles or other competitive scenarios.
 
 ```{figure} environments/adversarial_pursuit.gif

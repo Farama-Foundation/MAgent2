@@ -23,7 +23,12 @@ subfolders = next(os.walk(env_path))[1]
 subfolder_dirs = list(map(lambda x: os.path.join(env_path, x), subfolders))
 for dir in subfolder_dirs:
     # there should be only 1 file in each folder besides __init__.py
-    files = list(filter(lambda x: not x.startswith("__init__"), os.listdir(dir)))
+    # (ignore __pycache__ and any other non-source entries)
+    files = sorted(
+        f
+        for f in os.listdir(dir)
+        if f.endswith(".py") and not f.startswith("__init__")
+    )
     file = os.path.join(dir, files[0])
     file_name = files[0].split(".")[0]
 
