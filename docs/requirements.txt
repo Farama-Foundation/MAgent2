@@ -1,4 +1,5 @@
 sphinx
+sphinx-autobuild
 sphinx-notfound-page
 myst-parser
 git+https://github.com/Farama-Foundation/Celshast#egg=furo
