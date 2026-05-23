@@ -3,9 +3,9 @@
  * \brief The map for the game engine
  */
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
-#include <assert.h>
+#include <cassert>
 #include "Map.h"
 #include "GridWorld.h"
 

@@ -3,7 +3,7 @@
  * \brief implementation of reward description
  */
 
-#include "assert.h"
+#include <cassert>
 
 #include "RewardEngine.h"
 #include "GridWorld.h"

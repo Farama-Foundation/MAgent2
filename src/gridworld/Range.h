@@ -7,7 +7,7 @@
 #define MAGNET_GRIDWORLD_RANGE_H
 
 #include <cstdio>
-#include <tgmath.h>
+#include <cmath>
 #include <cstring>
 
 namespace magent {
@@ -28,8 +28,8 @@ public:
         dy = new int[width * height];
 
         memcpy(is_in_range, other.is_in_range, sizeof(bool) * width * height);
-        memcpy(dx, other.dx, sizeof(bool) * width * height);
-        memcpy(dy, other.dy, sizeof(bool) * width * height);
+        memcpy(dx, other.dx, sizeof(int) * width * height);
+        memcpy(dy, other.dy, sizeof(int) * width * height);
     }
 
     ~Range() {

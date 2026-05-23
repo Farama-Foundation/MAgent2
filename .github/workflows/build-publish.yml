@@ -21,51 +21,53 @@ jobs:
       matrix:
         include:
         - os: ubuntu-22.04
-          python: 38
-          platform: manylinux_x86_64
-        - os: ubuntu-22.04
-          python: 39
-          platform: manylinux_x86_64
-        - os: ubuntu-22.04
           python: 310
           platform: manylinux_x86_64
         - os: ubuntu-22.04
           python: 311
           platform: manylinux_x86_64
+        - os: ubuntu-22.04
+          python: 312
+          platform: manylinux_x86_64
 
     steps:
     - uses: actions/checkout@v4
     - name: Build wheels
-      uses: pypa/cibuildwheel@v2.19.2
+      uses: pypa/cibuildwheel@v2.22.0
       env:
         CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform }}
         CIBW_ARCHS: auto
         CIBW_BUILD_VERBOSITY: 1
 
     - name: Store wheels
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
+        name: wheels-linux-${{ matrix.python }}
         path: ./wheelhouse/*.whl
 
   build-src:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
     - name: Build src
       run: |
-        python -m pip install --upgrade pip
-        pip install wheel
-        python setup.py sdist
+        python -m pip install --upgrade pip build
+        python -m build --sdist
     - name: Store src
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
+        name: sdist
         path: dist/*.tar.gz
 
   build-wheels-ms:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [ '3.8', '3.9', '3.10', '3.11' ]
+        python-version: [ '3.10', '3.11', '3.12' ]
         include:
         - os: windows-latest
 
@@ -73,7 +75,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
         architecture: x64
@@ -87,8 +89,9 @@ jobs:
         pip install wheel cmake-build-extension
         pip wheel .  --no-deps -w wheelhouse/
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
+        name: wheels-windows-${{ matrix.python-version }}
         path: ./wheelhouse/*.whl
 
   publish:
@@ -100,10 +103,10 @@ jobs:
     if: github.event_name == 'release' && github.event.action == 'published'
     steps:
     - name: Download dists
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
-        name: artifact
         path: dist
+        merge-multiple: true
     - name: Publish
       uses: pypa/gh-action-pypi-publish@release/v1
       with:

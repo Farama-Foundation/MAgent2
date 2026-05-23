@@ -1,19 +1,11 @@
 import os
 import platform
+import shutil
 import subprocess
-from subprocess import check_output
 
 import setuptools
 from setuptools import Extension
 from setuptools.command.build_ext import build_ext
-
-
-###
-# Build process:
-# cmake .
-# make -j threads
-# move libmagent -> build/
-###
 
 
 def get_version():
@@ -29,10 +21,10 @@ def get_version():
 
 
 class CMakeExtension(Extension):
-    def __init__(self, name, sourcedir, config=[]):
+    def __init__(self, name, sourcedir, config=None):
         Extension.__init__(self, name, sources=[])
         self.sourcedir = os.path.abspath(sourcedir)
-        self.config = config
+        self.config = config or []
 
 
 class CMakeBuild(build_ext):
@@ -44,7 +36,7 @@ class CMakeBuild(build_ext):
                 "CMake must be installed to build the extensions: %s"
                 % ", ".join(ext.name for ext in self.extensions)
             )
-        cfg = "Debug" if self.debug else "Release"
+        cfg = "Release"
         for ext in self.extensions:
             if not os.path.exists(self.build_temp):
                 os.makedirs(self.build_temp)
@@ -55,9 +47,7 @@ class CMakeBuild(build_ext):
                 f"-DCMAKE_BUILD_TYPE={cfg}",
                 f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{cfg.upper()}={extdir}",
                 f"-DCMAKE_RUNTIME_OUTPUT_DIRECTORY_{cfg.upper()}={extdir}",
-                "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_{}={}".format(
-                    cfg.upper(), self.build_temp
-                ),
+                f"-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_{cfg.upper()}={self.build_temp}",
             ]
 
             make_location = os.path.abspath(self.build_temp)
@@ -65,51 +55,27 @@ class CMakeBuild(build_ext):
             subprocess.check_call(
                 ["cmake", ext.sourcedir] + cmake_config_args, cwd=make_location
             )
-            print(ext.name)
+
+            subprocess.check_call(
+                ["cmake", "--build", ".", "--config", cfg],
+                cwd=make_location,
+            )
+
+            # CMake produces magent.dll / libmagent.so / libmagent.dylib,
+            # but setuptools expects a .pyd file on Windows. Copy the built
+            # shared library to the path setuptools expects.
+            ext_fullpath = self.get_ext_fullpath(ext.name)
+            ext_fulldir = os.path.dirname(ext_fullpath)
             if platform.system() == "Windows":
-                str(subprocess.check_output(["cd"], shell=True).decode()).strip()
-                # subprocess.check_call(["dir"], shell=True)
+                built_lib = os.path.join(extdir, "magent.dll")
+            elif platform.system() == "Darwin":
+                built_lib = os.path.join(extdir, "libmagent.dylib")
             else:
-                subprocess.check_call(["pwd"])
-                print(extdir)
-                subprocess.check_call(["ls"])
+                built_lib = os.path.join(extdir, "libmagent.so")
 
-            # lib_ext = ""
-            # lib_name = ""
-
-            if platform.system() == "Darwin":
-                # lib_ext = ".dylib"
-                # lib_name = "libmagent"
-                thread_num = check_output(["sysctl", "-n", "hw.ncpu"], encoding="utf-8")
-                subprocess.check_call(
-                    ["make", "-C", make_location, "-j", str(thread_num).rstrip()],
-                    cwd=extdir,
-                )
-            elif platform.system() == "Linux":
-                # lib_ext = ".so"
-                # lib_name = "libmagent"
-                thread_num = check_output(["nproc"], encoding="utf-8")
-                subprocess.check_call(
-                    ["make", "-C", make_location, "-j", str(thread_num).rstrip()],
-                    cwd=extdir,
-                )
-            elif platform.system() == "Windows":
-                # lib_ext = ".dll"
-                # lib_name = "magent"
-                thread_num = 1
-                # cmake --build . --target ALL_BUILD --config Release
-                subprocess.check_call(
-                    ["cmake", "--build", ".", "--target", "ALL_BUILD", "--config", cfg],
-                    cwd=make_location,
-                    shell=True,
-                )
-            # build_res_dir = extdir + "/magent/build/"
-            # if not os.path.exists(build_res_dir):
-            #     os.makedirs(build_res_dir)
-            # lib_name = extdir + "/libmagent" + lib_ext
-            # subprocess.check_call(
-            #     ["mv", lib_name, build_res_dir]
-            # )
+            if os.path.exists(built_lib):
+                os.makedirs(ext_fulldir, exist_ok=True)
+                shutil.copy2(built_lib, ext_fullpath)
 
 
 setuptools.setup(
