@@ -26,11 +26,11 @@ jobs:
       - name: Install package
         run: pip install .
 
-      - name: Remove source package
-        run: rm -rf magent2
-
       - name: Build Envs Docs
         run: python docs/scripts/gen_mds.py
+
+      - name: Remove source package
+        run: rm -rf magent2
 
       - name: Build
         run: sphinx-build -b dirhtml -v docs _build
