@@ -92,6 +92,9 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install pytest "dist/"*"cp${PYTHON_VERSION}"*.whl
 
+    - name: Remove source package
+      run: rm -rf magent2
+
     - name: Run tests
       run: python -m pytest tests
 
@@ -169,6 +172,10 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install pytest
         python -m pip install (Get-ChildItem dist/*.whl)
+
+    - name: Remove source package
+      shell: pwsh
+      run: Remove-Item -Recurse -Force magent2
 
     - name: Run tests
       run: python -m pytest tests
