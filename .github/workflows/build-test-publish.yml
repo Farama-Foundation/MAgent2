@@ -188,6 +188,11 @@ jobs:
     - build-src
     - test
     - test-ms
+    environment:
+      name: pypi
+      url: https://pypi.org/p/magent2
+    permissions:
+      id-token: write
     if: github.event_name == 'release' && github.event.action == 'published'
 
     steps:
