@@ -85,7 +85,7 @@ jobs:
         pattern: dist-macos-cp*-macosx_arm64
         path: dist
         merge-multiple: true
-        
+
     - name: Install wheel and test dependencies
       run: |
         export PYTHON_VERSION=$(python -c "import sys; print(f'{sys.version_info.major}{sys.version_info.minor}')")
@@ -169,7 +169,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install pytest
         python -m pip install (Get-ChildItem dist/*.whl)
-        
+
     - name: Run tests
       run: python -m pytest tests
 
