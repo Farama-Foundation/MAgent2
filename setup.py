@@ -1,5 +1,6 @@
 import os
 import platform
+import shutil
 import subprocess
 from subprocess import check_output
 
@@ -74,28 +75,25 @@ class CMakeBuild(build_ext):
                 print(extdir)
                 subprocess.check_call(["ls"])
 
-            # lib_ext = ""
-            # lib_name = ""
-
             if platform.system() == "Darwin":
-                # lib_ext = ".dylib"
-                # lib_name = "libmagent"
+                lib_ext = ".dylib"
+                lib_name = "libmagent"
                 thread_num = check_output(["sysctl", "-n", "hw.ncpu"], encoding="utf-8")
                 subprocess.check_call(
                     ["make", "-C", make_location, "-j", str(thread_num).rstrip()],
                     cwd=extdir,
                 )
             elif platform.system() == "Linux":
-                # lib_ext = ".so"
-                # lib_name = "libmagent"
+                lib_ext = ".so"
+                lib_name = "libmagent"
                 thread_num = check_output(["nproc"], encoding="utf-8")
                 subprocess.check_call(
                     ["make", "-C", make_location, "-j", str(thread_num).rstrip()],
                     cwd=extdir,
                 )
             elif platform.system() == "Windows":
-                # lib_ext = ".dll"
-                # lib_name = "magent"
+                lib_ext = ".dll"
+                lib_name = "magent"
                 thread_num = 1
                 # cmake --build . --target ALL_BUILD --config Release
                 subprocess.check_call(
@@ -103,6 +101,18 @@ class CMakeBuild(build_ext):
                     cwd=make_location,
                     shell=True,
                 )
+            else:
+                raise RuntimeError("unsupported system: " + platform.system())
+
+            # copy generic object file to expected cpython object file
+            cmake_lib = os.path.join(self.build_lib, "magent2", f"{lib_name}.{lib_ext}")
+            if not os.path.exists(cmake_lib):
+                raise FileNotFoundError(
+                    f"Expected CMake build output {cmake_lib} not found."
+                )
+            ext_fullpath = self.get_ext_fullpath(ext.name)
+            shutil.copyfile(cmake_lib, ext_fullpath)
+
             # build_res_dir = extdir + "/magent/build/"
             # if not os.path.exists(build_res_dir):
             #     os.makedirs(build_res_dir)
