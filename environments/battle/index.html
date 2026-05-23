@@ -14,7 +14,7 @@
     <link rel="shortcut icon" href="../../_static/magent2.svg"/><!-- Generated with Sphinx 7.4.7 and Furo 2023.08.19.dev1 -->
         <title>Battle - MAgent2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=3e7f4c72" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=5b1a364e" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=82c8b628" />
     
     
@@ -681,14 +681,6 @@ each attack, and recover 0.1 HP every turn.</p>
         const jsonResponse = xhr.response;
         const sections = {
           "Core Projects": [],
-          "Mature Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
-          "Incubating Projects": {
-            "Documentation": [],
-            "Repositories": [],
-          },
           "Foundation": [
             {
               name: "About",
@@ -702,7 +694,14 @@ each attack, and recover 0.1 HP every turn.</p>
               name: "Donate",
               link: "https://farama.org/donations"
             }
-          ]
+          ],
+          "Mature Projects": {
+            "Documentation": [],
+          },
+          "Incubating Projects": {
+            "Documentation": [],
+            "Repositories": [],
+          }
         }
 
         // Categorize projects
@@ -718,8 +717,6 @@ each attack, and recover 0.1 HP every turn.</p>
           } else if (projectJson.type == "mature") {
             if (projectJson.website !== null) {
               sections["Mature Projects"]["Documentation"].push(projectJson)
-            } else {
-              sections["Mature Projects"]["Repositories"].push(projectJson)
             }
           } else {
             if (projectJson.website !== null) {
@@ -731,6 +728,13 @@ each attack, and recover 0.1 HP every turn.</p>
         })
 
         const menuContainer = document.querySelector(".farama-header-menu__body");
+
+        const stackedColumnElem = Object.assign(
+          document.createElement('div'), {
+            style: 'display: flex; flex-direction: column;'
+          }
+        );
+        const stackedKeys = new Set(["Core Projects", "Foundation"]);
 
         Object.keys(sections).forEach((key, i) => {
           const sectionElem = Object.assign(
@@ -775,7 +779,14 @@ each attack, and recover 0.1 HP every turn.</p>
             const ulElem = createProjectsList(projects, true);
             sectionElem.appendChild(ulElem);
           }
-          menuContainer.appendChild(sectionElem)
+          if (stackedKeys.has(key)) {
+            if (!stackedColumnElem.parentNode) {
+              menuContainer.appendChild(stackedColumnElem);
+            }
+            stackedColumnElem.appendChild(sectionElem);
+          } else {
+            menuContainer.appendChild(sectionElem);
+          }
         });
       }
 
