@@ -1,3 +1,6 @@
+[![Python](https://img.shields.io/pypi/pyversions/magent2.svg)](https://badge.fury.io/py/magent2)
+[![PyPI Version](https://img.shields.io/pypi/v/magent2)](https://pypi.org/project/magent2)
+
 <p align="center">
     <img src="https://raw.githubusercontent.com/Farama-Foundation/MAgent2/main/MAgent2-text.png" width="500px"/>
 </p>
