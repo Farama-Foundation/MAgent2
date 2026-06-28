@@ -77,6 +77,10 @@ html_theme_options = {
     "light_logo": "img/magent2.svg",
     "dark_logo": "img/magent2-white.svg",
     "gtag": "G-07SGW5KKJF",
+    "versioning": True,
+    "source_repository": "https://github.com/Farama-Foundation/MAgent2/",
+    "source_branch": "main",
+    "source_directory": "docs/",
 }
 html_context: Dict[str, Any] = {}
 html_context["conf_py_path"] = "/docs/"
