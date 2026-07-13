@@ -220,6 +220,13 @@ def get_config(
         gw.Event(b, "attack", a), receiver=b, value=attack_opponent_reward
     )
 
+    # NOTE: the KILL_REWARD (the "kill_reward" agent-type option above) is
+    # granted directly by the C++ engine: Map::do_attack returns the victim's
+    # kill_reward to the killer (see src/gridworld/Map.cc / GridWorld.cc). No
+    # explicit `Event(a, "kill", b)` reward rule is added here on purpose --
+    # doing so would reward kills *twice*. This differs from combined_arms,
+    # which grants the kill reward solely through an explicit rule and does not
+    # set the "kill_reward" option.
     return cfg
 
 
