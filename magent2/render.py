@@ -94,8 +94,8 @@ class Renderer:
         self.handles = self.env.get_handles()
         base_resolution = (map_size * 8, map_size * 8 + 16)
         if mode == "human":
-            pygame.init()
             pygame.display.init()
+            pygame.font.init()
             infoObject = pygame.display.Info()
             screen_size = (infoObject.current_w - 50, infoObject.current_h - 50)
             self.resolution = resolution = np.min(
