@@ -329,6 +329,10 @@ class Renderer:
         new_observation = np.copy(observation)
         del observation
         if self.mode == "human":
+            # Drain the event queue every frame. Without this the OS considers
+            # the window unresponsive and it freezes (e.g. when it loses focus).
+            pygame.event.pump()
+            pygame.event.clear()
             pygame.display.flip()
         return (
             np.transpose(new_observation, axes=(1, 0, 2))
