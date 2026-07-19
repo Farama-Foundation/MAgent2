@@ -68,7 +68,7 @@ napoleon_custom_sections = [("Returns", "params_style")]
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "furo"
+html_theme = "celshast"
 html_title = "MAgent2 Documentation"
 html_baseurl = "https://magent2.farama.org/"
 html_copy_source = False
