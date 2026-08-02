@@ -137,7 +137,7 @@ jobs:
         architecture: x64
 
     - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.2
+      uses: microsoft/setup-msbuild@v3.0.0
 
     - name: Build wheel
       working-directory: ${{env.GITHUB_WORKSPACE}}
