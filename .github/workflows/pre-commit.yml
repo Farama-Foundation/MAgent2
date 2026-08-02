@@ -5,6 +5,8 @@ on:
   pull_request:
   push:
     branches: [main]
+permissions:
+  contents: read
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
