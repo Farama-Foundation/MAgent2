@@ -48,14 +48,14 @@ jobs:
 
     - name: Store Linux wheels
       if: matrix.os == 'ubuntu-24.04'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: dist-linux-cp${{ matrix.python }}-manylinux_x86_64
         path: ./wheelhouse/*.whl
 
     - name: Store macOS wheels
       if: matrix.os == 'macos-14'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: dist-macos-cp${{ matrix.python }}-macosx_arm64
         path: ./wheelhouse/*.whl
@@ -114,7 +114,7 @@ jobs:
         pip install wheel
         python setup.py sdist
     - name: Store src
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: dist-source
         path: dist/*.tar.gz
@@ -145,7 +145,7 @@ jobs:
         pip install wheel cmake-build-extension
         pip wheel .  --no-deps -w wheelhouse/
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: dist-windows-py${{ matrix.python-version }}
         path: ./wheelhouse/*.whl
