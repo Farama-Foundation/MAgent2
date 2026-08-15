@@ -70,6 +70,12 @@ Reward is given as:
 
 If multiple options apply, rewards are added.
 
+The kill reward is granted by the underlying C++ engine rather than by a reward
+rule: when an attack reduces an agent's HP to zero, the engine returns the dead
+agent's `kill_reward` to its killer. This is why, unlike `combined_arms`, this
+environment does not register an explicit `Event(a, "kill", b)` rule -- adding
+one would pay out the kill reward twice.
+
 #### Observation space
 
 The observation space is a 13x13 map with the below channels (in order):
