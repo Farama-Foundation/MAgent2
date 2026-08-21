@@ -399,8 +399,8 @@ it must be one of the agents involved in the triggering event.</p></li>
 <p>Here is an example of creating two symbols, one for each of two groups:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">magent2.gridworld.AgentSymbol</span>
 
-<span class="n">as1</span> <span class="o">=</span> <span class="n">AgentSymbol</span><span class="p">(</span><span class="n">group_1</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s2">&quot;any&quot;</span><span class="p">)</span>
-<span class="n">as2</span> <span class="o">=</span> <span class="n">AgentSymbol</span><span class="p">(</span><span class="n">group_2</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s2">&quot;any&quot;</span><span class="p">)</span>
+<span class="n">as1</span> <span class="o">=</span> <span class="n">AgentSymbol</span><span class="p">(</span><span class="n">group_1</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s2">"any"</span><span class="p">)</span>
+<span class="n">as2</span> <span class="o">=</span> <span class="n">AgentSymbol</span><span class="p">(</span><span class="n">group_2</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s2">"any"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">Event</span></code>s establish what must occur to trigger a reward disbursement. They are called with a subject (<code class="docutils literal notranslate"><span class="pre">AgentSymbol</span></code>), predicate, and relevant args.</p>
@@ -445,10 +445,10 @@ it must be one of the agents involved in the triggering event.</p></li>
 
 <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
 
-<span class="n">e1</span> <span class="o">=</span> <span class="n">Event</span><span class="p">(</span><span class="n">as1</span><span class="p">,</span> <span class="s2">&quot;attack&quot;</span><span class="p">,</span> <span class="n">as2</span><span class="p">)</span>
+<span class="n">e1</span> <span class="o">=</span> <span class="n">Event</span><span class="p">(</span><span class="n">as1</span><span class="p">,</span> <span class="s2">"attack"</span><span class="p">,</span> <span class="n">as2</span><span class="p">)</span>
 <span class="n">config</span><span class="o">.</span><span class="n">add_reward_rule</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span> <span class="n">receiver</span><span class="o">=</span><span class="n">as1</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">attack_opponent_reward</span><span class="p">)</span>
 
-<span class="n">e2</span> <span class="o">=</span> <span class="n">Event</span><span class="p">(</span><span class="n">as2</span><span class="p">,</span> <span class="s2">&quot;attack&quot;</span><span class="p">,</span> <span class="n">as1</span><span class="p">)</span>
+<span class="n">e2</span> <span class="o">=</span> <span class="n">Event</span><span class="p">(</span><span class="n">as2</span><span class="p">,</span> <span class="s2">"attack"</span><span class="p">,</span> <span class="n">as1</span><span class="p">)</span>
 <span class="n">config</span><span class="o">.</span><span class="n">add_reward_rule</span><span class="p">(</span><span class="n">e2</span><span class="p">,</span> <span class="n">receiver</span><span class="o">=</span><span class="n">as2</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">attack_opponent_reward</span><span class="p">)</span>
 </pre></div>
 </div>

@@ -300,11 +300,11 @@
 <p>Agents are controlled by groups. Agents in a group share the same general attributes and control method.
 The attributes of an agent can be width, height, speed, hp, etc. An AgentType can be registered as follows.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">predator</span> <span class="o">=</span> <span class="n">register_agent_type</span><span class="p">(</span>
-    <span class="s2">&quot;predator&quot;</span><span class="p">,</span>
+    <span class="s2">"predator"</span><span class="p">,</span>
     <span class="p">{</span>
-        <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;hp&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;speed&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-        <span class="s1">&#39;view_range&#39;</span><span class="p">:</span> <span class="n">CircleRange</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="s1">&#39;attack_range&#39;</span><span class="p">:</span> <span class="n">CircleRange</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
-        <span class="s1">&#39;attack_penalty&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.2</span>
+        <span class="s1">'width'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'length'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'hp'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'speed'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s1">'view_range'</span><span class="p">:</span> <span class="n">CircleRange</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="s1">'attack_range'</span><span class="p">:</span> <span class="n">CircleRange</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+        <span class="s1">'attack_penalty'</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.2</span>
     <span class="p">})</span>
 </pre></div>
 </div>
@@ -341,13 +341,13 @@ So if agent is configured as follow, it has 13 + 8 + 2 = 23 valid actions.</p>
 <h2>Reward<a class="headerlink" href="#reward" title="Link to this heading">¶</a></h2>
 <p>Reward can be defined by constant attributes of agent type or by event trigger.
 Here is an example of the event trigger fashion. Boolean expression is supported. Two tigers can get reward when attack a deer simultaneously.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AgentSymbol</span><span class="p">(</span><span class="n">tiger_group</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s1">&#39;any&#39;</span><span class="p">)</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">AgentSymbol</span><span class="p">(</span><span class="n">tiger_group</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s1">&#39;any&#39;</span><span class="p">)</span>
-<span class="n">c</span> <span class="o">=</span> <span class="n">AgentSymbol</span><span class="p">(</span><span class="n">deer_group</span><span class="p">,</span>  <span class="n">index</span><span class="o">=</span><span class="s1">&#39;any&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AgentSymbol</span><span class="p">(</span><span class="n">tiger_group</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s1">'any'</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">AgentSymbol</span><span class="p">(</span><span class="n">tiger_group</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s1">'any'</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">AgentSymbol</span><span class="p">(</span><span class="n">deer_group</span><span class="p">,</span>  <span class="n">index</span><span class="o">=</span><span class="s1">'any'</span><span class="p">)</span>
 
 <span class="c1"># tigers get reward when they attack a deer simultaneously</span>
-<span class="n">e1</span> <span class="o">=</span> <span class="n">Event</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">&#39;attack&#39;</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
-<span class="n">e2</span> <span class="o">=</span> <span class="n">Event</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="s1">&#39;attack&#39;</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+<span class="n">e1</span> <span class="o">=</span> <span class="n">Event</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">'attack'</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+<span class="n">e2</span> <span class="o">=</span> <span class="n">Event</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="s1">'attack'</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
 <span class="n">config</span><span class="o">.</span><span class="n">add_reward_rule</span><span class="p">(</span><span class="n">e1</span> <span class="o">&amp;</span> <span class="n">e2</span><span class="p">,</span> <span class="n">receiver</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">],</span> <span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
