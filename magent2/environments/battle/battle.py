@@ -70,6 +70,12 @@ Reward is given as:
 
 If multiple options apply, rewards are added.
 
+The kill reward is granted by the underlying C++ engine rather than by a reward
+rule: when an attack reduces an agent's HP to zero, the engine returns the dead
+agent's `kill_reward` to its killer. This is why, unlike `combined_arms`, this
+environment does not register an explicit `Event(a, "kill", b)` rule -- adding
+one would pay out the kill reward twice.
+
 #### Observation space
 
 The observation space is a 13x13 map with the below channels (in order):
@@ -220,6 +226,13 @@ def get_config(
         gw.Event(b, "attack", a), receiver=b, value=attack_opponent_reward
     )
 
+    # NOTE: the KILL_REWARD (the "kill_reward" agent-type option above) is
+    # granted directly by the C++ engine: Map::do_attack returns the victim's
+    # kill_reward to the killer (see src/gridworld/Map.cc / GridWorld.cc). No
+    # explicit `Event(a, "kill", b)` reward rule is added here on purpose --
+    # doing so would reward kills *twice*. This differs from combined_arms,
+    # which grants the kill reward solely through an explicit rule and does not
+    # set the "kill_reward" option.
     return cfg
 
 
