@@ -18,6 +18,10 @@ bigscreen_size = 72
 bigscreen_spacing = 0
 grid_rgba = ((0, 0, 0), 30)
 grid_size = 8
+# Shrink each agent box by this many pixels on every side so a thin border of
+# the (white) background shows between neighbouring agents, matching the look
+# of the original MAgent renderer.
+agent_border = 1
 
 
 def draw_line(surface, color, a, b):
@@ -250,11 +254,11 @@ class Renderer:
                     self.canvas,
                     (int(now_group[2]), int(now_group[3]), int(now_group[4])),
                     (
-                        now_prop[0] * grid_size - view_position[0],
-                        now_prop[1] * grid_size - view_position[1],
+                        now_prop[0] * grid_size - view_position[0] + agent_border,
+                        now_prop[1] * grid_size - view_position[1] + agent_border,
                     ),
-                    now_group[0] * grid_size,
-                    now_group[1] * grid_size,
+                    now_group[0] * grid_size - 2 * agent_border,
+                    now_group[1] * grid_size - 2 * agent_border,
                 )
 
             for key, event_x, event_y in self.new_data[1]:
