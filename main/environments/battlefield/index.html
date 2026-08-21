@@ -364,6 +364,11 @@ coordination is difficult.  Agents slowly regain HP over time, so it is best to 
 <li><p>-0.1 reward for dying (dead_penalty option)</p></li>
 </ul>
 <p>If multiple options apply, rewards are added.</p>
+<p>The kill reward is granted by the underlying C++ engine rather than by a reward
+rule: when an attack reduces an agent’s HP to zero, the engine returns the dead
+agent’s <code class="docutils literal notranslate"><span class="pre">kill_reward</span></code> to its killer. This is why, unlike <code class="docutils literal notranslate"><span class="pre">combined_arms</span></code>, this
+environment does not register an explicit <code class="docutils literal notranslate"><span class="pre">Event(a,</span> <span class="pre">&quot;kill&quot;,</span> <span class="pre">b)</span></code> rule – adding
+one would pay out the kill reward twice.</p>
 </section>
 <section id="observation-space">
 <h3>Observation space<a class="headerlink" href="#observation-space" title="Link to this heading">¶</a></h3>
