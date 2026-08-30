@@ -28,8 +28,8 @@ public:
         dy = new int[width * height];
 
         memcpy(is_in_range, other.is_in_range, sizeof(bool) * width * height);
-        memcpy(dx, other.dx, sizeof(bool) * width * height);
-        memcpy(dy, other.dy, sizeof(bool) * width * height);
+        memcpy(dx, other.dx, sizeof(int) * width * height);
+        memcpy(dy, other.dy, sizeof(int) * width * height);
     }
 
     ~Range() {

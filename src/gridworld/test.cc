@@ -151,9 +151,38 @@ void test_extract_view() {
 }
 #endif
 
+#include "Range.h"
+
+#include <cassert>
+
+using ::magent::gridworld::CircleRange;
+using ::magent::gridworld::Range;
+
+void test_range_copy() {
+    CircleRange original(4, 0, 1);
+    Range copy(original);
+
+    assert(copy.get_width() == original.get_width());
+    assert(copy.get_height() == original.get_height());
+    assert(copy.get_count() == original.get_count());
+
+    for (int row = 0; row < original.get_height(); row++) {
+        for (int col = 0; col < original.get_width(); col++) {
+            assert(copy.is_in(row, col) == original.is_in(row, col));
+        }
+    }
+
+    for (int index = 0; index < original.get_count(); index++) {
+        int original_dx, original_dy, copy_dx, copy_dy;
+        original.num2delta(index, original_dx, original_dy);
+        copy.num2delta(index, copy_dx, copy_dy);
+        assert(copy_dx == original_dx);
+        assert(copy_dy == original_dy);
+    }
+}
+
 int main() {
-    //test_sector_range();
-    //test_extract_view();
+    test_range_copy();
 
     return 0;
 }
