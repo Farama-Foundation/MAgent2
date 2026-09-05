@@ -6,8 +6,8 @@
 #ifndef MAGNET_GRIDWORLD_RANGE_H
 #define MAGNET_GRIDWORLD_RANGE_H
 
+#include <cmath>
 #include <cstdio>
-#include <tgmath.h>
 #include <cstring>
 
 namespace magent {
@@ -105,7 +105,7 @@ class SectorRange : public Range {
 public:
     SectorRange(float angle, float radius, int parity) {
         height = (int)(radius + 0.5);
-        width  = (int)(2 * radius * sin(angle / 2 * (PI / 180)) + 0.5);
+        width  = (int)(2 * radius * std::sin(angle / 2 * (PI / 180)) + 0.5);
         if (width % 2 != parity) {  // fit to parity, pick ceil
             width--;
         }
@@ -124,10 +124,10 @@ public:
                 dis_x = std::fabs(j - (width-1)/2.0);
                 dis_y = std::fabs(height - i);
 
-                double dis = sqrt(dis_x * dis_x + dis_y * dis_y);
+                double dis = std::sqrt(dis_x * dis_x + dis_y * dis_y);
 
                 if (dis < radius + 0.2 + eps && dis_x / dis_y
-                                                < tan(angle / 2 * PI / 180) + eps) {
+                                                < std::tan(angle / 2 * PI / 180) + eps) {
                     is_in_range[i * width + j] = true;
                     dx[count] = j - width/2;
                     dy[count] = i - height;
@@ -167,9 +167,9 @@ public:
         double delta = (parity == 0 ? 0.5 : 0);
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < width; j++) {
-                double dis_x = fabs(j - center + delta);
-                double dis_y = fabs(i - center + delta);
-                double dis = sqrt(dis_x * dis_x + dis_y * dis_y);
+                double dis_x = std::fabs(j - center + delta);
+                double dis_y = std::fabs(i - center + delta);
+                double dis = std::sqrt(dis_x * dis_x + dis_y * dis_y);
 
                 if (dis < radius + eps) {
                     if (dis > inner_radius - eps) { // if inc_center is false, exclude the center
