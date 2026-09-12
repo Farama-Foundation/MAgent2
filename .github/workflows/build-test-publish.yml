@@ -22,39 +22,35 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-24.04, macos-14 ]
+        os: [ ubuntu-24.04, ubuntu-24.04-arm, macos-14 ]
         python: [ 310, 311, 312, 313, 314 ]
+        include:
+        - os: ubuntu-24.04
+          platform-name: Linux x64
+          wheel-platform: manylinux_x86_64
+          artifact-platform: linux
+        - os: ubuntu-24.04-arm
+          platform-name: Linux ARM64
+          wheel-platform: manylinux_aarch64
+          artifact-platform: linux
+        - os: macos-14
+          platform-name: macOS ARM64
+          wheel-platform: macosx_arm64
+          artifact-platform: macos
 
     steps:
     - uses: actions/checkout@v7
-    - name: Build Linux wheels
-      if: matrix.os == 'ubuntu-24.04'
+    - name: Build ${{ matrix.platform-name }} wheels
       uses: pypa/cibuildwheel@v4.2.0
       env:
-        CIBW_BUILD: cp${{ matrix.python }}-manylinux_x86_64
+        CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.wheel-platform }}
         CIBW_ARCHS: auto
         CIBW_BUILD_VERBOSITY: 1
 
-    - name: Build macOS wheels
-      if: matrix.os == 'macos-14'
-      uses: pypa/cibuildwheel@v4.2.0
-      env:
-        CIBW_BUILD: cp${{ matrix.python }}-macosx_arm64
-        CIBW_ARCHS: auto
-        CIBW_BUILD_VERBOSITY: 1
-
-    - name: Store Linux wheels
-      if: matrix.os == 'ubuntu-24.04'
+    - name: Store ${{ matrix.platform-name }} wheels
       uses: actions/upload-artifact@v7
       with:
-        name: dist-linux-cp${{ matrix.python }}-manylinux_x86_64
-        path: ./wheelhouse/*.whl
-
-    - name: Store macOS wheels
-      if: matrix.os == 'macos-14'
-      uses: actions/upload-artifact@v7
-      with:
-        name: dist-macos-cp${{ matrix.python }}-macosx_arm64
+        name: dist-${{ matrix.artifact-platform }}-cp${{ matrix.python }}-${{ matrix.wheel-platform }}
         path: ./wheelhouse/*.whl
 
   test:
@@ -63,8 +59,21 @@ jobs:
     - build-wheels
     strategy:
       matrix:
-        os: [ ubuntu-24.04, macos-14 ]
+        os: [ ubuntu-24.04, ubuntu-24.04-arm, macos-14 ]
         python-version: [ '3.10', '3.11', '3.12', '3.13', '3.14' ]
+        include:
+        - os: ubuntu-24.04
+          architecture: x64
+          platform-name: Linux x64
+          artifact-pattern: dist-linux-cp*-manylinux_x86_64
+        - os: ubuntu-24.04-arm
+          architecture: arm64
+          platform-name: Linux ARM64
+          artifact-pattern: dist-linux-cp*-manylinux_aarch64
+        - os: macos-14
+          architecture: arm64
+          platform-name: macOS ARM64
+          artifact-pattern: dist-macos-cp*-macosx_arm64
 
     steps:
     - uses: actions/checkout@v7
@@ -72,20 +81,12 @@ jobs:
       uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python-version }}
+        architecture: ${{ matrix.architecture }}
 
-    - name: Download Linux wheels
-      if: matrix.os == 'ubuntu-24.04'
+    - name: Download ${{ matrix.platform-name }} wheels
       uses: actions/download-artifact@v8
       with:
-        pattern: dist-linux-cp*-manylinux_x86_64
-        path: dist
-        merge-multiple: true
-
-    - name: Download macOS wheels
-      if: matrix.os == 'macos-14'
-      uses: actions/download-artifact@v8
-      with:
-        pattern: dist-macos-cp*-macosx_arm64
+        pattern: ${{ matrix.artifact-pattern }}
         path: dist
         merge-multiple: true
 
@@ -121,8 +122,15 @@ jobs:
     strategy:
       matrix:
         python-version: [ '3.10', '3.11', '3.12', '3.13', '3.14' ]
+        architecture: [ x64, arm64 ]
+        exclude:
+        - python-version: '3.10'
+          architecture: arm64
         include:
-        - os: windows-latest
+        - architecture: x64
+          os: windows-latest
+        - architecture: arm64
+          os: windows-11-arm
 
     steps:
     - uses: actions/checkout@v7
@@ -131,7 +139,7 @@ jobs:
       uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python-version }}
-        architecture: x64
+        architecture: ${{ matrix.architecture }}
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v3.0.0
@@ -144,16 +152,25 @@ jobs:
 
     - uses: actions/upload-artifact@v7
       with:
-        name: dist-windows-py${{ matrix.python-version }}
+        name: dist-windows-${{ matrix.architecture }}-py${{ matrix.python-version }}
         path: ./wheelhouse/*.whl
 
   test-ms:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
     needs:
     - build-wheels-ms
     strategy:
       matrix:
         python-version: [ '3.10', '3.11', '3.12', '3.13', '3.14' ]
+        architecture: [ x64, arm64 ]
+        exclude:
+        - python-version: '3.10'
+          architecture: arm64
+        include:
+        - architecture: x64
+          os: windows-latest
+        - architecture: arm64
+          os: windows-11-arm
 
     steps:
     - uses: actions/checkout@v7
@@ -161,12 +178,12 @@ jobs:
       uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python-version }}
-        architecture: x64
+        architecture: ${{ matrix.architecture }}
 
     - name: Download wheel
       uses: actions/download-artifact@v8
       with:
-        name: dist-windows-py${{ matrix.python-version }}
+        name: dist-windows-${{ matrix.architecture }}-py${{ matrix.python-version }}
         path: dist
 
     - name: Install wheel and test dependencies
