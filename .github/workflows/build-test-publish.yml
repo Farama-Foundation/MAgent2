@@ -7,6 +7,7 @@
 name: Build, test and publish Python package
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
   pull_request:
