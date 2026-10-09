@@ -59,8 +59,8 @@ jobs:
     - build-wheels
     strategy:
       matrix:
-        os: [ ubuntu-24.04, ubuntu-24.04-arm, macos-26 ]
-        python-version: [ '3.10', '3.11', '3.12', '3.13', '3.14' ]
+        os: [ ubuntu-24.04, ubuntu-24.04-arm, macos-14 ]
+        python-version: [ '3.11', '3.12', '3.13', '3.14' ]
         include:
         - os: ubuntu-24.04
           architecture: x64
@@ -121,11 +121,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [ '3.10', '3.11', '3.12', '3.13', '3.14' ]
+        python-version: [ '3.11', '3.12', '3.13', '3.14' ]
         architecture: [ x64, arm64 ]
-        exclude:
-        - python-version: '3.10'
-          architecture: arm64
         include:
         - architecture: x64
           os: windows-latest
@@ -161,11 +158,8 @@ jobs:
     - build-wheels-ms
     strategy:
       matrix:
-        python-version: [ '3.10', '3.11', '3.12', '3.13', '3.14' ]
+        python-version: [ '3.11', '3.12', '3.13', '3.14' ]
         architecture: [ x64, arm64 ]
-        exclude:
-        - python-version: '3.10'
-          architecture: arm64
         include:
         - architecture: x64
           os: windows-latest
