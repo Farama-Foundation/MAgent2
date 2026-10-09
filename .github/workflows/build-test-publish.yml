@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-24.04, ubuntu-24.04-arm, macos-26 ]
-        python: [ 310, 311, 312, 313, 314 ]
+        python: [ 311, 312, 313, 314 ]
         include:
         - os: ubuntu-24.04
           platform-name: Linux x64
@@ -59,7 +59,7 @@ jobs:
     - build-wheels
     strategy:
       matrix:
-        os: [ ubuntu-24.04, ubuntu-24.04-arm, macos-14 ]
+        os: [ ubuntu-24.04, ubuntu-24.04-arm, macos-26 ]
         python-version: [ '3.11', '3.12', '3.13', '3.14' ]
         include:
         - os: ubuntu-24.04
