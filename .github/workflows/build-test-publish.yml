@@ -22,8 +22,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-24.04, ubuntu-24.04-arm, macos-14 ]
-        python: [ 310, 311, 312, 313, 314 ]
+        os: [ ubuntu-24.04, ubuntu-24.04-arm, macos-26 ]
+        python: [ 311, 312, 313, 314 ]
         include:
         - os: ubuntu-24.04
           platform-name: Linux x64
@@ -33,7 +33,7 @@ jobs:
           platform-name: Linux ARM64
           wheel-platform: manylinux_aarch64
           artifact-platform: linux
-        - os: macos-14
+        - os: macos-26
           platform-name: macOS ARM64
           wheel-platform: macosx_arm64
           artifact-platform: macos
@@ -59,8 +59,8 @@ jobs:
     - build-wheels
     strategy:
       matrix:
-        os: [ ubuntu-24.04, ubuntu-24.04-arm, macos-14 ]
-        python-version: [ '3.10', '3.11', '3.12', '3.13', '3.14' ]
+        os: [ ubuntu-24.04, ubuntu-24.04-arm, macos-26 ]
+        python-version: [ '3.11', '3.12', '3.13', '3.14' ]
         include:
         - os: ubuntu-24.04
           architecture: x64
@@ -70,7 +70,7 @@ jobs:
           architecture: arm64
           platform-name: Linux ARM64
           artifact-pattern: dist-linux-cp*-manylinux_aarch64
-        - os: macos-14
+        - os: macos-26
           architecture: arm64
           platform-name: macOS ARM64
           artifact-pattern: dist-macos-cp*-macosx_arm64
@@ -121,11 +121,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [ '3.10', '3.11', '3.12', '3.13', '3.14' ]
+        python-version: [ '3.11', '3.12', '3.13', '3.14' ]
         architecture: [ x64, arm64 ]
-        exclude:
-        - python-version: '3.10'
-          architecture: arm64
         include:
         - architecture: x64
           os: windows-latest
@@ -161,11 +158,8 @@ jobs:
     - build-wheels-ms
     strategy:
       matrix:
-        python-version: [ '3.10', '3.11', '3.12', '3.13', '3.14' ]
+        python-version: [ '3.11', '3.12', '3.13', '3.14' ]
         architecture: [ x64, arm64 ]
-        exclude:
-        - python-version: '3.10'
-          architecture: arm64
         include:
         - architecture: x64
           os: windows-latest
