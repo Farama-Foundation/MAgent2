@@ -408,7 +408,7 @@ Reward Map::do_turn(Agent *agent, int wise) {
 int Map::get_align(Agent *agent) {
     Position pos = agent->get_pos();
     GroupHandle group = agent->get_group();
-    PositionInteger max_size = w * h;
+    PositionInteger max_size = static_cast<PositionInteger>(w) * static_cast<PositionInteger>(h);
 
     // scan x axis
     PositionInteger pos_int = pos2int(pos);

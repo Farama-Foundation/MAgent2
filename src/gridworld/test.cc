@@ -160,11 +160,21 @@ using ::magent::gridworld::Range;
 
 void test_range_copy() {
     CircleRange original(4, 0, 1);
+    original.add_rela_offset(7, -3);
     Range copy(original);
 
     assert(copy.get_width() == original.get_width());
     assert(copy.get_height() == original.get_height());
     assert(copy.get_count() == original.get_count());
+
+    int original_x1, original_y1, original_x2, original_y2;
+    int copy_x1, copy_y1, copy_x2, copy_y2;
+    original.get_range_rela_offset(original_x1, original_y1, original_x2, original_y2);
+    copy.get_range_rela_offset(copy_x1, copy_y1, copy_x2, copy_y2);
+    assert(copy_x1 == original_x1);
+    assert(copy_y1 == original_y1);
+    assert(copy_x2 == original_x2);
+    assert(copy_y2 == original_y2);
 
     for (int row = 0; row < original.get_height(); row++) {
         for (int col = 0; col < original.get_width(); col++) {

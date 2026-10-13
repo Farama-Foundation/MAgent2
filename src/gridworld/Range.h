@@ -22,7 +22,8 @@ public:
         dx = dy = nullptr;
     }
 
-    Range(const Range &other) :  width(other.width), height(other.height), count(other.count) {
+    Range(const Range &other) :  width(other.width), height(other.height), count(other.count),
+        x1(other.x1), y1(other.y1), x2(other.x2), y2(other.y2) {
         is_in_range = new bool[width * height];
         dx = new int[width * height];
         dy = new int[width * height];
