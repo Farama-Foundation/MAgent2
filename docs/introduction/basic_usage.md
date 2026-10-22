@@ -2,12 +2,16 @@
 
 ## Initializing Environments
 
-The environments in MAgent2 are implemented using [PettingZoo](https://github.com/Farama-Foundation/PettingZoo). They can be initialized by calling their `env()` method and passing desired parameters:
+The environments in MAgent2 are implemented using [PettingZoo](https://github.com/Farama-Foundation/PettingZoo). Import MAgent2 to register its environments, then initialize one with PettingZoo's `make()` function:
 
 ```python
-from magent2.environments import battle_v4
-env = battle_v4.env(map_size=16, render_mode='human')
+import magent2
+from pettingzoo import make
+
+env = make("aec", "magent2/battle-v4", map_size=16, render_mode="human")
 ```
+
+Pass `"parallel"` instead of `"aec"` to create the parallel version of an environment. The previous module-based API remains available for compatibility.
 
 ## Interaction Workflow
 
@@ -25,10 +29,11 @@ for agent in env.agent_iter():
 
 Run a demo using PettingZoo's [`random_demo`](https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/utils/random_demo.py) function which implements this workflow with random policies:
 ```python
-from magent2.environments import battle_v4
+import magent2
+from pettingzoo import make
 from pettingzoo.utils import random_demo
 
-env = battle_v4.env(render_mode='human')
+env = make("aec", "magent2/battle-v4", render_mode="human")
 random_demo(env, render=True, episodes=1)
 ```
 
