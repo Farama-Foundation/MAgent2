@@ -7,7 +7,7 @@
 :name: tiger_deer
 ```
 
-| Import             | `from magent2.environments import tiger_deer_v3` |
+| Environment ID     | `magent2/tiger_deer-v4` |
 |--------------------|-----------------------------------------------|
 | Actions            | Discrete                                      |
 | Parallel API       | Yes                                           |
@@ -25,10 +25,22 @@
 In tiger-deer, there are a number of tigers who are only rewarded for teaming up to take down the deer (two tigers must attack a deer in the same step to receive reward). If they do not eat the deer, they will slowly lose 0.1 HP each turn until they die. If they do eat the deer they regain 8
 health (they have 10 health to start). At the same time, the deer are trying to avoid getting attacked. Deer start with 5 HP, lose 1 HP when attacked, and regain 0.1 HP each turn. Deer should run from tigers and tigers should form small teams to take down deer.
 
+### Usage
+
+```python
+import magent2
+from pettingzoo import make
+
+env = make("aec", "magent2/tiger_deer-v4")
+parallel_env = make("parallel", "magent2/tiger_deer-v4")
+```
+
+The module-based `env()` and `parallel_env()` constructors remain available for compatibility.
+
 ### Arguments
 
 ``` python
-tiger_deer_v3.env(map_size=45, minimap_mode=False, tiger_step_recover=-0.1, deer_attacked=-0.1, max_cycles=500, extra_features=False)
+make("aec", "magent2/tiger_deer-v4", map_size=45, minimap_mode=False, tiger_step_recover=-0.1, deer_attacked=-0.1, max_cycles=500, extra_features=False)
 ```
 
 `map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents.  Minimum size is 10.
