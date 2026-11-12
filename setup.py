@@ -1,5 +1,6 @@
 import os
 import platform
+import shutil
 import subprocess
 from subprocess import check_output
 
@@ -74,42 +75,59 @@ class CMakeBuild(build_ext):
                 print(extdir)
                 subprocess.check_call(["ls"])
 
-            # lib_ext = ""
-            # lib_name = ""
-
             if platform.system() == "Darwin":
-                # lib_ext = ".dylib"
-                # lib_name = "libmagent"
+                lib_name, lib_ext = "libmagent", ".dylib"
                 thread_num = check_output(["sysctl", "-n", "hw.ncpu"], encoding="utf-8")
                 subprocess.check_call(
                     ["make", "-C", make_location, "-j", str(thread_num).rstrip()],
                     cwd=extdir,
                 )
             elif platform.system() == "Linux":
-                # lib_ext = ".so"
-                # lib_name = "libmagent"
+                lib_name, lib_ext = "libmagent", ".so"
                 thread_num = check_output(["nproc"], encoding="utf-8")
                 subprocess.check_call(
                     ["make", "-C", make_location, "-j", str(thread_num).rstrip()],
                     cwd=extdir,
                 )
             elif platform.system() == "Windows":
-                # lib_ext = ".dll"
-                # lib_name = "magent"
-                thread_num = 1
+                lib_name, lib_ext = "magent", ".dll"
                 # cmake --build . --target ALL_BUILD --config Release
                 subprocess.check_call(
                     ["cmake", "--build", ".", "--target", "ALL_BUILD", "--config", cfg],
                     cwd=make_location,
                     shell=True,
                 )
-            # build_res_dir = extdir + "/magent/build/"
-            # if not os.path.exists(build_res_dir):
-            #     os.makedirs(build_res_dir)
-            # lib_name = extdir + "/libmagent" + lib_ext
-            # subprocess.check_call(
-            #     ["mv", lib_name, build_res_dir]
-            # )
+            else:
+                raise RuntimeError("unsupported system: " + platform.system())
+
+            # CMake emits a generically-named shared library (e.g.
+            # libmagent.dylib / libmagent.so / magent.dll). setuptools, however,
+            # expects the extension at the interpreter-specific path returned by
+            # get_ext_fullpath (e.g. magent2/libmagent.cpython-312-darwin.so).
+            # Copy the built library there so both wheel builds and editable
+            # (`pip install -e .`) installs can locate it. See c_lib.py, which
+            # loads the library from this same EXT_SUFFIX-based name.
+            built_lib = self._find_built_lib(extdir, lib_name, lib_ext, cfg)
+            ext_fullpath = self.get_ext_fullpath(ext.name)
+            os.makedirs(os.path.dirname(ext_fullpath), exist_ok=True)
+            shutil.copyfile(built_lib, ext_fullpath)
+
+    @staticmethod
+    def _find_built_lib(extdir, lib_name, lib_ext, cfg):
+        """Locate the shared library produced by the CMake/make build."""
+        candidates = [
+            os.path.join(extdir, lib_name + lib_ext),
+            # Multi-config generators (e.g. MSVC) nest the output in a
+            # per-config subdirectory.
+            os.path.join(extdir, cfg, lib_name + lib_ext),
+        ]
+        for candidate in candidates:
+            if os.path.exists(candidate):
+                return candidate
+        raise FileNotFoundError(
+            "Could not find the built magent library. Looked in: "
+            + ", ".join(candidates)
+        )
 
 
 setuptools.setup(
