@@ -7,7 +7,7 @@
 :name: battle
 ```
 
-| Import             | `from magent2.environments import battle_v4` |
+| Environment ID     | `magent2/battle-v4` |
 |--------------------|-------------------------------------------|
 | Actions            | Discrete                                  |
 | Parallel API       | Yes                                       |
@@ -27,10 +27,22 @@ each attack, and recover 0.1 HP every turn.
 
 Like all MAgent2 environments, agents can either move or attack each turn. An attack against another agent on their own team will not be registered.
 
+### Usage
+
+```python
+import magent2
+from pettingzoo import make
+
+env = make("aec", "magent2/battle-v4")
+parallel_env = make("parallel", "magent2/battle-v4")
+```
+
+The module-based `env()` and `parallel_env()` constructors remain available for compatibility.
+
 ### Arguments
 
 ``` python
-battle_v4.env(map_size=45, minimap_mode=False, step_reward=-0.005,
+make("aec", "magent2/battle-v4", map_size=45, minimap_mode=False, step_reward=-0.005,
 dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2,
 max_cycles=1000, extra_features=False)
 ```

@@ -7,7 +7,7 @@
 :name: gather
 ```
 
-| Import             | `from magent2.environments import gather_v4` |
+| Environment ID     | `magent2/gather-v5` |
 |--------------------|-------------------------------------------|
 | Actions            | Discrete                                  |
 | Parallel API       | Yes                                       |
@@ -25,10 +25,22 @@
 In gather, the agents gain reward by eating food. Food needs to be broken down by 5 "attacks" before it is absorbed. Since there is finite food on the map, there is competitive pressure between agents over the food. You expect to see that agents coordinate by not attacking each other until food is
 scarce. When food is scarce, agents may attack each other to try to monopolize the food. Agents can kill each other with a single attack.
 
+### Usage
+
+```python
+import magent2
+from pettingzoo import make
+
+env = make("aec", "magent2/gather-v5")
+parallel_env = make("parallel", "magent2/gather-v5")
+```
+
+The module-based `env()` and `parallel_env()` constructors remain available for compatibility.
+
 ### Arguments
 
 ``` python
-gather_v4.env(minimap_mode=False, step_reward=-0.01, attack_penalty=-0.1,
+make("aec", "magent2/gather-v5", minimap_mode=False, step_reward=-0.01, attack_penalty=-0.1,
 dead_penalty=-1, attack_food_reward=0.5, max_cycles=500, extra_features=False)
 ```
 

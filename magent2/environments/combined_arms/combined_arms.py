@@ -7,7 +7,7 @@
 :name: combined_arms
 ```
 
-| Import             | `from magent2.environments import combined_arms_v6`                                   |
+| Environment ID     | `magent2/combined_arms-v6` |
 |--------------------|------------------------------------------------------------------------------------|
 | Actions            | Discrete                                                                           |
 | Parallel API       | Yes                                                                                |
@@ -25,10 +25,22 @@
 A large-scale team battle. Here there are two types of agents on each team, ranged units which can attack farther and move faster but have less HP, and melee units which can only attack close units and move more slowly but have more HP. Unlike battle and battlefield, agents can attack units on
 their own team (they just are not rewarded for doing so). Agents slowly regain HP over time, so it is best to kill an opposing agent quickly. Specifically, agents have 10 HP, are damaged 2 HP by each attack, and recover 0.1 HP every turn.
 
+### Usage
+
+```python
+import magent2
+from pettingzoo import make
+
+env = make("aec", "magent2/combined_arms-v6")
+parallel_env = make("parallel", "magent2/combined_arms-v6")
+```
+
+The module-based `env()` and `parallel_env()` constructors remain available for compatibility.
+
 ### Arguments
 
 ``` python
-combined_arms_v6.env(map_size=45, minimap_mode=False, step_reward=-0.005,
+make("aec", "magent2/combined_arms-v6", map_size=45, minimap_mode=False, step_reward=-0.005,
 dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000,
 extra_features=False)
 ```
