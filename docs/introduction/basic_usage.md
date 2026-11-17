@@ -21,6 +21,34 @@ for agent in env.agent_iter():
     env.step(action)
 ```
 
+## Parallel API
+
+If your policy or training setup chooses actions for every agent at once, use an
+environment's `parallel_env()` constructor. Each call to `step()` accepts a
+dictionary with one action per active agent and returns dictionaries of
+observations, rewards, terminations, truncations, and infos:
+
+```python
+from magent2.environments.battle import parallel_env
+
+env = parallel_env(max_cycles=200)
+observations, infos = env.reset(seed=42)
+
+while env.agents:
+    # Replace the sampled actions with actions from your policy.
+    actions = {
+        agent: env.action_space(agent).sample()
+        for agent in env.agents
+    }
+    observations, rewards, terminations, truncations, infos = env.step(actions)
+
+env.close()
+```
+
+The observation dictionary contains the latest observation for each active
+agent. Pass it to your policy and use the returned `actions` dictionary in the
+same way.
+
 ## Demo
 
 Run a demo using PettingZoo's [`random_demo`](https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/utils/random_demo.py) function which implements this workflow with random policies:
