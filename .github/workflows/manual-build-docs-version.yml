@@ -34,6 +34,11 @@ jobs:
         with:
           python-version: 3.12
 
+      - name: Update legacy docs theme references
+        run: |
+          sed -i 's|git+https://github.com/Farama-Foundation/Celshast#egg=furo|celshast|' docs/requirements.txt
+          sed -i 's|html_theme = "furo"|html_theme = "celshast"|' docs/conf.py
+
       - name: Install dependencies
         run: pip install -r docs/requirements.txt
 
