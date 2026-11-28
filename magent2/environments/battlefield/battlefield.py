@@ -7,7 +7,7 @@
 :name: battlefield
 ```
 
-| Import             | `from magent2.environments import battlefield_v4` |
+| Environment ID     | `magent2/battlefield-v5` |
 |--------------------|------------------------------------------------|
 | Actions            | Discrete                                       |
 | Parallel API       | Yes                                            |
@@ -29,10 +29,22 @@ coordination is difficult.  Agents slowly regain HP over time, so it is best to 
 
 Like all MAgent2 environments, agents can either move or attack each turn. An attack against another agent on their own team will not be registered.
 
+### Usage
+
+```python
+import magent2
+from pettingzoo import make
+
+env = make("aec", "magent2/battlefield-v5")
+parallel_env = make("parallel", "magent2/battlefield-v5")
+```
+
+The module-based `env()` and `parallel_env()` constructors remain available for compatibility.
+
 ### Arguments
 
 ``` python
-battlefield_v5.env(map_size=80, minimap_mode=False, step_reward=-0.005,
+make("aec", "magent2/battlefield-v5", map_size=80, minimap_mode=False, step_reward=-0.005,
 dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2,
 max_cycles=1000, extra_features=False)
 ```

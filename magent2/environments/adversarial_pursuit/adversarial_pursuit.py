@@ -7,7 +7,7 @@
 :name: adversarial_pursuit
 ```
 
-| Import             | `from magent2.environments import adversarial_pursuit_v4` |
+| Environment ID     | `magent2/adversarial_pursuit-v4` |
 |--------------------|--------------------------------------------------------|
 | Actions            | Discrete                                               |
 | Parallel API       | Yes                                                    |
@@ -25,10 +25,22 @@
 The red agents must navigate the obstacles and tag (similar to attacking, but without damaging) the blue agents. The blue agents should try to avoid being tagged. To be effective, the red agents, who are much are slower and larger than the blue agents, must work together to trap blue agents so
 they can be tagged continually.
 
+### Usage
+
+```python
+import magent2
+from pettingzoo import make
+
+env = make("aec", "magent2/adversarial_pursuit-v4")
+parallel_env = make("parallel", "magent2/adversarial_pursuit-v4")
+```
+
+The module-based `env()` and `parallel_env()` constructors remain available for compatibility.
+
 ### Arguments
 
 ``` python
-adversarial_pursuit_v4.env(map_size=45, minimap_mode=False, tag_penalty=-0.2,
+make("aec", "magent2/adversarial_pursuit-v4", map_size=45, minimap_mode=False, tag_penalty=-0.2,
 max_cycles=500, extra_features=False)
 ```
 
